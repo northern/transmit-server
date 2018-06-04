@@ -1,14 +1,17 @@
 
 import express from 'express'
-import HttpStatus from 'http-status-codes'
+
+import container from './container'
+import routesApi from './routes/api'
 
 const app = express()
+app.container = container
 
-app.get('/', (req, res) => {
-  let result
-  let status = HttpStatus.OK
+app.use('/', routesApi)
+app.use((err, req, res, next) => {
+  console.error(err)
 
-  res.status(status).json(result)
+  res.sendStatus(500)
 })
 
 app.listen(3000, () => console.info('Transmit Server running on port 3000'))
