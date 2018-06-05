@@ -34,7 +34,6 @@ function dumpRes(res) {
 }
 
 module.exports = function(grunt) {
-
   grunt.registerTask('transmissions:post', "Creates a new transmission.", function() {
     var done = this.async();
 

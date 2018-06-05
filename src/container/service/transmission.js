@@ -1,7 +1,7 @@
 
-import TransmissionService from '../App/Service/Transmission/TransmissionService'
-import TransmissionRepository from '../App/Service/Transmission/TransmissionRepository'
-import MySqlRepository from '../App/Service/Transmission/Repository/MySqlRepository'
+import TransmissionService from '../../App/Service/Transmission/TransmissionService'
+import TransmissionRepository from '../../App/Service/Transmission/TransmissionRepository'
+import MySqlRepository from '../../App/Service/Transmission/Repository/MySqlRepository'
 
 export default bottle => {
   bottle.factory('transmissionMySqlRepository', container => {

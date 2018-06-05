@@ -2,8 +2,8 @@
 import Bottle from 'bottlejs'
 
 import logger from '../App/Util/logger'
-import initTemplateService from './template'
-import initTransmissionService from './transmission'
+import initTemplateService from './service/template'
+import initTransmissionService from './service/transmission'
 import initCommand from './command'
 import initQuery from './query'
 
