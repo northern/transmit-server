@@ -1,6 +1,6 @@
 {
-  "name": "transmit-server",
-  "version": "0.0.1",
+  "name": "@postways/transmit-server",
+  "version": "0.0.0",
   "author": "Postways",
   "license": "MIT",
   "description": "Postways Transmit Server",

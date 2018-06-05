@@ -1,0 +1,26 @@
+version: '3'
+services:
+  app:
+    build: .
+    command: yarn dev
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: mysql://postways:postways@db/transmit
+
+  db:
+    image: mysql/mysql-server:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_USER: postways
+      MYSQL_PASSWORD: postways
+      MYSQL_DATABASE: transmit
+    restart: always
