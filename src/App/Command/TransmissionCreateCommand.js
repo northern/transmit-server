@@ -15,12 +15,18 @@ export default class TransmissionCreateCommand {
   execute(data) {
     const response = new Response()
 
+    this.transmissionService.beginTransaction()
+
     try {
       const transmission = this.transmissionService.create(data)
 
       response.transmission = transmission
+
+      this.transmissionService.commitTransaction()
     }
     catch(e) {
+      this.transmissionService.rollbackTransaction()
+      
       if (e instanceof TransmissionValidationError) {
         response.status  = Response.INVALID
         response.message = e.message

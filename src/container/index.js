@@ -7,13 +7,15 @@ import initTransmissionService from './service/transmission'
 import initCommand from './command'
 import initQuery from './query'
 
-const bottle = new Bottle()
+export default (config) => {
+  const bottle = new Bottle()
 
-bottle.factory('logger', container => logger)
+  bottle.factory('logger', container => logger)
 
-initTemplateService(bottle)
-initTransmissionService(bottle)
-initCommand(bottle)
-initQuery(bottle)
+  initTemplateService(bottle, config)
+  initTransmissionService(bottle, config)
+  initCommand(bottle, config)
+  initQuery(bottle, config)
 
-export default bottle.container
+  return bottle.container
+}

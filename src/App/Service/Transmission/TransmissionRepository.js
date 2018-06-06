@@ -4,11 +4,27 @@ export default class TransmissionRepository {
     this.logger = logger
   }
 
-  setRepository(repository) {
-    this.repository = repository
+  setStorage(storage) {
+    this.storage = storage
   }
 
   getById(id) {
-    return this.repository.getById(id)
+    return this.storage.getById(id)
+  }
+
+  persist(transmission) {
+    return this.storage.persist(transmission)
+  }
+
+  beginTransaction() {
+    this.storage.beginTransaction()
+  }
+
+  commitTransaction() {
+    this.storage.commit()
+  }
+
+  rollbackTransaction() {
+    this.storage.rollback()
   }
 }

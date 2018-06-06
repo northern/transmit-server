@@ -35,5 +35,7 @@ export default class Transmission {
     this.status = Transmission.STATUS_OK
     this.error = null
     this.data = data
+    this.timeCreated = null
+    this.timeUpdated = null
   }
 }

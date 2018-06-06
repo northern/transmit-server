@@ -5,13 +5,15 @@ import HttpStatus from 'http-status-codes'
 import routesTemplate from './template'
 import routesTranmission from './transmission'
 
-const router = express.Router()
+export default () => {
+  const router = express.Router()
 
-router.get('/', (req, res) => {
-  return res.sendStatus(HttpStatus.FORBIDDEN)
-})
+  router.get('/', (req, res) => {
+    return res.sendStatus(HttpStatus.FORBIDDEN)
+  })
 
-router.use('/templates', routesTemplate)
-router.use('/transmissions', routesTranmission)
+  router.use('/templates', routesTemplate)
+  router.use('/transmissions', routesTranmission)
 
-export default router
+  return router
+}

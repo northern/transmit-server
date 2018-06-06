@@ -11,6 +11,7 @@ services:
     depends_on:
       - db
     environment:
+      STORAGE_TYPE: mysql
       DATABASE_URL: mysql://postways:postways@db/transmit
 
   db:

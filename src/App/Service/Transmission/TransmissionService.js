@@ -28,8 +28,20 @@ export default class TransmissionService {
 
     const transmission = new Transmission(data)
 
-    
+    this.repository.persis(transmission)
 
     return transmission
+  }
+
+  beginTransaction() {
+    this.repository.beginTransaction()
+  }
+
+  commitTransaction() {
+    this.repository.commitTransaction()
+  }
+
+  rollbackTransaction() {
+    this.repository.rollbackTransaction()
   }
 }

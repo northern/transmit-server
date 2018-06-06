@@ -1,21 +1,28 @@
 
+import mysql from 'mysql'
+
 import TransmissionService from '../../App/Service/Transmission/TransmissionService'
 import TransmissionValidator from '../../App/Service/Transmission/TransmissionValidator'
 import TransmissionRepository from '../../App/Service/Transmission/TransmissionRepository'
-import MySqlRepository from '../../App/Service/Transmission/Repository/MySqlRepository'
+import MySqlStorage from '../../App/Service/Transmission/Storage/MySqlStorage'
 
-export default bottle => {
-  bottle.factory('transmissionMySqlRepository', container => {
-    const service = new MySqlRepository()
-    service.setLogger(container.logger)
-
-    return service
-  })
-
+export default (bottle, config) => {
   bottle.factory('transmissionRepository', container => {
     const service = new TransmissionRepository()
     service.setLogger(container.logger)
-    service.setRepository(container.transmissionMySqlRepository)
+
+    switch (config.storageType) {
+      case 'mysql': {
+        var connection = mysql.createConnection(config.databaseUrl);
+
+        const storage = new MySqlStorage()
+        storage.setLogger(container.logger)
+        storage.setConnection(connection)
+
+        service.setStorage(storage)
+      }
+      break;
+    }
 
     return service
   })
