@@ -15,12 +15,10 @@ router.post('/', (req, res) => {
   const logger = container.logger
 
   try {
-    logger.info(req.body)
-
-    const response = container.transmissionCreateCommand.execute("something")
+    const response = container.transmissionCreateCommand.execute(req.body)
 
     if (response.status !== Response.OK) {
-      throw new HttpError(response.message, HttpStatus.BAD_REQUEST)
+      throw new HttpError(response, HttpStatus.BAD_REQUEST)
     }
 
     result = response.transmission
@@ -28,9 +26,7 @@ router.post('/', (req, res) => {
   catch(e) {
     if (e instanceof HttpError) {
       status = e.code
-      result = {
-        message: e.message
-      }
+      result = e.response
     }
     else {
       throw e

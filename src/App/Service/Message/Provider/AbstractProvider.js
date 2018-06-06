@@ -2,15 +2,15 @@
 import MissingImplementationError extends './Error/MissingImplementationError'
 
 export default class AbstractProvider {
-  get static CAPABILITY_EMAIL() {
+  static get CAPABILITY_EMAIL() {
     return 'email'
   }
 
-  get static CAPABILITY_SMS() {
+  static get CAPABILITY_SMS() {
     return 'sms'
   }
 
-  get static CAPABILITY_PUSH() {
+  static get CAPABILITY_PUSH() {
     return 'push'
   }
 

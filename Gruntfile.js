@@ -45,7 +45,19 @@ module.exports = function(grunt) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-      })   
+        'template': {
+          'channels': {
+            'required': ['email'],
+          },
+          'default': {
+            'title': "Hello from Postways",
+            'body': "This is a message send through the Postways API.",
+          }
+        },
+        'recipients': [{
+          'email': "john.doe@postways.com",
+        }]
+      })
     },
     function(error, res, body) {
       console.log(dumpRes(res));

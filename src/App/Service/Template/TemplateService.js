@@ -11,6 +11,10 @@ export default class TemplateService {
     this.repository = repository;
   }
 
+  setValidator(validator) {
+    this.validator = validator
+  }
+
   getById(id) {
     const template = this.repository.getById(id)
 

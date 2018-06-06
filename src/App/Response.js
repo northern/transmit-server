@@ -1,7 +1,8 @@
 
 export default class Response {
-  static get OK() { return 'OK'}
-  static get ERROR() { return 'ERROR'}
+  static get OK() { return 'ok'}
+  static get ERROR() { return 'error'}
+  static get INVALID() { return 'invalid' }
 
   constructor() {
     this.status = Response.OK
