@@ -28,7 +28,7 @@ export default class TransmissionService {
 
     const transmission = new Transmission(data)
 
-    this.repository.persis(transmission)
+    this.repository.persist(transmission)
 
     return transmission
   }

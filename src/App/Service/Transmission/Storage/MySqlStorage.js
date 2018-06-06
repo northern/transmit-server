@@ -22,11 +22,45 @@ export default class MySqlStorage {
   }
 
   async persist(transmission) {
-    if (transmission.id) {
-      // Update
+    if (!transmission.id) {
+      transmission.timeCreated = Math.floor(new Date().getTime() / 1000)
+
+      try {
+        const result = await this.connection.query(
+          'INSERT INTO transmissions SET ?', {
+            token: transmission.token,
+            status: transmission.status,
+            error: transmission.error,
+            data: JSON.stringify(transmission.data),
+            time_created: transmission.timeCreated,
+            time_updated: transmission.timeUpdated,
+          }
+        )
+
+        transmission.id = result.insertId
+      }
+      catch(err) {
+        throw new Error(err)
+      }
     }
     else {
-      // Insert
+      transmission.timeUpdated = Math.floor(new Date().getTime() / 1000)
+
+      try {
+        await this.connection.query(
+          'UPDATE transmissions SET ?', {
+            token: transmission.token,
+            status: transmission.status,
+            error: transmission.error,
+            data: JSON.stringify(transmission.data),
+            time_created: transmission.timeCreated,
+            time_updated: transmission.timeUpdated,
+          }
+        )
+      }
+      catch(err) {
+        throw new Error(err)
+      }
     }
 
     return transmission
