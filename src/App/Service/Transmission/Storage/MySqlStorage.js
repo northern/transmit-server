@@ -1,5 +1,6 @@
 
 import util from 'util'
+import mysql from 'mysql'
 
 export default class MySqlStorage {
   setLogger(logger) {
@@ -8,11 +9,6 @@ export default class MySqlStorage {
 
   setConnection(connection) {
     this.connection = connection
-
-    this.connection.query = util.promisify(this.connection.query)
-    this.connection.beginTransaction = util.promisify(this.connection.beginTransaction)
-    this.connection.commit = util.promisify(this.connection.commit)
-    this.connection.rollback = util.promisify(this.connection.rollback)
   }
 
   getById(id) {
@@ -76,5 +72,16 @@ export default class MySqlStorage {
 
   async rollback() {
     await this.connection.rollback()
+  }
+
+  obtainConnection(url) {
+    const connection = mysql.createConnection(url);
+
+    connection.query = util.promisify(connection.query)
+    connection.beginTransaction = util.promisify(connection.beginTransaction)
+    connection.commit = util.promisify(connection.commit)
+    connection.rollback = util.promisify(connection.rollback)
+
+    return connection
   }
 }

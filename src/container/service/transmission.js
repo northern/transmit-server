@@ -1,6 +1,4 @@
 
-import mysql from 'mysql'
-
 import TransmissionService from '../../App/Service/Transmission/TransmissionService'
 import TransmissionValidator from '../../App/Service/Transmission/TransmissionValidator'
 import TransmissionRepository from '../../App/Service/Transmission/TransmissionRepository'
@@ -13,11 +11,9 @@ export default (bottle, config) => {
 
     switch (config.storageType) {
       case 'mysql': {
-        var connection = mysql.createConnection(config.databaseUrl);
-
         const storage = new MySqlStorage()
         storage.setLogger(container.logger)
-        storage.setConnection(connection)
+        storage.setConnection(storage.obtainConnection(config.databaseUrl))
 
         service.setStorage(storage)
       }
