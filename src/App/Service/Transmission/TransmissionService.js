@@ -20,13 +20,15 @@ export default class TransmissionService {
   }
 
   create(data) {
-    const transmission = new Transmission()
-
     const result = this.validator.validate(data)
-console.log(result)
+
     if (result.errors.length > 0) {
       throw new TransmissionValidationError(result.errors)
     }
+
+    const transmission = new Transmission(data)
+
+    
 
     return transmission
   }

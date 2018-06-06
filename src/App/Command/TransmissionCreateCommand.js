@@ -18,8 +18,6 @@ export default class TransmissionCreateCommand {
     try {
       const transmission = this.transmissionService.create(data)
 
-      //const transmission = this.transmissionService.getById(1)
-
       response.transmission = transmission
     }
     catch(e) {
