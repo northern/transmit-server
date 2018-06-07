@@ -31,6 +31,7 @@ export default class Transmission {
   }
 
   constructor(data) {
+    this.id = null
     this.token = crypto.createHash('sha256').update(crypto.randomBytes(256)).digest('hex')
     this.status = Transmission.STATUS_PROCESSING
     this.error = null

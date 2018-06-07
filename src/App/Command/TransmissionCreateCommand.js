@@ -8,25 +8,29 @@ export default class TransmissionCreateCommand {
     this.logger = logger
   }
 
+  setPersistanceService(persistanceService) {
+    this.persistanceService = persistanceService
+  }
+
   setTransmissionService(transmissionService) {
     this.transmissionService = transmissionService
   }
 
-  execute(data) {
+  async execute(data) {
     const response = new Response()
 
-    this.transmissionService.beginTransaction()
+    const connection = await this.persistanceService.beginTransaction()
 
     try {
-      const transmission = this.transmissionService.create(data)
+      const transmission = await this.transmissionService.create(data, connection)
 
       response.transmission = transmission
 
-      this.transmissionService.commitTransaction()
+      await this.persistanceService.commit(connection)
     }
     catch(e) {
-      this.transmissionService.rollbackTransaction()
-      
+      await this.persistanceService.rollback(connection)
+
       if (e instanceof TransmissionValidationError) {
         response.status  = Response.INVALID
         response.message = e.message
@@ -41,6 +45,8 @@ export default class TransmissionCreateCommand {
         throw e
       }
     }
+
+    this.persistanceService.releaseConnection(connection)
 
     return response
   }

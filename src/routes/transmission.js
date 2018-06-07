@@ -7,7 +7,7 @@ import HttpError from './error/HttpError'
 
 const router = express.Router()
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   let result
   let status = HttpStatus.CREATED
 
@@ -15,7 +15,7 @@ router.post('/', (req, res) => {
   const logger = container.logger
 
   try {
-    const response = container.transmissionCreateCommand.execute(req.body)
+    const response = await container.transmissionCreateCommand.execute(req.body)
 
     if (response.status !== Response.OK) {
       throw new HttpError(response, HttpStatus.BAD_REQUEST)

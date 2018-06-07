@@ -1,14 +1,7 @@
 
-import util from 'util'
-import mysql from 'mysql'
-
 export default class MySqlStorage {
   setLogger(logger) {
     this.logger = logger
-  }
-
-  setConnection(connection) {
-    this.connection = connection
   }
 
   getById(id) {
@@ -17,12 +10,12 @@ export default class MySqlStorage {
     }
   }
 
-  async persist(transmission) {
+  async persist(transmission, connection) {
     if (!transmission.id) {
       transmission.timeCreated = Math.floor(new Date().getTime() / 1000)
 
       try {
-        const result = await this.connection.query(
+        const result = await connection.query(
           'INSERT INTO transmissions SET ?', {
             token: transmission.token,
             status: transmission.status,
@@ -33,7 +26,7 @@ export default class MySqlStorage {
           }
         )
 
-        transmission.id = result.insertId
+        transmission.id = result[0].insertId
       }
       catch(err) {
         throw new Error(err)
@@ -43,7 +36,7 @@ export default class MySqlStorage {
       transmission.timeUpdated = Math.floor(new Date().getTime() / 1000)
 
       try {
-        await this.connection.query(
+        await connection.query(
           'UPDATE transmissions SET ?', {
             token: transmission.token,
             status: transmission.status,
@@ -60,28 +53,5 @@ export default class MySqlStorage {
     }
 
     return transmission
-  }
-
-  async beginTransaction() {
-    await this.connection.beginTransaction()
-  }
-
-  async commit() {
-    await this.connection.commit()
-  }
-
-  async rollback() {
-    await this.connection.rollback()
-  }
-
-  obtainConnection(url) {
-    const connection = mysql.createConnection(url);
-
-    connection.query = util.promisify(connection.query)
-    connection.beginTransaction = util.promisify(connection.beginTransaction)
-    connection.commit = util.promisify(connection.commit)
-    connection.rollback = util.promisify(connection.rollback)
-
-    return connection
   }
 }

@@ -13,7 +13,6 @@ export default (bottle, config) => {
       case 'mysql': {
         const storage = new MySqlStorage()
         storage.setLogger(container.logger)
-        storage.setConnection(storage.obtainConnection(config.databaseUrl))
 
         service.setStorage(storage)
       }

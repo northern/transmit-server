@@ -2,6 +2,7 @@
 import Bottle from 'bottlejs'
 
 import logger from '../App/Util/logger'
+import initPersistanceService from './service/persistance'
 import initTemplateService from './service/template'
 import initTransmissionService from './service/transmission'
 import initCommand from './command'
@@ -12,6 +13,7 @@ export default (config) => {
 
   bottle.factory('logger', container => logger)
 
+  initPersistanceService(bottle, config)
   initTemplateService(bottle, config)
   initTransmissionService(bottle, config)
   initCommand(bottle, config)

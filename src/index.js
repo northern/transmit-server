@@ -16,4 +16,4 @@ app.use((err, req, res, next) => {
   res.sendStatus(500)
 })
 
-app.listen(3000, () => console.info('Transmit Server running on port 3000'))
+app.listen(config().port, () => console.info(`Transmit Server running on port ${config().port}`))

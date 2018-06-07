@@ -8,23 +8,11 @@ export default class TransmissionRepository {
     this.storage = storage
   }
 
-  getById(id) {
+  getById(id, connection) {
     return this.storage.getById(id)
   }
 
-  persist(transmission) {
-    return this.storage.persist(transmission)
-  }
-
-  beginTransaction() {
-    this.storage.beginTransaction()
-  }
-
-  commitTransaction() {
-    this.storage.commit()
-  }
-
-  rollbackTransaction() {
-    this.storage.rollback()
+  async persist(transmission, connection) {
+    return await this.storage.persist(transmission, connection)
   }
 }

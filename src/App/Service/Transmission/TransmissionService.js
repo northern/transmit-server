@@ -19,7 +19,7 @@ export default class TransmissionService {
     return this.repository.getById(id)
   }
 
-  create(data) {
+  async create(data, connection) {
     const result = this.validator.validate(data)
 
     if (result.errors.length > 0) {
@@ -28,20 +28,8 @@ export default class TransmissionService {
 
     const transmission = new Transmission(data)
 
-    this.repository.persist(transmission)
+    await this.repository.persist(transmission, connection)
 
     return transmission
-  }
-
-  beginTransaction() {
-    this.repository.beginTransaction()
-  }
-
-  commitTransaction() {
-    this.repository.commitTransaction()
-  }
-
-  rollbackTransaction() {
-    this.repository.rollbackTransaction()
   }
 }
