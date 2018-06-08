@@ -1,10 +1,8 @@
 
-export default class MySqlStorage {
-  setLogger(logger) {
-    this.logger = logger
-  }
+import AbstractStorage from './AbstractStorage'
 
-  getById(id) {
+export default class MySqlStorage extends AbstractStorage {
+  getById(id, connection) {
     return {
       id: id
     }

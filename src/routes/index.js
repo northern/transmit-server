@@ -2,8 +2,8 @@
 import express from 'express'
 import HttpStatus from 'http-status-codes'
 
-import routesTemplate from './template'
-import routesTranmission from './transmission'
+import routesTemplate from './templates'
+import routesTranmission from './transmissions'
 
 export default () => {
   const router = express.Router()

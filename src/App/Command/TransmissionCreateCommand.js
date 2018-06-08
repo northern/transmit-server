@@ -1,15 +1,12 @@
 
 import Response from '../Response'
 import AppError from '../Error/AppError'
+import AbstractCommand from './AbstractCommand'
 import TransmissionValidationError from '../Service/Transmission/Error/TransmissionValidationError'
 
-export default class TransmissionCreateCommand {
-  setLogger(logger) {
-    this.logger = logger
-  }
-
-  setPersistanceService(persistanceService) {
-    this.persistanceService = persistanceService
+export default class TransmissionCreateCommand extends AbstractCommand {
+  setQueueService(queueService) {
+    this.queueService = queueService
   }
 
   setTransmissionService(transmissionService) {
@@ -19,17 +16,25 @@ export default class TransmissionCreateCommand {
   async execute(data) {
     const response = new Response()
 
-    const connection = await this.persistanceService.beginTransaction()
+    const connection = await this.persistenceService.beginTransaction()
 
     try {
       const transmission = await this.transmissionService.create(data, connection)
 
+      // TODO: Queue transmission for processing.
+      await this.queueService.add({
+        type: 'transmission',
+        data: {
+          id: transmission.id,
+        }
+      })
+
       response.transmission = transmission
 
-      await this.persistanceService.commit(connection)
+      await this.persistenceService.commit(connection)
     }
     catch(e) {
-      await this.persistanceService.rollback(connection)
+      await this.persistenceService.rollback(connection)
 
       if (e instanceof TransmissionValidationError) {
         response.status  = Response.INVALID
@@ -46,7 +51,7 @@ export default class TransmissionCreateCommand {
       }
     }
 
-    this.persistanceService.releaseConnection(connection)
+    this.persistenceService.releaseConnection(connection)
 
     return response
   }

@@ -1,16 +1,14 @@
 
-import MissingImplementationError extends './Error/MissingImplementationError'
-
 export default class AbstractProvider {
   setLogger(logger) {
     this.logger = logger
   }
 
-  add(message) {
-    throw new MissingImplementationError("Missing 'add' implementation.")
+  async add(message) {
+    throw new Error("Missing implementation for 'add'.")
   }
 
-  get() {
-    throw new MissingImplementationError("Missing 'get' implementation.")
+  async get() {
+    throw new Error("Missing implementation for 'get'.")
   }
 }

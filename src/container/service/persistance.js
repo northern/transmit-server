@@ -1,17 +1,19 @@
 
-import PersistanceService from '../../App/Service/Persistance/PersistanceService'
-import MySqlProvider from '../../App/Service/Persistance/Provider/MySqlProvider'
+import PersistenceService from '../../App/Service/Persistence/PersistenceService'
+import MySqlProvider from '../../App/Service/Persistence/Provider/MySqlProvider'
 
-export default (bottle, config) => {
-  bottle.factory('persistanceService', container => {
-    const service = new PersistanceService()
+export default (bottle) => {
+  bottle.factory('persistenceService', container => {
+    const { config } = container
+
+    const service = new PersistenceService()
     service.setLogger(container.logger)
 
-    switch (config.storageType) {
-      case 'mysql': {
+    switch (config.database.type) {
+      case PersistenceService.TYPE_MYSQL: {
         const provider = new MySqlProvider()
         provider.setLogger(container.logger)
-        provider.init({url: config.databaseUrl})
+        provider.init({url: config.database.url})
 
         service.setProvider(provider)
       }

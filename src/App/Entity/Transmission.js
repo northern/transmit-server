@@ -1,5 +1,5 @@
 
-import crypto from 'crypto'
+import uuid from 'uuid'
 
 export default class Transmission {
   /** 
@@ -14,6 +14,13 @@ export default class Transmission {
    */
   static get STATUS_FAILED() {
     return 'failed'
+  }
+
+  /**
+   * When a transmission has failed but a retry has been scheduled.
+   */
+  static get STATUS_RETRY() {
+    return 'retry'
   }
 
   /**
@@ -32,7 +39,7 @@ export default class Transmission {
 
   constructor(data) {
     this.id = null
-    this.token = crypto.createHash('sha256').update(crypto.randomBytes(256)).digest('hex')
+    this.token = uuid.v4()
     this.status = Transmission.STATUS_PROCESSING
     this.error = null
     this.data = data

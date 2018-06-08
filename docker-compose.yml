@@ -7,22 +7,32 @@ services:
       - .:/usr/app/
       - /usr/app/node_modules
     ports:
-      - "3000:3000"
+      - "${SERVER_PORT}:${SERVER_PORT}"
     depends_on:
       - db
     environment:
-      STORAGE_TYPE: mysql
-      DATABASE_URL: mysql://postways:postways@db/transmit
+      SERVER_PORT: ${SERVER_PORT}
+
+      DATABASE_TYPE: ${DATABASE_TYPE}
+      DATABASE_URL: ${DATABASE_URL}
+
+      QUEUE_TYPE: ${QUEUE_TYPE}
+      QUEUE_NAME: ${QUEUE_NAME}
+
+      AWS_CLIENT_VERSION: ${AWS_CLIENT_VERSION}
+      AWS_CLIENT_REGION: ${AWS_CLIENT_REGION}
+
+      AWS_ACCESS_KEY_ID: ${AWS_CLIENT_KEY}
+      AWS_SECRET_ACCESS_KEY: ${AWS_CLIENT_SECRET}
 
   db:
     image: mysql/mysql-server:5.7
     ports:
       - "3306:3306"
     environment:
-      PORT: 3000
       MYSQL_ROOT_PASSWORD: root
       MYSQL_ROOT_HOST: "%"
-      MYSQL_USER: postways
-      MYSQL_PASSWORD: postways
-      MYSQL_DATABASE: transmit
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     restart: always

@@ -1,5 +1,9 @@
 
 export default class QueueService {
+  static get TYPE_SQS() {
+    return 'sqs'
+  }
+
   setLogger(logger) {
     this.logger = logger
   }
@@ -11,14 +15,14 @@ export default class QueueService {
   /**
    * Adds a message to the queue.
    */
-  add(message) {
-    return this.provider.add(message)
+  async add(message) {
+    this.provider.add(message)
   }
 
   /**
    * Gets a message from the queue.
    */
-  get() {
+  async get() {
     return this.provider.get()
   }
 }

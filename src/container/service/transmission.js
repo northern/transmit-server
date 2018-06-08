@@ -4,13 +4,15 @@ import TransmissionValidator from '../../App/Service/Transmission/TransmissionVa
 import TransmissionRepository from '../../App/Service/Transmission/TransmissionRepository'
 import MySqlStorage from '../../App/Service/Transmission/Storage/MySqlStorage'
 
-export default (bottle, config) => {
+export default (bottle) => {
   bottle.factory('transmissionRepository', container => {
+    const { config } = container
+    
     const service = new TransmissionRepository()
     service.setLogger(container.logger)
 
-    switch (config.storageType) {
-      case 'mysql': {
+    switch (config.database.type) {
+      case TransmissionService.TYPE_MYSQL: {
         const storage = new MySqlStorage()
         storage.setLogger(container.logger)
 

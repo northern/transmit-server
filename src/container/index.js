@@ -3,6 +3,7 @@ import Bottle from 'bottlejs'
 
 import logger from '../App/Util/logger'
 import initPersistanceService from './service/persistance'
+import initQueueService from './service/queue'
 import initTemplateService from './service/template'
 import initTransmissionService from './service/transmission'
 import initCommand from './command'
@@ -11,13 +12,15 @@ import initQuery from './query'
 export default (config) => {
   const bottle = new Bottle()
 
-  bottle.factory('logger', container => logger)
+  bottle.service('logger', () => logger)
+  bottle.service('config', () => config)
 
-  initPersistanceService(bottle, config)
-  initTemplateService(bottle, config)
-  initTransmissionService(bottle, config)
-  initCommand(bottle, config)
-  initQuery(bottle, config)
+  initPersistanceService(bottle)
+  initQueueService(bottle)
+  initTemplateService(bottle)
+  initTransmissionService(bottle)
+  initCommand(bottle)
+  initQuery(bottle)
 
   return bottle.container
 }

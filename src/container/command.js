@@ -14,7 +14,8 @@ export default bottle => {
   bottle.factory('transmissionCreateCommand', container => {
     const service = new TransmissionCreateCommand()
     service.setLogger(container.logger)
-    service.setPersistanceService(container.persistanceService)
+    service.setPersistenceService(container.persistenceService)
+    service.setQueueService(container.queueService)
     service.setTransmissionService(container.transmissionService)
 
     return service

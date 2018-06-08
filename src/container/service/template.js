@@ -3,7 +3,7 @@ import TemplateService from '../../App/Service/Template/TemplateService'
 import TemplateRepository from '../../App/Service/Template/TemplateRepository'
 import TemplateValidator from '../../App/Service/Template/TemplateValidator'
 
-export default bottle => {
+export default (bottle) => {
   bottle.factory('templateServiceRepository', container => {
     const service = new TemplateRepository()
     service.setLogger(container.logger)

@@ -1,5 +1,9 @@
 
-export default class PersistanceService {
+export default class PersistenceService {
+  static get TYPE_MYSQL() {
+    return 'mysql'
+  }
+  
   setLogger(logger) {
     this.logger = logger
   }
@@ -28,7 +32,7 @@ export default class PersistanceService {
     await this.provider.rollback(connection)
   }
 
-  releaseConnection(connection) {
+  async releaseConnection(connection) {
     this.provider.releaseConnection(connection)
   }  
 }

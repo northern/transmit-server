@@ -3,6 +3,10 @@ import Transmission from '../../Entity/Transmission'
 import TransmissionValidationError from './Error/TransmissionValidationError'
 
 export default class TransmissionService {
+  static get TYPE_MYSQL() {
+    return 'mysql'
+  }
+  
   setLogger(logger) {
     this.logger = logger
   }
