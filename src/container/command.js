@@ -1,6 +1,6 @@
 
-import TemplateCreateCommand from '../App/Command/TemplateCreateCommand'
-import TransmissionCreateCommand from '../App/Command/TransmissionCreateCommand'
+import TemplateCreateCommand from '../app/Command/TemplateCreateCommand'
+import TransmissionCreateCommand from '../app/Command/TransmissionCreateCommand'
 
 export default bottle => {
   bottle.factory('templateCreateCommand', container => {

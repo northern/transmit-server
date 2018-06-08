@@ -1,8 +1,8 @@
 
-import TransmissionService from '../../App/Service/Transmission/TransmissionService'
-import TransmissionValidator from '../../App/Service/Transmission/TransmissionValidator'
-import TransmissionRepository from '../../App/Service/Transmission/TransmissionRepository'
-import MySqlStorage from '../../App/Service/Transmission/Storage/MySqlStorage'
+import TransmissionService from '../../app/Service/Transmission/TransmissionService'
+import TransmissionValidator from '../../app/Service/Transmission/TransmissionValidator'
+import TransmissionRepository from '../../app/Service/Transmission/TransmissionRepository'
+import MySqlStorage from '../../app/Service/Transmission/Storage/MySqlStorage'
 
 export default (bottle) => {
   bottle.factory('transmissionRepository', container => {

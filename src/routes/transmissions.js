@@ -2,7 +2,7 @@
 import express from 'express'
 import HttpStatus from 'http-status-codes'
 
-import Response from '../App/Response'
+import Response from '../app/Response'
 import HttpError from './error/HttpError'
 
 const router = express.Router()

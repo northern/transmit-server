@@ -1,7 +1,7 @@
 
 import Bottle from 'bottlejs'
 
-import logger from '../App/Util/logger'
+import logger from '../app/Util/logger'
 import initPersistanceService from './service/persistance'
 import initQueueService from './service/queue'
 import initTemplateService from './service/template'

@@ -1,6 +1,6 @@
 
-import TemplateQueryRepository from '../App/Query/TemplateQueryRepository'
-import TransmissionQueryRepository from '../App/Query/TransmissionQueryRepository'
+import TemplateQueryRepository from '../app/Query/TemplateQueryRepository'
+import TransmissionQueryRepository from '../app/Query/TransmissionQueryRepository'
 
 export default bottle => {
   bottle.factory('templateQueryRepository', container => {

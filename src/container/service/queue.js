@@ -1,8 +1,8 @@
 
 import Aws from 'aws-sdk'
 
-import QueueService from '../../App/Service/Queue/QueueService'
-import SqsProvider from '../../App/Service/Queue/Provider/SqsProvider'
+import QueueService from '../../app/Service/Queue/QueueService'
+import SqsProvider from '../../app/Service/Queue/Provider/SqsProvider'
 
 function initQueueDependencies(bottle) {
   const config = bottle.container.config

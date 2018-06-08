@@ -1,7 +1,7 @@
 
-import TemplateService from '../../App/Service/Template/TemplateService'
-import TemplateRepository from '../../App/Service/Template/TemplateRepository'
-import TemplateValidator from '../../App/Service/Template/TemplateValidator'
+import TemplateService from '../../app/Service/Template/TemplateService'
+import TemplateRepository from '../../app/Service/Template/TemplateRepository'
+import TemplateValidator from '../../app/Service/Template/TemplateValidator'
 
 export default (bottle) => {
   bottle.factory('templateServiceRepository', container => {
