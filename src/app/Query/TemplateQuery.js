@@ -1,23 +1,20 @@
 
 import Response from '../Response'
 import AppError from '../Error/AppError'
+import AbstractQuery from './AbstractQuery'
 
-export default class TransmissionQueryRepository {
-  setLogger(logger) {
-    this.logger = logger
+export default class TemplateQuery extends AbstractQuery {
+  setTemplateService(templateService) {
+    this.templateService = templateService
   }
 
-  setTransmissionService(transmissionService) {
-    this.transmissionService = transmissionService
-  }
-
-  getById(id) {
+  getById(templateId) {
     const response = new Response()
 
     try {
-      const transmission = this.transmissionService.getById(id)
+      const template = this.templateService.getById(templateId)
 
-      response.transmission = transmission
+      response.template = template
     }
     catch(e) {
       if (e instanceof AppError) {

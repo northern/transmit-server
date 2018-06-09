@@ -33,6 +33,8 @@ export default class PersistenceService {
   }
 
   async releaseConnection(connection) {
-    this.provider.releaseConnection(connection)
+    if (connection) {
+      await this.provider.releaseConnection(connection)
+    }
   }  
 }

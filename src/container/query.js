@@ -1,19 +1,21 @@
 
-import TemplateQueryRepository from '../app/Query/TemplateQueryRepository'
-import TransmissionQueryRepository from '../app/Query/TransmissionQueryRepository'
+import TemplateQuery from '../app/Query/TemplateQuery'
+import TransmissionQuery from '../app/Query/TransmissionQuery'
 
 export default bottle => {
-  bottle.factory('templateQueryRepository', container => {
-    const service = new TemplateQueryRepository()
+  bottle.factory('templateQuery', container => {
+    const service = new TemplateQuery()
     service.setLogger(container.logger)
+    service.setPersistenceService(container.persistenceService)
     service.setTemplateService(container.templateService)
 
     return service
   })
 
-  bottle.factory('transmissionQueryRepository', container => {
-    const service = new TransmissionQueryRepository()
+  bottle.factory('transmissionQuery', container => {
+    const service = new TransmissionQuery()
     service.setLogger(container.logger)
+    service.setPersistenceService(container.persistenceService)
     service.setTransmissionService(container.transmissionService)
 
     return service

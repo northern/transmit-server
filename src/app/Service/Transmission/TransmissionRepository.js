@@ -8,8 +8,8 @@ export default class TransmissionRepository {
     this.storage = storage
   }
 
-  getById(id, connection) {
-    return this.storage.getById(id)
+  async getById(id, connection) {
+    return this.storage.getById(id, connection)
   }
 
   async persist(transmission, connection) {

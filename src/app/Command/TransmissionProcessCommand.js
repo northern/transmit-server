@@ -2,9 +2,8 @@
 import Response from '../Response'
 import AppError from '../Error/AppError'
 import AbstractCommand from './AbstractCommand'
-import TransmissionValidationError from '../Service/Transmission/Error/TransmissionValidationError'
 
-export default class TransmissionCreateCommand extends AbstractCommand {
+export default class TransmissionProcessCommand extends AbstractCommand {
   setQueueService(queueService) {
     this.queueService = queueService
   }
@@ -13,20 +12,15 @@ export default class TransmissionCreateCommand extends AbstractCommand {
     this.transmissionService = transmissionService
   }
 
-  async execute(data) {
+  async execute(transmissionId) {
     const response = new Response()
 
-    let connection
+    const connection = await this.persistenceService.beginTransaction()
 
     try {
-      connection = await this.persistenceService.beginTransaction()
 
+      /*
       const transmission = await this.transmissionService.create(data, connection)
-
-      await this.persistenceService.commit(connection)
-      await this.persistenceService.releaseConnection(connection)
-
-      connection = null
 
       // TODO: Queue transmission for processing.
       await this.queueService.add({
@@ -37,16 +31,13 @@ export default class TransmissionCreateCommand extends AbstractCommand {
       })
 
       response.transmission = transmission
+      */
+
+      await this.persistenceService.commit(connection)
     }
     catch(e) {
       await this.persistenceService.rollback(connection)
 
-      if (e instanceof TransmissionValidationError) {
-        response.status  = Response.INVALID
-        response.message = e.message
-        response.errors  = e.errors
-      }
-      else
       if (e instanceof AppError) {
         response.status  = Response.ERROR
         response.message = e.message
@@ -55,6 +46,8 @@ export default class TransmissionCreateCommand extends AbstractCommand {
         throw e
       }
     }
+
+    this.persistenceService.releaseConnection(connection)
 
     return response
   }

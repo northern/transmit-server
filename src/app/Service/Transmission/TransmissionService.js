@@ -19,8 +19,8 @@ export default class TransmissionService {
     this.validator = validator
   }
 
-  getById(id) {
-    return this.repository.getById(id)
+  async getById(id, connection) {
+    return this.repository.getById(id, connection)
   }
 
   async create(data, connection) {

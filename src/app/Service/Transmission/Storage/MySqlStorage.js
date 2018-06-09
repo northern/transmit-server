@@ -1,11 +1,34 @@
 
 import AbstractStorage from './AbstractStorage'
+import Transmission from '../../../Entity/Transmission'
 
 export default class MySqlStorage extends AbstractStorage {
-  getById(id, connection) {
-    return {
-      id: id
+  async getById(id, connection) {
+    let transmission = null
+
+    try {
+      const [rows, fields] = await connection.query(
+        'SELECT * FROM `transmissions` WHERE `id` = ?', [id]
+      )
+
+      const result = rows[0]
+
+      if (result) {
+        transmission = new Transmission()
+        transmission.id = result.id
+        transmission.token = result.token
+        transmission.status = result.status
+        transmission.error = result.error
+        transmission.data = JSON.parse(result.data)
+        transmission.timeCreated = result.time_created
+        transmission.timeUpdated = result.time_updated
+      }
     }
+    catch(err) {
+      throw new Error(err)
+    }
+
+    return transmission
   }
 
   async persist(transmission, connection) {
