@@ -4,6 +4,7 @@ let config
 export default () => {
   if (!config) {
     config = {
+      isDebug: () => process.env.NODE_ENV !== 'production',
       server: {
         port: process.env.SERVER_PORT || 3000,
       },

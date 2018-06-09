@@ -1,5 +1,6 @@
 
 import express from 'express'
+import morgan from 'morgan'
 
 import config from './config'
 import routes from './routes'
@@ -7,6 +8,10 @@ import container from './container'
 
 const server = express()
 server.container = container(config())
+
+if (config().isDebug) {
+  server.use(morgan('combined'))
+}
 
 server.use(express.json())
 server.use('/', routes())
