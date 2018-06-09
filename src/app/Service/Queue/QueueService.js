@@ -16,13 +16,13 @@ export default class QueueService {
    * Adds a message to the queue.
    */
   async add(message) {
-    this.provider.add(message)
+    await this.provider.add(message)
   }
 
   /**
    * Gets a message from the queue.
    */
   async get() {
-    return this.provider.get()
+    return await this.provider.get()
   }
 }
