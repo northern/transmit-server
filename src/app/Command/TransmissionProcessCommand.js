@@ -27,11 +27,15 @@ export default class TransmissionProcessCommand extends AbstractCommand {
 
       transmission = await this.transmissionService.update(transmission, values, connection)
 
+      
+
+
+
+
       await this.persistenceService.commit(connection)
       await this.persistenceService.releaseConnection(connection)
 
       connection = null
-
 
       response.transmission = transmission
 
@@ -49,7 +53,6 @@ export default class TransmissionProcessCommand extends AbstractCommand {
       */
     }
     catch(e) {
-      console.log(e)
       await this.persistenceService.rollback(connection)
 
       if (e instanceof AppError) {

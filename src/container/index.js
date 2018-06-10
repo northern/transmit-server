@@ -6,6 +6,7 @@ import initPersistanceService from './service/persistance'
 import initQueueService from './service/queue'
 import initTemplateService from './service/template'
 import initTransmissionService from './service/transmission'
+import initMessageService from './service/message'
 import initCommand from './command'
 import initQuery from './query'
 
@@ -19,6 +20,7 @@ export default (config) => {
   initQueueService(bottle)
   initTemplateService(bottle)
   initTransmissionService(bottle)
+  initMessageService(bottle)
   initCommand(bottle)
   initQuery(bottle)
 
