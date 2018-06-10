@@ -40,6 +40,8 @@ export default class TransmissionCreateCommand extends AbstractCommand {
       response.transmission = transmission
     }
     catch(e) {
+      await this.persistenceService.rollback(connection)
+
       if (e instanceof TransmissionValidationError) {
         response.status  = Response.INVALID
         response.message = e.message
@@ -55,7 +57,7 @@ export default class TransmissionCreateCommand extends AbstractCommand {
       }
     }
     finally {
-      await this.persistenceService.rollback(connection)
+      await this.persistenceService.releaseConnection(connection)
     }
 
     return response

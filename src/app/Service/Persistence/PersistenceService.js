@@ -29,7 +29,9 @@ export default class PersistenceService {
   }
 
   async rollback(connection) {
-    await this.provider.rollback(connection)
+    if (connection) {
+      await this.provider.rollback(connection)
+    }
   }
 
   async releaseConnection(connection) {

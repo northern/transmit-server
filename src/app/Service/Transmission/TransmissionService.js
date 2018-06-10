@@ -24,13 +24,13 @@ export default class TransmissionService {
   }
 
   async create(data, connection) {
-    const result = this.validator.validate(data)
+    const transmission = new Transmission(data)
+
+    const result = this.validator.validate(transmission)
 
     if (result.errors.length > 0) {
       throw new TransmissionValidationError(result.errors)
     }
-
-    const transmission = new Transmission(data)
 
     await this.repository.persist(transmission, connection)
 

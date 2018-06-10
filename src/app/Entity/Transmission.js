@@ -53,4 +53,15 @@ export default class Transmission {
     this.timeCreated = null
     this.timeUpdated = null
   }
+
+  static getStatuses() {
+    return [
+      Transmission.STATUS_PENDING,
+      Transmission.STATUS_PROCESSING,
+      Transmission.STATUS_FAILED,
+      Transmission.STATUS_RETRY,
+      Transmission.STATUS_OK,
+      Transmission.STATUS_WARNING,
+    ]
+  }
 }
