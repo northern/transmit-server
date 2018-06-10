@@ -15,9 +15,12 @@ router.post('/:id', async (req, res) => {
   const logger = container.logger
 
   try {
+    let response
+
     const transmissionId = parseInt(req.params.id)
 
-    const response = await container.transmissionQuery.getById(transmissionId)
+    // Retrieve transmission.
+    response = await container.transmissionQuery.getById(transmissionId)
 
     if (response.status !== Response.OK) {
       throw new HttpError(response, HttpStatus.BAD_REQUEST)
@@ -25,13 +28,14 @@ router.post('/:id', async (req, res) => {
 
     const transmission = response.transmission    
 
-    /*const response = await container.transmissionProcessCommand.execute(transmission)
+    // Process the transmission.
+    response = await container.transmissionProcessCommand.execute(transmission)
 
     if (response.status !== Response.OK) {
       throw new HttpError(response, HttpStatus.BAD_REQUEST)
-    }*/
+    }
 
-    result = transmission
+    result = response.transmission
   }
   catch(e) {
     if (e instanceof HttpError) {

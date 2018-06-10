@@ -36,4 +36,12 @@ export default class TransmissionService {
 
     return transmission
   }
+
+  async update(transmission, values, connection) {
+    const updatedTransmission = Object.assign(new Transmission(), transmission, values)
+
+    await this.repository.persist(updatedTransmission, connection)
+
+    return updatedTransmission
+  }
 }

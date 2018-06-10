@@ -19,6 +19,7 @@ export default class TransmissionCreateCommand extends AbstractCommand {
     let connection
 
     try {
+      // Create and persist transmission.
       connection = await this.persistenceService.beginTransaction()
 
       const transmission = await this.transmissionService.create(data, connection)
@@ -28,7 +29,7 @@ export default class TransmissionCreateCommand extends AbstractCommand {
 
       connection = null
 
-      // TODO: Queue transmission for processing.
+      // Queue transmission for processing.
       await this.queueService.add({
         type: 'transmission',
         data: {
@@ -39,8 +40,6 @@ export default class TransmissionCreateCommand extends AbstractCommand {
       response.transmission = transmission
     }
     catch(e) {
-      await this.persistenceService.rollback(connection)
-
       if (e instanceof TransmissionValidationError) {
         response.status  = Response.INVALID
         response.message = e.message
@@ -54,6 +53,9 @@ export default class TransmissionCreateCommand extends AbstractCommand {
       else {
         throw e
       }
+    }
+    finally {
+      await this.persistenceService.rollback(connection)
     }
 
     return response

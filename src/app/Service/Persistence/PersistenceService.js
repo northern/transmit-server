@@ -36,5 +36,5 @@ export default class PersistenceService {
     if (connection) {
       await this.provider.releaseConnection(connection)
     }
-  }  
+  }
 }

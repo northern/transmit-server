@@ -2,6 +2,7 @@
 import Response from '../Response'
 import AppError from '../Error/AppError'
 import AbstractCommand from './AbstractCommand'
+import Transmission from '../Entity/Transmission'
 
 export default class TransmissionProcessCommand extends AbstractCommand {
   setQueueService(queueService) {
@@ -12,12 +13,28 @@ export default class TransmissionProcessCommand extends AbstractCommand {
     this.transmissionService = transmissionService
   }
 
-  async execute(transmissionId) {
+  async execute(transmission) {
     const response = new Response()
 
-    const connection = await this.persistenceService.beginTransaction()
+    let connection
 
     try {
+      connection = await this.persistenceService.beginTransaction()
+
+      const values = {
+        status: Transmission.STATUS_PROCESSING
+      }
+
+      transmission = await this.transmissionService.update(transmission, values, connection)
+
+      await this.persistenceService.commit(connection)
+      await this.persistenceService.releaseConnection(connection)
+
+      connection = null
+
+
+      response.transmission = transmission
+
 
       /*
       const transmission = await this.transmissionService.create(data, connection)
@@ -29,13 +46,10 @@ export default class TransmissionProcessCommand extends AbstractCommand {
           id: transmission.id,
         }
       })
-
-      response.transmission = transmission
       */
-
-      await this.persistenceService.commit(connection)
     }
     catch(e) {
+      console.log(e)
       await this.persistenceService.rollback(connection)
 
       if (e instanceof AppError) {
@@ -46,8 +60,9 @@ export default class TransmissionProcessCommand extends AbstractCommand {
         throw e
       }
     }
-
-    this.persistenceService.releaseConnection(connection)
+    finally {
+      await this.persistenceService.releaseConnection(connection)
+    }
 
     return response
   }

@@ -27,8 +27,9 @@ export default class TransmissionQuery extends AbstractQuery {
         throw e
       }
     }
-
-    await this.persistenceService.releaseConnection(connection)
+    finally {
+      await this.persistenceService.releaseConnection(connection)
+    }
 
     return response
   }

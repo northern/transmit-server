@@ -58,14 +58,14 @@ export default class MySqlStorage extends AbstractStorage {
 
       try {
         await connection.query(
-          'UPDATE transmissions SET ?', {
+          'UPDATE transmissions SET ? WHERE id = ?', [{
             token: transmission.token,
             status: transmission.status,
             error: transmission.error,
             data: JSON.stringify(transmission.data),
             time_created: transmission.timeCreated,
             time_updated: transmission.timeUpdated,
-          }
+          }, transmission.id]
         )
       }
       catch(err) {

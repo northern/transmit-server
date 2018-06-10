@@ -14,7 +14,7 @@ export default class MySqlProvider {
     return await this.pool.getConnection()
   }
 
-  releaseConnection(connection) {
+  async releaseConnection(connection) {
     connection.release()
   }
 
@@ -27,6 +27,8 @@ export default class MySqlProvider {
   }
 
   async rollback(connection) {
-    await connection.query('ROLLBACK')
+    if (connection) {
+      await connection.query('ROLLBACK')
+    }
   }
 }

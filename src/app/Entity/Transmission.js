@@ -3,7 +3,14 @@ import uuid from 'uuid'
 
 export default class Transmission {
   /** 
-   * While a transmission is processing its messages (default).
+   * While a transmission is pending, waiting to be processed (default).
+   */
+  static get STATUS_PENDING() {
+    return 'pending'
+  }
+
+  /** 
+   * While a transmission is processing its messages.
    */
   static get STATUS_PROCESSING() {
     return 'processing'
@@ -40,7 +47,7 @@ export default class Transmission {
   constructor(data) {
     this.id = null
     this.token = uuid.v4()
-    this.status = Transmission.STATUS_PROCESSING
+    this.status = Transmission.STATUS_PENDING
     this.error = null
     this.data = data
     this.timeCreated = null
