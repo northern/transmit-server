@@ -40,6 +40,12 @@ export default class TransmissionService {
   async update(transmission, values, connection) {
     const updatedTransmission = Object.assign(new Transmission(), transmission, values)
 
+    const result = this.validator.validate(transmission)
+
+    if (result.errors.length > 0) {
+      throw new TransmissionValidationError(result.errors)
+    }
+
     await this.repository.persist(updatedTransmission, connection)
 
     return updatedTransmission
