@@ -34,12 +34,12 @@ function dumpRes(res) {
 }
 
 module.exports = function(grunt) {
-  grunt.registerTask('transmissions:post', "Creates a new transmission.", function() {
+  grunt.registerTask('messages:post', "Creates a new message.", function() {
     var done = this.async();
 
     var req = request({
       method: 'POST',
-      uri: `${baseUrl}/transmissions`,
+      uri: `${baseUrl}/messages`,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',

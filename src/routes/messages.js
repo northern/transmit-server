@@ -17,25 +17,25 @@ router.post('/:id', async (req, res) => {
   try {
     let response
 
-    const transmissionId = parseInt(req.params.id)
+    const messageId = parseInt(req.params.id)
 
-    // Retrieve transmission.
-    response = await container.transmissionQuery.getById(transmissionId)
-
-    if (response.status !== Response.OK) {
-      throw new HttpError(response, HttpStatus.BAD_REQUEST)
-    }
-
-    const transmission = response.transmission    
-
-    // Process the transmission.
-    response = await container.transmissionProcessCommand.execute(transmission)
+    // Retrieve message.
+    response = await container.messageQuery.getById(messageId)
 
     if (response.status !== Response.OK) {
       throw new HttpError(response, HttpStatus.BAD_REQUEST)
     }
 
-    result = response.transmission
+    const message = response.message    
+
+    // Process the message.
+    response = await container.messageProcessCommand.execute(message)
+
+    if (response.status !== Response.OK) {
+      throw new HttpError(response, HttpStatus.BAD_REQUEST)
+    }
+
+    result = response.message
   }
   catch(e) {
     if (e instanceof HttpError) {
@@ -58,13 +58,13 @@ router.post('/', async (req, res) => {
   const logger = container.logger
 
   try {
-    const response = await container.transmissionCreateCommand.execute(req.body)
+    const response = await container.messageCreateCommand.execute(req.body)
 
     if (response.status !== Response.OK) {
       throw new HttpError(response, HttpStatus.BAD_REQUEST)
     }
 
-    result = response.transmission
+    result = response.message
   }
   catch(e) {
     if (e instanceof HttpError) {

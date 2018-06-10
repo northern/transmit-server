@@ -1,7 +1,7 @@
 
 import TemplateCreateCommand from '../app/Command/TemplateCreateCommand'
-import TransmissionCreateCommand from '../app/Command/TransmissionCreateCommand'
-import TransmissionProcessCommand from '../app/Command/TransmissionProcessCommand'
+import MessageCreateCommand from '../app/Command/MessageCreateCommand'
+import MessageProcessCommand from '../app/Command/MessageProcessCommand'
 
 export default bottle => {
   bottle.factory('templateCreateCommand', container => {
@@ -12,22 +12,22 @@ export default bottle => {
     return service
   })
 
-  bottle.factory('transmissionCreateCommand', container => {
-    const service = new TransmissionCreateCommand()
+  bottle.factory('messageCreateCommand', container => {
+    const service = new MessageCreateCommand()
     service.setLogger(container.logger)
     service.setPersistenceService(container.persistenceService)
     service.setQueueService(container.queueService)
-    service.setTransmissionService(container.transmissionService)
+    service.setMessageService(container.messageService)
 
     return service
   })
 
-  bottle.factory('transmissionProcessCommand', container => {
-    const service = new TransmissionProcessCommand()
+  bottle.factory('messageProcessCommand', container => {
+    const service = new MessageProcessCommand()
     service.setLogger(container.logger)
     service.setPersistenceService(container.persistenceService)
     service.setQueueService(container.queueService)
-    service.setTransmissionService(container.transmissionService)
+    service.setMessageService(container.messageService)
 
     return service
   })

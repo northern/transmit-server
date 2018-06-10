@@ -2,15 +2,15 @@
 import Response from '../Response'
 import AppError from '../Error/AppError'
 import AbstractCommand from './AbstractCommand'
-import TransmissionValidationError from '../Service/Transmission/Error/TransmissionValidationError'
+import MessageValidationError from '../Service/Message/Error/MessageValidationError'
 
-export default class TransmissionCreateCommand extends AbstractCommand {
+export default class MessageCreateCommand extends AbstractCommand {
   setQueueService(queueService) {
     this.queueService = queueService
   }
 
-  setTransmissionService(transmissionService) {
-    this.transmissionService = transmissionService
+  setMessageService(messageService) {
+    this.messageService = messageService
   }
 
   async execute(data) {
@@ -19,30 +19,30 @@ export default class TransmissionCreateCommand extends AbstractCommand {
     let connection
 
     try {
-      // Create and persist transmission.
+      // Create and persist message.
       connection = await this.persistenceService.beginTransaction()
 
-      const transmission = await this.transmissionService.create(data, connection)
+      const message = await this.messageService.create(data, connection)
 
       await this.persistenceService.commit(connection)
       await this.persistenceService.releaseConnection(connection)
 
       connection = null
 
-      // Queue transmission for processing.
+      // Queue message for processing.
       await this.queueService.add({
-        type: 'transmission',
+        type: 'message',
         data: {
-          id: transmission.id,
+          id: message.id,
         }
       })
 
-      response.transmission = transmission
+      response.message = message
     }
     catch(e) {
       await this.persistenceService.rollback(connection)
 
-      if (e instanceof TransmissionValidationError) {
+      if (e instanceof MessageValidationError) {
         response.status  = Response.INVALID
         response.message = e.message
         response.errors  = e.errors

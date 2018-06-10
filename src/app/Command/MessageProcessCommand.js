@@ -2,18 +2,18 @@
 import Response from '../Response'
 import AppError from '../Error/AppError'
 import AbstractCommand from './AbstractCommand'
-import Transmission from '../Entity/Transmission'
+import Message from '../Entity/Message'
 
-export default class TransmissionProcessCommand extends AbstractCommand {
+export default class MessageProcessCommand extends AbstractCommand {
   setQueueService(queueService) {
     this.queueService = queueService
   }
 
-  setTransmissionService(transmissionService) {
-    this.transmissionService = transmissionService
+  setMessageService(messageService) {
+    this.messageService = messageService
   }
 
-  async execute(transmission) {
+  async execute(message) {
     const response = new Response()
 
     let connection
@@ -22,10 +22,10 @@ export default class TransmissionProcessCommand extends AbstractCommand {
       connection = await this.persistenceService.beginTransaction()
 
       const values = {
-        status: Transmission.STATUS_PROCESSING
+        status: Message.STATUS_PROCESSING
       }
 
-      transmission = await this.transmissionService.update(transmission, values, connection)
+      message = await this.messageService.update(message, values, connection)
 
       
 
@@ -37,17 +37,17 @@ export default class TransmissionProcessCommand extends AbstractCommand {
 
       connection = null
 
-      response.transmission = transmission
+      response.message = message
 
 
       /*
-      const transmission = await this.transmissionService.create(data, connection)
+      const message = await this.messageService.create(data, connection)
 
-      // TODO: Queue transmission for processing.
+      // TODO: Queue message for processing.
       await this.queueService.add({
-        type: 'transmission',
+        type: 'message',
         data: {
-          id: transmission.id,
+          id: message.id,
         }
       })
       */

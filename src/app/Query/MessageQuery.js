@@ -3,9 +3,9 @@ import Response from '../Response'
 import AppError from '../Error/AppError'
 import AbstractQuery from './AbstractQuery'
 
-export default class TransmissionQuery extends AbstractQuery {
-  setTransmissionService(transmissionService) {
-    this.transmissionService = transmissionService
+export default class MessageQuery extends AbstractQuery {
+  setMessageService(messageService) {
+    this.messageService = messageService
   }
 
   async getById(id) {
@@ -14,9 +14,9 @@ export default class TransmissionQuery extends AbstractQuery {
     const connection = await this.persistenceService.getConnection()
 
     try {
-      const transmission = await this.transmissionService.getById(id, connection)
+      const message = await this.messageService.getById(id, connection)
 
-      response.transmission = transmission
+      response.message = message
     }
     catch(e) {
       if (e instanceof AppError) {

@@ -27,7 +27,6 @@ export default (bottle) => {
   bottle.factory('transmissionValidator', container => {
     const service = new TransmissionValidator()
     service.setLogger(container.logger)
-    service.setTemplateValidator(container.templateValidator)
 
     return service
   })

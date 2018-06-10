@@ -10,13 +10,13 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `transmissions`
+-- Table structure for table `messages`
 --
 
-DROP TABLE IF EXISTS `transmissions`;
+DROP TABLE IF EXISTS `messages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `transmissions` (
+CREATE TABLE `messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -31,15 +31,15 @@ CREATE TABLE `transmissions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `messages`
+-- Table structure for table `transmissions`
 --
 
-DROP TABLE IF EXISTS `messages`;
+DROP TABLE IF EXISTS `transmissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `messages` (
+CREATE TABLE `transmissions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `transmission_id` int(11) NOT NULL,
+  `message_id` int(11) NOT NULL,
   `status` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
   `vars` longtext COLLATE utf8mb4_unicode_ci,
   `target` longtext COLLATE utf8mb4_unicode_ci,
@@ -47,9 +47,9 @@ CREATE TABLE `messages` (
   `time_created` int(11) NOT NULL,
   `time_updated` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `transmission_idx` (`transmission_id`),
+  KEY `message_idx` (`message_id`),
   KEY `time_created_idx` (`time_created`),
-  CONSTRAINT `FK_DB021E9678D28519` FOREIGN KEY (`transmission_id`) REFERENCES `transmissions` (`id`) ON DELETE CASCADE
+  CONSTRAINT `FK_DB021E9678D28519` FOREIGN KEY (`message_id`) REFERENCES `transmissions` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

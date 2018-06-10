@@ -1,6 +1,6 @@
 
 import TemplateQuery from '../app/Query/TemplateQuery'
-import TransmissionQuery from '../app/Query/TransmissionQuery'
+import MessageQuery from '../app/Query/MessageQuery'
 
 export default bottle => {
   bottle.factory('templateQuery', container => {
@@ -12,11 +12,11 @@ export default bottle => {
     return service
   })
 
-  bottle.factory('transmissionQuery', container => {
-    const service = new TransmissionQuery()
+  bottle.factory('messageQuery', container => {
+    const service = new MessageQuery()
     service.setLogger(container.logger)
     service.setPersistenceService(container.persistenceService)
-    service.setTransmissionService(container.transmissionService)
+    service.setMessageService(container.messageService)
 
     return service
   })

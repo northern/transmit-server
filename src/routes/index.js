@@ -3,7 +3,7 @@ import express from 'express'
 import HttpStatus from 'http-status-codes'
 
 import routesTemplate from './templates'
-import routesTranmission from './transmissions'
+import routesMessage from './messages'
 
 export default () => {
   const router = express.Router()
@@ -13,7 +13,7 @@ export default () => {
   })
 
   router.use('/templates', routesTemplate)
-  router.use('/transmissions', routesTranmission)
+  router.use('/messages', routesMessage)
 
   return router
 }
