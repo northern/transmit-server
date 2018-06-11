@@ -11,8 +11,8 @@ export default (bottle) => {
     const service = new TransmissionRepository()
     service.setLogger(container.logger)
 
-    switch (config.database.type) {
-      case TransmissionService.TYPE_MYSQL: {
+    switch (config.database.provider) {
+      case TransmissionService.PROVIDER_MYSQL: {
         const storage = new MySqlStorage()
         storage.setLogger(container.logger)
 

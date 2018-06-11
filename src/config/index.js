@@ -15,11 +15,11 @@ export default () => {
         }
       },
       database: {
-        type: (process.env.DATABASE_TYPE || 'mysql').toLowerCase(),
+        provider: (process.env.DATABASE_PROVIDER || 'mysql').toLowerCase(),
         url: process.env.DATABASE_URL,
       },
       queue: {
-        type: (process.env.QUEUE_TYPE || 'sqs').toLowerCase(),
+        provider: (process.env.QUEUE_PROVIDER || 'sqs').toLowerCase(),
         name: process.env.QUEUE_NAME,
       }
     }

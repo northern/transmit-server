@@ -9,8 +9,8 @@ export default (bottle) => {
     const service = new PersistenceService()
     service.setLogger(container.logger)
 
-    switch (config.database.type) {
-      case PersistenceService.TYPE_MYSQL: {
+    switch (config.database.provider) {
+      case PersistenceService.PROVIDER_MYSQL: {
         const provider = new MySqlProvider()
         provider.setLogger(container.logger)
         provider.init({url: config.database.url})

@@ -5,8 +5,8 @@ import SqsProvider from '../../app/Service/Queue/Provider/SqsProvider'
 function initQueueProviders(bottle) {
   const config = bottle.container.config
 
-  switch (config.queue.type) {
-    case QueueService.TYPE_SQS: {
+  switch (config.queue.provider) {
+    case QueueService.PROVIDER_SQS: {
       const sqs = SqsProvider.getSqsClient(
         config.aws.client.version,
         config.aws.client.region

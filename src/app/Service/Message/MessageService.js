@@ -3,7 +3,7 @@ import Message from '../../Entity/Message'
 import MessageValidationError from './Error/MessageValidationError'
 
 export default class MessageService {
-  static get TYPE_MYSQL() {
+  static get PROVIDER_MYSQL() {
     return 'mysql'
   }
   

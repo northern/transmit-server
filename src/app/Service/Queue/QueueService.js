@@ -1,6 +1,6 @@
 
 export default class QueueService {
-  static get TYPE_SQS() {
+  static get PROVIDER_SQS() {
     return 'sqs'
   }
 

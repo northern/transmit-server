@@ -1,6 +1,6 @@
 
 export default class PersistenceService {
-  static get TYPE_MYSQL() {
+  static get PROVIDER_MYSQL() {
     return 'mysql'
   }
   
