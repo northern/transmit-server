@@ -9,23 +9,27 @@ services:
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     depends_on:
-      - db
+      - ${DATABASE_PROVIDER}
+      - ${CACHE_PROVIDER}
     environment:
       SERVER_PORT: ${SERVER_PORT}
 
-      DATABASE_TYPE: ${DATABASE_TYPE}
-      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_PROVIDER: ${DATABASE_PROVIDER}
 
-      QUEUE_TYPE: ${QUEUE_TYPE}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+
+      QUEUE_PROVIDER: ${QUEUE_PROVIDER}
       QUEUE_NAME: ${QUEUE_NAME}
 
-      AWS_CLIENT_VERSION: ${AWS_CLIENT_VERSION}
-      AWS_CLIENT_REGION: ${AWS_CLIENT_REGION}
+      SQS_CLIENT_VERSION: ${SQS_CLIENT_VERSION}
+      SQS_CLIENT_REGION: ${SQS_CLIENT_REGION}
+      SQS_CLIENT_KEY: ${SQS_CLIENT_KEY}
+      SQS_CLIENT_SECRET: ${SQS_CLIENT_SECRET}
 
-      AWS_ACCESS_KEY_ID: ${AWS_CLIENT_KEY}
-      AWS_SECRET_ACCESS_KEY: ${AWS_CLIENT_SECRET}
-
-  db:
+  mysql:
     image: mysql/mysql-server:5.7
     ports:
       - "3306:3306"
@@ -36,3 +40,9 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     restart: always
+
+  redis:
+    image: redis:3.2-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"

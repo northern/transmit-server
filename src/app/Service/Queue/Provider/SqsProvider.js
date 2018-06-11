@@ -3,10 +3,11 @@ import Aws from 'aws-sdk'
 import AbstractProvider from './AbstractProvider'
 
 export default class SqsProvider extends AbstractProvider {
-  static getSqsClient(version, region) {
+  static getSqsClient(version, region, credentials) {
     const sqsClient = new Aws.SQS({
-      region: region,
-      version: version,
+      region,
+      version,
+      credentials,
     })
 
     return sqsClient
@@ -30,7 +31,7 @@ export default class SqsProvider extends AbstractProvider {
     const params = {
       MessageBody: payload,
       QueueUrl: this.queueUrl,
-      DelaySeconds: 0,
+      //DelaySeconds: 0,
     }
 
     return new Promise((resolve, reject) => {
