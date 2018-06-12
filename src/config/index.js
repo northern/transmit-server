@@ -1,6 +1,42 @@
 
 let config
 
+const getSqs = () => ({
+  sqsClientVersion: process.env.SQS_CLIENT_VERSION,
+  sqsClientRegion: process.env.SQS_CLIENT_REGION,
+  sqsClientKey: process.env.SQS_CLIENT_KEY,
+  sqsClientSecret: process.env.SQS_CLIENT_SECRET,
+})
+
+const getSmtp = () => ({
+  username: process.env.SMTP_USERNAME,
+  password: process.env.SMTP_PASSWORD,
+  endpoint: process.env.SMTP_ENDPOINT,
+  port: parseInt(process.env.SMTP_PORT) || 587,
+  isSecure: process.env.SMTP_SECURE === 'true'
+})
+
+const getAwsInternal = () => ({
+  awsClientVerion: process.env.AWS_CLIENT_VERSION || 'latest',
+  awsClientRegion: process.env.AWS_CLIENT_REGION,
+  awsClientKey: process.env.AWS_CLIENT_KEY,
+  awsClientSecret: process.env.AWS_CLIENT_SECRET,
+})
+
+const getAwsExternal = () => ({
+  stsClientVersion: process.env.STS_CLIENT_VERSION || 'latest',
+  stsClientRegion: process.env.STS_CLIENT_REGION,
+  stsClientKey: process.env.STS_CLIENT_KEY,
+  stsClientSecret: process.env.STS_CLIENT_SECRET,
+  stsClientExternalId: process.env.STS_CLIENT_EXTERNAL_ID,
+  stsClientArn: process.env.STS_CLIENT_ARN,
+  stsClientCacheTimeout: process.env.STS_CLIENT_CACHE_TIMEOUT,
+})
+
+const getHttp = () => ({
+  httpUrl: process.env.HTTP_URL
+})
+
 export default () => {
   if (!config) {
     config = {
@@ -42,12 +78,7 @@ export default () => {
 
         switch (config.provider) {
           case 'sqs': {
-            config = Object.assign({}, config, {
-              sqsClientVersion: process.env.SQS_CLIENT_VERSION,
-              sqsClientRegion: process.env.SQS_CLIENT_REGION,
-              sqsClientKey: process.env.SQS_CLIENT_KEY,
-              sqsClientSecret: process.env.SQS_CLIENT_SECRET,
-            })
+            config = Object.assign({}, config, getSqs())
           }
           break
         }
@@ -55,49 +86,40 @@ export default () => {
         return config
       })(process.env.QUEUE_PROVIDER),
 
-      integrations: ((email, sms, push) => {
-        config = {}
+      integrations: ((email, sms, push, callback) => {
+        config = {
+          provider: {
+            smtp: getSmtp(),
+            aws: getAwsInternal(),
+            sts: getAwsExternal(),
+            http: getHttp(),
+          },
+          channel: {}
+        }
 
-        email = email && email.toLowerCase()
+        if (email) {
+          config.channel.email = email.toLowerCase()
+        }
 
-        switch (email) {
-          case 'smtp':
-            config['email'] = 'smtp'
-            config['smtp'] = {
-              username: process.env.SMTP_USERNAME,
-              password: process.env.SMTP_PASSWORD,
-              endpoint: process.env.SMTP_ENDPOINT,
-              port: parseInt(process.env.SMTP_PORT) || 587,
-              isSsl: process.env.SMTP_SSL === 'true'
-            }
-            break
+        if (sms) {
+          config.channel.sms = sms.toLowerCase()
+        }
 
-          case 'aws:internal':
-            config['email'] = 'aws:internal'
-            config['aws:internal'] = {
-              awsClientVerion: process.env.AWS_CLIENT_VERSION || 'latest',
-              awsClientRegion: process.env.AWS_CLIENT_REGION,
-              awsClientKey: process.env.AWS_CLIENT_KEY,
-              awsClientSecret: process.env.AWS_CLIENT_SECRET,
-            }
-            break
+        if (push) {
+          config.channel.push = push.toLowerCase()
+        }
 
-          case 'aws:external':
-            config['email'] = 'aws:external'
-            config['aws:external'] = {
-              stsClientVersion: process.env.STS_CLIENT_VERSION || 'latest',
-              stsClientRegion: process.env.STS_CLIENT_REGION,
-              stsClientKey: process.env.STS_CLIENT_KEY,
-              stsClientSecret: process.env.STS_CLIENT_SECRET,
-              stsClientExternalId: process.env.STS_CLIENT_EXTERNAL_ID,
-              stsClientArn: process.env.STS_CLIENT_ARN,
-              stsClientCacheTimeout: process.env.STS_CLIENT_CACHE_TIMEOUT,
-            }
-            break
+        if (callback) {
+          config.channel.callback = callback.toLowerCase()
         }
 
         return config
-      })(process.env.INTEGRATION_EMAIL, process.env.INTEGRATION_SMS, process.env.INTEGRATION_PUSH)
+      })(
+        process.env.INTEGRATION_EMAIL,
+        process.env.INTEGRATION_SMS,
+        process.env.INTEGRATION_PUSH,
+        process.env.INTEGRATION_CALLBACK
+      )
     }
     
     if (process.env.NODE_ENV !== 'production') {
