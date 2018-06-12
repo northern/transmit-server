@@ -15,12 +15,14 @@ export default class Email {
   }
 
   unserialize(data) {
-    this.title = data.title || this.title
-    this.senderName = data.senderName || this.senderName
-    this.senderEmail = data.senderEmail || this.senderEmail
-    this.body = data.body ? (new Body()).unserialize(data.body) : this.body
-    this.isHtml = data.isHtml || this.isHtml
+    if (!data) {
+      data = {}
+    }
 
-    return this
+    this.title = data.title || null
+    this.senderName = data.senderName || null
+    this.senderEmail = data.senderEmail || null
+    this.body = data.body ? (new Body()).unserialize(data.body) : new Body()
+    this.isHtml = data.isHtml || false
   }
 }

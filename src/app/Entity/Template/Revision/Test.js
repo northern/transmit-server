@@ -9,8 +9,10 @@ export default class Test {
   }
 
   unserialize(data) {
-    this.vars = data.vars || this.vars
+    if (!data) {
+      data = {}
+    }
 
-    return this
+    this.vars = data.vars || null
   }
 }

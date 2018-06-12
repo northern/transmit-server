@@ -10,9 +10,11 @@ export default class Defaults {
   }
 
   unserialize(data) {
-    this.title = data.title || this.title
-    this.body = data.body || this.body
+    if (!data) {
+      data = {}
+    }
 
-    return this
+    this.title = data.title || null
+    this.body = data.body || null
   }
 }

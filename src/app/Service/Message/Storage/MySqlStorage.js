@@ -20,6 +20,7 @@ export default class MySqlStorage extends AbstractStorage {
         message.status = result.status
         message.error = result.error
         message.data = JSON.parse(result.data)
+        message.template = JSON.parse(result.template)
         message.timeCreated = result.time_created
         message.timeUpdated = result.time_updated
       }
@@ -42,6 +43,7 @@ export default class MySqlStorage extends AbstractStorage {
             status: message.status,
             error: message.error,
             data: JSON.stringify(message.data),
+            template: JSON.stringify(message.template),
             time_created: message.timeCreated,
             time_updated: message.timeUpdated,
           }
@@ -63,6 +65,7 @@ export default class MySqlStorage extends AbstractStorage {
             status: message.status,
             error: message.error,
             data: JSON.stringify(message.data),
+            template: JSON.stringify(message.template),
             time_created: message.timeCreated,
             time_updated: message.timeUpdated,
           }, message.id]

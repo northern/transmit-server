@@ -26,9 +26,11 @@ export default class Channels {
   }
 
   unserialize(data) {
-    this.preferred = data.preferred || this.preferred
-    this.required = data.required || this.required
+    if (!data) {
+      data = {}
+    }
 
-    return this
+    this.preferred = data.preferred || []
+    this.required = data.required || [Channels.TYPE_EMAIL]
   }
 }

@@ -20,7 +20,7 @@ export default class TransmissionService {
     this.providers.push(provider)
   }
 
-  create(message, template) {
+  create(message, template, integrations, recipients) {
     const transmissions = []
 
 

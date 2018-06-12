@@ -10,9 +10,11 @@ export default class Sms {
   }
 
   unserialize(data) {
-    this.from = data.from || this.from
-    this.body = data.body || this.body
+    if (!data) {
+      data = {}
+    }
 
-    return this
+    this.from = data.from || null
+    this.body = data.body || null
   }
 }

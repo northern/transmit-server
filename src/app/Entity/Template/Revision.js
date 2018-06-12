@@ -21,17 +21,19 @@ export default class Revision {
   }
 
   unserialize(data) {
-    this.number = data.number || this.number
-    this.parent = data.parent || this.parent
+    if (!data) {
+      data = {}
+    }
 
-    this.channels = new Channels().unserialize(data.channels || {})
-    this.default = new Defaults().unserialize(data.defaults || {})
-    this.email = new Email().unserialize(data.email || {})
-    this.sms = new Sms().unserialize(data.sms || {})
-    this.push = new Push().unserialize(data.push || {})
-    this.callback = new Callback().unserialize(data.callback || {})
-    this.test = new Test().unserialize(data.test || {})
+    this.number = data.number || 1
+    this.parent = data.parent || null
 
-    return this
+    this.channels.unserialize(data.channels)
+    this.default.unserialize(data.default)
+    this.email.unserialize(data.email)
+    this.sms.unserialize(data.sms)
+    this.push.unserialize(data.push)
+    this.callback.unserialize(data.callback)
+    this.test.unserialize(data.test)
   }
 }

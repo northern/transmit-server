@@ -31,14 +31,7 @@ export default class MessageProcessCommand extends AbstractCommand {
     try {
       connection = await this.persistenceService.beginTransaction()
 
-      // Update the message status to 'processing'.
-      const values = {
-        status: Message.STATUS_PROCESSING
-      }
-
-      message = await this.messageService.update(message, values, connection)
-
-      // Either load the template or create an inline template.
+      // Either load the template or create an inline template and obtain the active revision.
       let template = null
 
       const templateId = _.get(message.data, 'template.id')
@@ -50,10 +43,25 @@ export default class MessageProcessCommand extends AbstractCommand {
         template = this.templateService.createInline(message.data.template)
       }
 
-      //console.log("%o", template)
+      const templateRevision = template.getActiveRevision()
+
+      // Update the message status to 'processing'.
+      const values = {
+        status: Message.STATUS_PROCESSING,
+        template: templateRevision,
+      }
+
+      message = await this.messageService.update(message, values, connection)
+
+      // TODO: Get the integrations.
+      const integrations = []
+
+
+      // TODO: Get the recipients.
+      const recipients = []
 
       // Create the individual transmissions.
-      const transmissions = this.transmissionService.create(message, template)
+      const transmissions = this.transmissionService.create(message, templateRevision, integrations, recipients)
 
 
 

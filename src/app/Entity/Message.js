@@ -50,6 +50,7 @@ export default class Message {
     this.status = Message.STATUS_PENDING
     this.error = null
     this.data = data
+    this.template = null
     this.timeCreated = null
     this.timeUpdated = null
   }

@@ -25,7 +25,7 @@ export default class MessageValidator {
     const schema = {
       title: "Postways Message Schema",
       type: 'object',
-      required: ['token', 'status', 'error', 'data', 'timeCreated', 'timeUpdated'],
+      required: ['token', 'status', 'error', 'data', 'template', 'timeCreated', 'timeUpdated'],
       properties: {
         id: {
           type: ['number', 'string', 'null'],
@@ -143,6 +143,9 @@ export default class MessageValidator {
                       },
                       additionalProperties: false,
                     },
+                    chat: {
+                      type: ['object', 'null']
+                    },
                     vars: {
                       type: ['object', 'null'],
                       additionalProperties: true,
@@ -161,6 +164,9 @@ export default class MessageValidator {
             }
           },
           additionalProperties: false
+        },
+        template: {
+          type: ['string', 'null'],
         },
         timeCreated: {
           type: ['number', 'null'],

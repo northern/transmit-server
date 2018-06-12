@@ -34,7 +34,11 @@ const getAwsExternal = () => ({
 })
 
 const getHttp = () => ({
-  httpUrl: process.env.HTTP_URL
+  httpUrl: process.env.HTTP_URL,
+})
+
+const getSlack = () => ({
+  slackUri: process.env.SLACK_WEBHOOK_URI,
 })
 
 export default () => {
@@ -86,13 +90,14 @@ export default () => {
         return config
       })(process.env.QUEUE_PROVIDER),
 
-      integrations: ((email, sms, push, callback) => {
+      integrations: ((email, sms, push, callback, chat) => {
         config = {
           provider: {
             smtp: getSmtp(),
             aws: getAwsInternal(),
             sts: getAwsExternal(),
             http: getHttp(),
+            slack: getSlack(),
           },
           channel: {}
         }
@@ -113,12 +118,17 @@ export default () => {
           config.channel.callback = callback.toLowerCase()
         }
 
+        if (chat) {
+          config.channel.chat = chat.toLowerCase()
+        }
+
         return config
       })(
         process.env.INTEGRATION_EMAIL,
         process.env.INTEGRATION_SMS,
         process.env.INTEGRATION_PUSH,
-        process.env.INTEGRATION_CALLBACK
+        process.env.INTEGRATION_CALLBACK,
+        process.env.INTEGRATION_CHAT
       )
     }
     

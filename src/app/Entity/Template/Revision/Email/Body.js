@@ -10,9 +10,11 @@ export default class Body {
   }
 
   unserialize(data) {
-    this.text = data.text || this.text
-    this.html = data.html || this.html
+    if (!data) {
+      data = {}
+    }
 
-    return this
+    this.text = data.text || null
+    this.html = data.html || null
   }
 }

@@ -10,9 +10,11 @@ export default class Category {
   }
 
   unserialize(data) {
-    this.name = data.name || this.name
-    this.title = data.title || this.title
-    
-    return this
+    if (!data) {
+      data = {}
+    }
+
+    this.name = data.name || null
+    this.title = data.title || "None"
   }
 }

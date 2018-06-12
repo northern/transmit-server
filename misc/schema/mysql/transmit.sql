@@ -22,6 +22,7 @@ CREATE TABLE `messages` (
   `status` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
   `error` longtext COLLATE utf8mb4_unicode_ci,
   `data` longtext COLLATE utf8mb4_unicode_ci,
+  `template` longtext COLLATE utf8mb4_unicode_ci,
   `time_created` int(11) NOT NULL,
   `time_updated` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),

@@ -33,6 +33,7 @@ services:
       INTEGRATION_SMS: ${INTEGRATION_SMS}
       INTEGRATION_PUSH: ${INTEGRATION_PUSH}
       INTEGRATION_CALLBACK: ${INTEGRATION_CALLBACK}
+      INTEGRATION_CHAT: ${INTEGRATION_CHAT}
 
       # Integration 'smtp'
       SMTP_USERNAME: ${SMTP_USERNAME}
@@ -58,6 +59,8 @@ services:
       # Integration 'http'
       HTTP_URL: ${HTTP_URL}
 
+      # Integration 'slack'
+      SLACK_WEBHOOK_URI: ${SLACK_WEBHOOK_URI}
 
   mysql:
     image: mysql/mysql-server:5.7

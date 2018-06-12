@@ -55,7 +55,11 @@ module.exports = function(grunt) {
           }
         },
         'recipients': [{
-          'email': "john.doe@postways.com",
+          email: "john.doe@postways.com",
+          chat: {
+            username: 'username',
+            channel: 'channel',
+          }
         }]
       })
     },
