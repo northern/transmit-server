@@ -43,23 +43,65 @@ export default () => {
         switch (config.provider) {
           case 'sqs': {
             config = Object.assign({}, config, {
-              sqs_client_version: process.env.SQS_CLIENT_VERSION,
-              sqs_client_region: process.env.SQS_CLIENT_REGION,
-              sqs_client_credentials: {
-                accessKeyId: process.env.SQS_CLIENT_KEY,
-                secretAccessKey: process.env.SQS_CLIENT_SECRET,
-              }
+              sqsClientVersion: process.env.SQS_CLIENT_VERSION,
+              sqsClientRegion: process.env.SQS_CLIENT_REGION,
+              sqsClientKey: process.env.SQS_CLIENT_KEY,
+              sqsClientSecret: process.env.SQS_CLIENT_SECRET,
             })
           }
           break
         }
 
         return config
-      })(process.env.QUEUE_PROVIDER)
+      })(process.env.QUEUE_PROVIDER),
+
+      integrations: ((email, sms, push) => {
+        config = {}
+
+        email = email && email.toLowerCase()
+
+        switch (email) {
+          case 'smtp':
+            config['email'] = 'smtp'
+            config['smtp'] = {
+              username: process.env.SMTP_USERNAME,
+              password: process.env.SMTP_PASSWORD,
+              endpoint: process.env.SMTP_ENDPOINT,
+              port: parseInt(process.env.SMTP_PORT) || 587,
+              isSsl: process.env.SMTP_SSL === 'true'
+            }
+            break
+
+          case 'aws:internal':
+            config['email'] = 'aws:internal'
+            config['aws:internal'] = {
+              awsClientVerion: process.env.AWS_CLIENT_VERSION || 'latest',
+              awsClientRegion: process.env.AWS_CLIENT_REGION,
+              awsClientKey: process.env.AWS_CLIENT_KEY,
+              awsClientSecret: process.env.AWS_CLIENT_SECRET,
+            }
+            break
+
+          case 'aws:external':
+            config['email'] = 'aws:external'
+            config['aws:external'] = {
+              stsClientVersion: process.env.STS_CLIENT_VERSION || 'latest',
+              stsClientRegion: process.env.STS_CLIENT_REGION,
+              stsClientKey: process.env.STS_CLIENT_KEY,
+              stsClientSecret: process.env.STS_CLIENT_SECRET,
+              stsClientExternalId: process.env.STS_CLIENT_EXTERNAL_ID,
+              stsClientArn: process.env.STS_CLIENT_ARN,
+              stsClientCacheTimeout: process.env.STS_CLIENT_CACHE_TIMEOUT,
+            }
+            break
+        }
+
+        return config
+      })(process.env.INTEGRATION_EMAIL, process.env.INTEGRATION_SMS, process.env.INTEGRATION_PUSH)
     }
     
     if (process.env.NODE_ENV !== 'production') {
-      console.log(config)
+      console.log("%o", config)
     }
   }
 

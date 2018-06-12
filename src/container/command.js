@@ -28,6 +28,8 @@ export default bottle => {
     service.setPersistenceService(container.persistenceService)
     service.setQueueService(container.queueService)
     service.setMessageService(container.messageService)
+    service.setTransmissionService(container.transmissionService)
+    service.setTemplateService(container.templateService)
 
     return service
   })

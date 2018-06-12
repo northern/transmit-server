@@ -32,4 +32,10 @@ export default class TemplateService {
 
     return template
   }
+
+  createInline(data) {
+    const template = new Template(data)
+
+    return template
+  }
 }

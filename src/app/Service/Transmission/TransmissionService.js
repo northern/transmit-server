@@ -8,11 +8,28 @@ export default class TransmissionService {
     this.logger = logger
   }
 
+  setRepository(repository) {
+    this.repository = repository
+  }
+
+  setValidator(validator) {
+    this.validator = validator
+  }
+
   addProvider(provider) {
     this.providers.push(provider)
   }
 
-  send(message) {
+  create(message, template) {
+    const transmissions = []
+
+
+
+
+    return transmissions
+  }
+
+  send(transmission) {
     
   }
 }

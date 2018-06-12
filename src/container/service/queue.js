@@ -6,9 +6,9 @@ function initSqsProvider(bottle) {
   const config = bottle.container.config
 
   const sqs = SqsProvider.getSqsClient(
-    config.queue.sqs_client_version,
-    config.queue.sqs_client_region,
-    config.queue.sqs_client_credentials,
+    config.queue.sqsClientVersion,
+    config.queue.sqsClientRegion,
+    {accessKeyId: config.queue.sqsClientKey, secretAccessKey: config.queue.sqsClientSecret},
   )
 
   new Promise((resolve, reject) => {

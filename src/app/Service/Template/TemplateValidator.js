@@ -8,104 +8,97 @@ export default class TemplateValidator {
 
   getSchema() {
     const schema = {
-      // 'title' => "Postways Template Schema",
-      // 'type' => 'object',
-      // 'required' => ['name', 'title', 'description', 'enabled', 'status', 'revision', 'category', 'revisions'],
-      // 'properties' => (object)[
-      //     'id' => (object)[
-      //         'type' => ['integer', 'string', 'null'],
-      //     ],
-      //     'name' => (object)[
-      //         'type' => 'string',
-      //         'minLength' => 2,
-      //         'maxLength' => 64,
-      //     ],
-      //     'title' => (object)[
-      //         'type' => 'string',
-      //         'minLength' => 2,
-      //         'maxLength' => 64,
-      //     ],
-      //     'category' => (object)[
-      //         'type' => 'object',
-      //         'required' => ['name', 'title'],
-      //         'properties' => (object)[
-      //             'name' => (object)[
-      //                 'type' => ['string', 'null'],
-      //                 'maxLength' => 64,
-      //             ],
-      //             'title' => (object)[
-      //                 'type' => 'string',
-      //                 'minLength' => 1,
-      //                 'maxLength' => 64,
-      //             ],
-      //         ],
-      //         'additionalProperties' => false,
-      //     ],
-      //     'description' => (object)[
-      //         'type' => ['string', 'null'],
-      //         'maxLength' => 256,
-      //     ],
-      //     'enabled' => (object)[
-      //         'type' => 'boolean'
-      //     ],
-      //     'status' => (object)[
-      //         'type' => 'string',
-      //         'enum' => Template::getStatuses(),
-      //         'maxLength' => 16,
-      //     ],
-      //     'revision' => (object)[
-      //         'type' => 'integer',
-      //     ],
-      //     'revisions' => (object)[
-      //         'type' => ['array'],
-      //         'items' => (object)[
-      //             'type' => 'object',
-      //             'required' => ['number', 'parent', 'channels', 'default'/*, 'email', 'sms', 'push', 'callback', 'test'*/],
-      //             'properties' => (object)[
-      //                 'number' => (object)[
-      //                     'type' => 'integer',
-      //                 ],
-      //                 'parent' => (object)[
-      //                     'type' => 'integer',
-      //                 ],
-      //                 'channels' => self::getChannelsType(),
-      //                 'default' => self::getDefaultType(),
-      //                 'email' => self::getEmailType(),
-      //                 'sms' => self::getSmsType(),
-      //                 'push' => self::getPushType(),
-      //                 'callback' => self::getCallbackType(),
-      //                 'test' => (object)[
-      //                     'type' => ['object', 'null'],
-      //                     'required' => ['vars'],
-      //                     'properties' => (object)[
-      //                         'vars' => (object)[
-      //                             'type' => ['array', 'object', 'null'],
-      //                             'additionalProperties' => true,
-      //                         ],
-      //                     ],
-      //                     'additionalProperties' => false,
-      //                 ],
-      //             ],
-      //             'additionalProperties' => false,
-      //         ],
-      //         'minItems' => 1,
-      //     ],
+      title: "Postways Template Schema",
+      type: 'object',
+      required: ['name', 'title', 'description', 'enabled', 'status', 'revision', 'category', 'revisions'],
+      properties: {
+          id: {
+            type: ['integer', 'string', 'null'],
+          },
+          name: {
+            type: 'string',
+            minLength: 2,
+            maxLength: 64,
+          },
+          title: {
+            type: 'string',
+            minLength: 2,
+            maxLength: 64,
+          },
+          'category': {
+            type: 'object',
+            required: ['name', 'title'],
+            properties: {
+              name: {
+                type: ['string', 'null'],
+                maxLength: 64,
+              },
+              title: {
+                type: 'string',
+                minLength: 1,
+                maxLength: 64,
+              },
+            },
+            additionalProperties: false,
+          },
+          description: {
+            type: ['string', 'null'],
+            maxLength: 256,
+          },
+          enabled: {
+            type: 'boolean'
+          },
+          status: {
+            type: 'string',
+            enum: Template.getStatuses(),
+            maxLength: 16,
+          },
+          revision: {
+            type: 'integer',
+          },
+          revisions: {
+            type: ['array'],
+            items: {
+              type: 'object',
+              required: ['number', 'parent', 'channels', 'default'/*, 'email', 'sms', 'push', 'callback', 'test'*/],
+              properties: {
+                number: {
+                  type: 'integer',
+                },
+                parent: {
+                  type: 'integer',
+                },
+                channels: Template.getChannelsType(),
+                default: Template.getDefaultType(),
+                email: Template.getEmailType(),
+                sms: Template.getSmsType(),
+                push: Template.getPushType(),
+                callback: Template.getCallbackType(),
+                test: {
+                  type: ['object', 'null'],
+                  required: ['vars'],
+                  properties: {
+                    vars: {
+                      type: ['array', 'object', 'null'],
+                      additionalProperties: true,
+                    },
+                  },
+                  additionalProperties: false,
+                },
+              },
+              additionalProperties: false,
+            },
+            minItems: 1,
+          },
 
-      //     'team' => (object)[
-      //         'type' => ['object', 'null'],
-      //     ],
-      //     'testers' => (object)[
-      //         'type' => ['object', 'null'],
-      //     ],
-
-      //     'timeCreated' => (object)[
-      //         'type' => ['integer', 'null'],
-      //     ],
-      //     'timeUpdated' => (object)[
-      //         'type' => ['integer', 'null'],
-      //     ],
-      // ],
-      // //'additionalProperties' => false,
+          'timeCreated': {
+              'type': ['integer', 'null'],
+          },
+          'timeUpdated': {
+              'type': ['integer', 'null'],
+          },
+      },
+      'additionalProperties': false,
     }
 
     return schema
@@ -113,138 +106,138 @@ export default class TemplateValidator {
 
   getChannelsType() {
     return {
-      'type': 'object',
-      'properties': {
-        'preferred': {
-          'type': ['array', 'null'],
-          'items': {
-            'type': 'string',
-            'enum': Template.getChannelTypes(),
+      type: 'object',
+      properties: {
+        preferred: {
+          type: ['array', 'null'],
+          items: {
+            type: 'string',
+            enum: Template.getChannelTypes(),
           },
         },
-        'required': {
-          'type': ['array', 'null'],
-          'items': {
-            'type': 'string',
-            'enum': Template.getChannelTypes(),
+        required: {
+          type: ['array', 'null'],
+          items: {
+            type: 'string',
+            enum: Template.getChannelTypes(),
           },
         },
       },
-      'additionalProperties': false,
+      additionalProperties: false,
     }
   }
 
   getDefaultType() {
     return {
-      'type': 'object',
-      'required': ['title', 'body'],
-      'properties': {
-        'title': {
-          'type': 'string',
-          //'minLength': 1,
-          'maxLength': 64,
+      type: 'object',
+      required: ['title', 'body'],
+      properties: {
+        title: {
+          type: 'string',
+          //minLength: 1,
+          maxLength: 64,
         },
-        'body': {
-          'type': ['string', 'null'],
+        body: {
+          type: ['string', 'null'],
         },
       },
-      'additionalProperties': false,
+      additionalProperties: false,
     }
   }
 
   getEmailType() {
     return {
-      'type': 'object',
-      'required': ['body'],
-      'properties': {
-        'title': {
-          'type': ['string', 'null'],
-          'maxLength': 64,
+      type: 'object',
+      required: ['body'],
+      properties: {
+        title: {
+          type: ['string', 'null'],
+          maxLength: 64,
         },
-        'senderName': {
-          'type': ['string', 'null'],
-          'maxLength': 32,
+        senderName: {
+          type: ['string', 'null'],
+          maxLength: 32,
         },
-        'senderEmail': {
-          'type': 'email',
+        senderEmail: {
+          type: 'email',
         },
-        'body': {
-          'type': 'object',
-          //'required': ['text', 'html', 'isHtml'],
-          'properties': {
-            'text': {
-              'type': ['string', 'null'],
+        body: {
+          type: 'object',
+          //required: ['text', 'html', 'isHtml'],
+          properties: {
+            text: {
+              type: ['string', 'null'],
             },
-            'html': {
-              'type': ['string', 'null'],
+            html: {
+              type: ['string', 'null'],
             },
           },
-          'additionalProperties': false,
+          additionalProperties: false,
         },
-        'isHtml': {
-          'type': 'bool'
+        isHtml: {
+          type: 'bool'
         },
       },
-      'additionalProperties': false,
+      additionalProperties: false,
     }
   }
 
   getSmsType() {
     return {
-      'type': 'object',
-      'required': ['body'],
-      'properties': {
-        'from': {
-          'type': ['string', 'null'],
-          'maxLength': 64,
+      type: 'object',
+      required: ['body'],
+      properties: {
+        from: {
+          type: ['string', 'null'],
+          maxLength: 64,
         },
-        'body': {
-          'type': ['string', 'null'],
+        body: {
+          type: ['string', 'null'],
         },
       },
-      'additionalProperties': false,
+      additionalProperties: false,
     }
   }
 
   getPushType() {
     return {
-      'type': 'object',
-      'required': ['body'],
-      'properties': {
-        'title': {
-          'type': ['string', 'null'],
-          'maxLength': 64,
+      type: 'object',
+      required: ['body'],
+      properties: {
+        title: {
+          type: ['string', 'null'],
+          maxLength: 64,
         },
-        'from': {
-          'type': ['string', 'null'],
-          'maxLength': 32,
+        from: {
+          type: ['string', 'null'],
+          maxLength: 32,
         },
-        'body': {
-          'type': ['string', 'null'],
+        body: {
+          type: ['string', 'null'],
         },
       },
-      'additionalProperties': false,
+      additionalProperties: false,
     }
   }
 
   getCallbackType() {
     return {
-      'type': 'object',
-      'required': ['body'],
-      'properties': {
-        'title': {
-          'type': ['string', 'null'],
-          'maxLength': 64,
+      type: 'object',
+      required: ['body'],
+      properties: {
+        title: {
+          type: ['string', 'null'],
+          maxLength: 64,
         },
-        'from': {
-          'type': ['string', 'null'],
-          'maxLength': 32,
+        from: {
+          type: ['string', 'null'],
+          maxLength: 32,
         },
-        'body': {
-          'type': ['string', 'null'],
+        body: {
+          type: ['string', 'null'],
         },
       },
-      'additionalProperties': false,
+      additionalProperties: false,
     }
   }
 }
