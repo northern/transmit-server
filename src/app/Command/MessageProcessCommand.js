@@ -73,13 +73,22 @@ export default class MessageProcessCommand extends AbstractCommand {
       // Create the individual transmissions.
       const transmissions = this.transmissionService.create(message, templateRevision, integrations, recipients, connection)
 
-
       await this.persistenceService.commit(connection)
       await this.persistenceService.releaseConnection(connection)
 
       connection = null
 
-      response.message = message
+      // Queue transmissions for processing.
+      for(let i = 0; i < transmissions.length; i++) {
+        await this.queueService.add({
+          type: 'transmission',
+          data: {
+            id: transmissions[i].id,
+          }
+        })
+      }
+
+      response.transmissions = transmissions
     }
     catch(e) {
       await this.persistenceService.rollback(connection)

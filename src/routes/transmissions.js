@@ -17,8 +17,12 @@ router.post('/:id', async (req, res) => {
   try {
     let response
 
-    const messageId = parseInt(req.params.id)
+    const transmissionId = parseInt(req.params.id)
+    console.log("transmissionId", transmissionId)
 
+    result = {}
+    
+    /*
     // Retrieve message.
     response = await container.messageQuery.getById(messageId)
 
@@ -36,35 +40,7 @@ router.post('/:id', async (req, res) => {
     }
 
     result = response.transmissions
-  }
-  catch(e) {
-    if (e instanceof HttpError) {
-      status = e.code
-      result = e.response
-    }
-    else {
-      throw e
-    }
-  }
- 
-  res.status(status).json(result) 
-})
-
-router.post('/', async (req, res) => {
-  let result
-  let status = HttpStatus.CREATED
-
-  const container = req.app.container
-  const logger = container.logger
-
-  try {
-    const response = await container.messageCreateCommand.execute(req.body)
-
-    if (response.status !== Response.OK) {
-      throw new HttpError(response, HttpStatus.BAD_REQUEST)
-    }
-
-    result = response.message
+    */
   }
   catch(e) {
     if (e instanceof HttpError) {

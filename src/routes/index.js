@@ -4,6 +4,7 @@ import HttpStatus from 'http-status-codes'
 
 import routesTemplate from './templates'
 import routesMessage from './messages'
+import routesTransmission from './transmissions'
 
 export default () => {
   const router = express.Router()
@@ -14,6 +15,7 @@ export default () => {
 
   router.use('/templates', routesTemplate)
   router.use('/messages', routesMessage)
+  router.use('/transmissions', routesTransmission)
 
   return router
 }
