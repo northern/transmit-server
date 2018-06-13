@@ -1,11 +1,11 @@
 
 export default class Recipient {
-  constructor(data) {
-    this.email = data.email || null
-    this.phone = data.phone || null
-    this.push = data.push || null
-    this.callback = data.callback || null
-    this.chat = data.chat || null
-    this.vars = data.vars || null
+  constructor() {
+    this.email = null
+    this.phone = null
+    this.push = null
+    this.callback = null
+    this.chat = null
+    this.vars = null
   }
 }

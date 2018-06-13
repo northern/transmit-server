@@ -18,10 +18,9 @@ router.post('/:id', async (req, res) => {
     let response
 
     const transmissionId = parseInt(req.params.id)
-    console.log("transmissionId", transmissionId)
 
     result = {}
-    
+
     /*
     // Retrieve message.
     response = await container.messageQuery.getById(messageId)
