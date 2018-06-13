@@ -42,15 +42,15 @@ CREATE TABLE `transmissions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `message_id` int(11) NOT NULL,
   `status` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `vars` longtext COLLATE utf8mb4_unicode_ci,
-  `target` longtext COLLATE utf8mb4_unicode_ci,
+  `type` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `target` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `vars` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `error` longtext COLLATE utf8mb4_unicode_ci,
   `time_created` int(11) NOT NULL,
   `time_updated` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `message_idx` (`message_id`),
-  KEY `time_created_idx` (`time_created`),
-  CONSTRAINT `FK_DB021E9678D28519` FOREIGN KEY (`message_id`) REFERENCES `transmissions` (`id`) ON DELETE CASCADE
+  KEY `time_created_idx` (`message_id`, `time_created`),
+  CONSTRAINT `FK_DB021E9678D28519` FOREIGN KEY (`message_id`) REFERENCES `messages` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

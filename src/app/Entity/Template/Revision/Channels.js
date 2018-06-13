@@ -16,6 +16,10 @@ export default class Channels {
     return 'callback'
   }
 
+  static get TYPE_CHAT() {
+    return 'chat'
+  }
+
   constructor() {
     this.preferred = []
     this.required = [Channels.TYPE_EMAIL]

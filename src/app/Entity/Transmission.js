@@ -1,9 +1,81 @@
 
-export default class Transmission {
-  constructor(data) {
-    this.id = null
+import Template from './Template'
 
+export default class Transmission {
+  /** 
+   * While a transmission is pending, waiting to be processed (default).
+   */
+  static get STATUS_PENDING() {
+    return 'pending'
+  }
+
+  /** 
+   * While a transmission is processing its transmissions.
+   */
+  static get STATUS_PROCESSING() {
+    return 'processing'
+  }
+
+  /**
+   * When a transmission failed, the 'error' has details.
+   */
+  static get STATUS_FAILED() {
+    return 'failed'
+  }
+
+  /**
+   * When a transmission has failed but a retry has been scheduled.
+   */
+  static get STATUS_RETRY() {
+    return 'retry'
+  }
+
+  /**
+   * When a transmission was successully processed.
+   */
+  static get STATUS_OK() {
+    return 'ok'
+  }
+
+  static get TYPE_EMAIL() {
+    return Template.CHANNEL_TYPE_EMAIL
+  }
+
+  static get TYPE_SMS() {
+    return Template.CHANNEL_TYPE_SMS
+  }
+
+  static get TYPE_PUSH() {
+    return Template.CHANNEL_TYPE_PUSH
+  }
+
+  static get TYPE_CALLBACK() {
+    return Template.CHANNEL_TYPE_CALLBACK
+  }
+
+  static get TYPE_CHAT() {
+    return Template.CHANNEL_TYPE_CHAT
+  }
+
+  constructor() {
+    this.id = null
+    this.messageId = null
+    this.status = Transmission.STATUS_PENDING
+    this.type = null
+    this.target = null
+    this.vars = null
+    this.error = null
     this.timeCreated = null
     this.timeUpdated = null
+  }
+
+  static getStatuses() {
+    return [
+      Message.STATUS_PENDING,
+      Message.STATUS_PROCESSING,
+      Message.STATUS_FAILED,
+      Message.STATUS_RETRY,
+      Message.STATUS_OK,
+    ]
   }
 }

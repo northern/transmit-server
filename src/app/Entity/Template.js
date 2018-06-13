@@ -22,6 +22,10 @@ export default class Template {
     return Channels.TYPE_CALLBACK
   }
 
+  static get CHANNEL_TYPE_CHAT() {
+    return Channels.TYPE_CHAT
+  }
+
   static get STATUS_ACTIVE() {
     return 'active'
   }
@@ -72,6 +76,7 @@ export default class Template {
       Template.CHANNEL_TYPE_SMS,
       Template.CHANNEL_TYPE_PUSH,
       Template.CHANNEL_TYPE_CALLBACK,
+      Template.CHANNEL_TYPE_CHAT,
     ]
   }
 

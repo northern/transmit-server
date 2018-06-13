@@ -71,7 +71,7 @@ export default class MessageProcessCommand extends AbstractCommand {
       const recipients = this.recipientService.create(message)
 
       // Create the individual transmissions.
-      const transmissions = this.transmissionService.create(message, templateRevision, integrations, recipients)
+      const transmissions = this.transmissionService.create(message, templateRevision, integrations, recipients, connection)
 
 
       await this.persistenceService.commit(connection)

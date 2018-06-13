@@ -59,6 +59,10 @@ module.exports = function(grunt) {
           chat: {
             username: 'username',
             channel: 'channel',
+          },
+          vars: {
+            foo: "Foo",
+            bar: "Bar",
           }
         }]
       })

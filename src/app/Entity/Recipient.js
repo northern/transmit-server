@@ -6,5 +6,6 @@ export default class Recipient {
     this.push = data.push || null
     this.callback = data.callback || null
     this.chat = data.chat || null
+    this.vars = data.vars || null
   }
 }

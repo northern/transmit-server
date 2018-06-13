@@ -21,7 +21,20 @@ export default class MySqlStorage extends AbstractStorage {
       transmission.timeCreated = Math.floor(new Date().getTime() / 1000)
 
       try {
+        const result = await connection.query(
+          'INSERT INTO transmissions SET ?', {
+            message_id: transmission.messageId,
+            status: transmission.status,
+            type: transmission.type,
+            target: transmission.target instanceof Object ? JSON.stringify(transmission.target) : transmission.target,
+            vars: JSON.stringify(transmission.vars),
+            error: transmission.error,
+            time_created: transmission.timeCreated,
+            time_updated: transmission.timeUpdated,
+          }
+        )
 
+        transmission.id = result[0].insertId
       }
       catch(err) {
         throw new Error(err)
