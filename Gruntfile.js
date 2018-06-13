@@ -47,7 +47,7 @@ module.exports = function(grunt) {
       body: JSON.stringify({
         'template': {
           'channels': {
-            'required': ['email'],
+            'required': ['email', 'chat'],
           },
           'default': {
             'title': "Hello from Postways",

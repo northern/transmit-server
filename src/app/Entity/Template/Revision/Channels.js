@@ -21,8 +21,12 @@ export default class Channels {
   }
 
   constructor() {
-    this.preferred = []
+    this.preferred = [Channels.TYPE_EMAIL]
     this.required = [Channels.TYPE_EMAIL]
+  }
+
+  getCombined() {
+    return [...this.preferred, ...this.required]
   }
 
   serialize() {
