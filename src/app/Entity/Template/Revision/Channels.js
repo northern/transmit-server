@@ -21,7 +21,7 @@ export default class Channels {
   }
 
   constructor() {
-    this.preferred = [Channels.TYPE_EMAIL]
+    this.preferred = []
     this.required = [Channels.TYPE_EMAIL]
   }
 
