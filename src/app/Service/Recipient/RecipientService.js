@@ -6,6 +6,15 @@ export default class RecipientService {
     this.logger = logger
   }
 
-  create() {
+  create(message) {
+    const recipients = []
+
+    message.data.recipients.map(data => {
+      recipients.push(
+        new Recipient(data)
+      )
+    })
+
+    return recipients
   }
 }

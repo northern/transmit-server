@@ -23,6 +23,14 @@ export default class MessageProcessCommand extends AbstractCommand {
     this.templateService = templateService
   }
 
+  setIntegrationService(integrationService) {
+    this.integrationService = integrationService
+  }
+
+  setRecipientService(recipientService) {
+    this.recipientService = recipientService
+  }
+
   async execute(message) {
     const response = new Response()
 
@@ -48,21 +56,22 @@ export default class MessageProcessCommand extends AbstractCommand {
       // Update the message status to 'processing'.
       const values = {
         status: Message.STATUS_PROCESSING,
-        template: templateRevision,
+        template: {
+          revision: templateRevision,
+          blocks: null,
+        },
       }
 
       message = await this.messageService.update(message, values, connection)
 
-      // TODO: Get the integrations.
-      const integrations = []
+      // Get the available integrations.
+      const integrations = this.integrationService.getIntegrations()
 
-
-      // TODO: Get the recipients.
-      const recipients = []
+      // Get the recipients from the message.
+      const recipients = this.recipientService.create(message)
 
       // Create the individual transmissions.
       const transmissions = this.transmissionService.create(message, templateRevision, integrations, recipients)
-
 
 
       await this.persistenceService.commit(connection)

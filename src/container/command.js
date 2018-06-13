@@ -30,6 +30,8 @@ export default bottle => {
     service.setMessageService(container.messageService)
     service.setTransmissionService(container.transmissionService)
     service.setTemplateService(container.templateService)
+    service.setIntegrationService(container.integrationService)
+    service.setRecipientService(container.recipientService)
 
     return service
   })

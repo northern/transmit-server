@@ -7,6 +7,8 @@ import initQueueService from './service/queue'
 import initTemplateService from './service/template'
 import initMessageService from './service/message'
 import initTransmissionService from './service/transmission'
+import initIntegrationService from './service/integration'
+import initRecipientService from './service/recipient'
 import initCommand from './command'
 import initQuery from './query'
 
@@ -21,6 +23,8 @@ export default (config) => {
   initTemplateService(bottle)
   initMessageService(bottle)
   initTransmissionService(bottle)
+  initIntegrationService(bottle)
+  initRecipientService(bottle)
   initCommand(bottle)
   initQuery(bottle)
 

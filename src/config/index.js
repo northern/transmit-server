@@ -92,34 +92,34 @@ export default () => {
 
       integrations: ((email, sms, push, callback, chat) => {
         config = {
-          provider: {
+          providers: {
             smtp: getSmtp(),
             aws: getAwsInternal(),
             sts: getAwsExternal(),
             http: getHttp(),
             slack: getSlack(),
           },
-          channel: {}
+          channels: {}
         }
 
         if (email) {
-          config.channel.email = email.toLowerCase()
+          config.channels.email = email.toLowerCase()
         }
 
         if (sms) {
-          config.channel.sms = sms.toLowerCase()
+          config.channels.sms = sms.toLowerCase()
         }
 
         if (push) {
-          config.channel.push = push.toLowerCase()
+          config.channels.push = push.toLowerCase()
         }
 
         if (callback) {
-          config.channel.callback = callback.toLowerCase()
+          config.channels.callback = callback.toLowerCase()
         }
 
         if (chat) {
-          config.channel.chat = chat.toLowerCase()
+          config.channels.chat = chat.toLowerCase()
         }
 
         return config
