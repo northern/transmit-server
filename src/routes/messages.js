@@ -12,7 +12,7 @@ router.post('/:id', async (req, res) => {
   let status = HttpStatus.ACCEPTED
 
   const container = req.app.container
-  const logger = container.logger
+  const logger = container.get('logger')
 
   try {
     let response
@@ -20,7 +20,7 @@ router.post('/:id', async (req, res) => {
     const messageId = parseInt(req.params.id)
 
     // Retrieve message.
-    response = await container.messageQuery.getById(messageId)
+    response = await container.get('messageQuery').getById(messageId)
 
     if (response.status !== Response.OK) {
       throw new HttpError(response, HttpStatus.BAD_REQUEST)
@@ -29,7 +29,7 @@ router.post('/:id', async (req, res) => {
     const message = response.message    
 
     // Process the message.
-    response = await container.messageProcessCommand.execute(message)
+    response = await container.get('messageProcessCommand').execute(message)
 
     if (response.status !== Response.OK) {
       throw new HttpError(response, HttpStatus.BAD_REQUEST)
@@ -55,10 +55,10 @@ router.post('/', async (req, res) => {
   let status = HttpStatus.CREATED
 
   const container = req.app.container
-  const logger = container.logger
+  const logger = container.get('logger')
 
   try {
-    const response = await container.messageCreateCommand.execute(req.body)
+    const response = await container.get('messageCreateCommand').execute(req.body)
 
     if (response.status !== Response.OK) {
       throw new HttpError(response, HttpStatus.BAD_REQUEST)

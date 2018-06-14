@@ -4,17 +4,18 @@ import TransmissionValidator from '../../app/Service/Transmission/TransmissionVa
 import TransmissionRepository from '../../app/Service/Transmission/TransmissionRepository'
 import MySqlStorage from '../../app/Service/Transmission/Storage/MySqlStorage'
 
-export default (bottle) => {
-  bottle.factory('transmissionRepository', container => {
-    const { config } = container
-    
+export default (container) => {
+  const config = container.get('config')
+  const logger = container.get('logger')
+
+  container.service('transmissionRepository', container => {
     const service = new TransmissionRepository()
-    service.setLogger(container.logger)
+    service.setLogger(logger)
 
     switch (config.database.provider) {
       case TransmissionService.PROVIDER_MYSQL: {
         const storage = new MySqlStorage()
-        storage.setLogger(container.logger)
+        storage.setLogger(logger)
 
         service.setStorage(storage)
       }
@@ -24,18 +25,18 @@ export default (bottle) => {
     return service
   })
 
-  bottle.factory('transmissionValidator', container => {
+  container.service('transmissionValidator', container => {
     const service = new TransmissionValidator()
-    service.setLogger(container.logger)
+    service.setLogger(logger)
 
     return service
   })
 
-  bottle.factory('transmissionService', container => {
+  container.service('transmissionService', container => {
     const service = new TransmissionService()
-    service.setLogger(container.logger)
-    service.setRepository(container.transmissionRepository)
-    service.setValidator(container.transmissionValidator)
+    service.setLogger(logger)
+    service.setRepository(container.get('transmissionRepository'))
+    service.setValidator(container.get('transmissionValidator'))
 
     return service
   })

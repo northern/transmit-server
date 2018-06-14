@@ -1,12 +1,13 @@
 
 import RecipientService from '../../app/Service/Recipient/RecipientService'
 
-export default (bottle) => {
-  bottle.factory('recipientService', container => {
-    const { config } = container
+export default (container) => {
+  const config = container.get('config')
+  const logger = container.get('logger')
 
+  container.service('recipientService', container => {
     const service = new RecipientService()
-    service.setLogger(container.logger)
+    service.setLogger(logger)
 
     return service
   })

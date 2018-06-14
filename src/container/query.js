@@ -2,22 +2,25 @@
 import TemplateQuery from '../app/Query/TemplateQuery'
 import MessageQuery from '../app/Query/MessageQuery'
 
-export default bottle => {
-  bottle.factory('templateQuery', container => {
+export default (container) => {
+  const config = container.get('config')
+  const logger = container.get('logger')
+
+  container.service('templateQuery', container => {
     const service = new TemplateQuery()
-    service.setLogger(container.logger)
-    service.setPersistenceService(container.persistenceService)
-    service.setTemplateService(container.templateService)
+    service.setLogger(logger)
+    service.setPersistenceService(container.get('persistenceService'))
+    service.setTemplateService(container.get('templateService'))
 
     return service
-  })
+  }, true)
 
-  bottle.factory('messageQuery', container => {
+  container.service('messageQuery', container => {
     const service = new MessageQuery()
-    service.setLogger(container.logger)
-    service.setPersistenceService(container.persistenceService)
-    service.setMessageService(container.messageService)
+    service.setLogger(logger)
+    service.setPersistenceService(container.get('persistenceService'))
+    service.setMessageService(container.get('messageService'))
 
     return service
-  })
+  }, true)
 }

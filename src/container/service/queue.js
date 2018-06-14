@@ -2,8 +2,9 @@
 import QueueService from '../../app/Service/Queue/QueueService'
 import SqsProvider from '../../app/Service/Queue/Provider/SqsProvider'
 
-function initSqsProvider(bottle) {
-  const config = bottle.container.config
+const initSqsProvider = (container) => {
+  const config = container.get('config')
+  const logger = container.get('logger')
 
   const sqs = SqsProvider.getSqsClient(
     config.queue.sqsClientVersion,
@@ -35,40 +36,41 @@ function initSqsProvider(bottle) {
     }
 
     const provider = new SqsProvider()
-    provider.setLogger(bottle.container.logger)
+    provider.setLogger(logger)
     provider.setSqsClient(sqs)
     provider.setQueueUrl(result.QueueUrl)
 
-    bottle.service('sqsProvider', () => provider)
+    container.service('sqsProvider', () => provider)
   })
 }
 
-function initQueueProviders(bottle) {
-  const config = bottle.container.config
+const initQueueProviders = (container) => {
+  const config = container.get('config')
 
   switch (config.queue.provider) {
     case QueueService.PROVIDER_SQS:
-      initSqsProvider(bottle)
+      initSqsProvider(container)
       break
   }
 }
 
-export default (bottle) => {
-  initQueueProviders(bottle)
+export default (container) => {
+  initQueueProviders(container)
 
-  bottle.factory('queueService', container => {
-    const { config } = container
+  container.service('queueService', container => {
+    const config = container.get('config')
+    const logger = container.get('logger')
     
     const service = new QueueService()
-    service.setLogger(container.logger)
+    service.setLogger(logger)
 
     switch (config.queue.type) {
       case QueueService.TYPE_SQS: {
-        service.setProvider(container.sqsProvider)
+        service.setProvider(container.get('sqsProvider'))
       }
       break
     }
 
     return service
-  })
+  }, true)
 }

@@ -16,6 +16,10 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
+"@northern/di@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@northern/di/-/di-1.0.2.tgz#0548a86a0c384c13dea0b1be6626b233317d1115"
+
 "@webassemblyjs/ast@1.5.9":
   version "1.5.9"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.5.9.tgz#b2770182678691ab4949d593105c15d4074fedb6"
@@ -1112,10 +1116,6 @@ body-parser@1.18.2:
     qs "6.5.1"
     raw-body "2.3.2"
     type-is "~1.6.15"
-
-bottlejs@^1.7.0:
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/bottlejs/-/bottlejs-1.7.1.tgz#f2673c42feb2ba092d94b8add390e66b3f7d948f"
 
 boxen@^1.2.1:
   version "1.3.0"

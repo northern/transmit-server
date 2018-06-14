@@ -12,7 +12,7 @@ router.post('/:id', async (req, res) => {
   let status = HttpStatus.ACCEPTED
 
   const container = req.app.container
-  const logger = container.logger
+  const logger = container.get('logger')
 
   try {
     let response

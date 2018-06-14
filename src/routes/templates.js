@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
   let status = HttpStatus.OK
 
   const container = req.app.container
-  const logger = container.logger
+  const logger = container.get('logger')
 
   try {
     result = []
@@ -43,10 +43,10 @@ router.post('/', (req, res) => {
   let status = HttpStatus.CREATED
 
   const container = req.app.container
-  const logger = container.logger
+  const logger = container.get('logger')
 
   try {
-    const response = container.templateCreateCommand.execute("test")
+    const response = container.get('templateCreateCommand').execute("test")
 
     if (response.status !== Response.OK) {
       throw new HttpError(response.message, HttpStatus.BAD_REQUEST)

@@ -1,5 +1,5 @@
 
-import Bottle from 'bottlejs'
+import Container from '@northern/di'
 
 import logger from '../app/Util/logger'
 import initPersistanceService from './service/persistance'
@@ -13,20 +13,20 @@ import initCommand from './command'
 import initQuery from './query'
 
 export default (config) => {
-  const bottle = new Bottle()
+  const container = new Container()
 
-  bottle.service('logger', () => logger)
-  bottle.service('config', () => config)
+  container.service('logger', () => logger)
+  container.service('config', () => config)
 
-  initPersistanceService(bottle)
-  initQueueService(bottle)
-  initTemplateService(bottle)
-  initMessageService(bottle)
-  initTransmissionService(bottle)
-  initIntegrationService(bottle)
-  initRecipientService(bottle)
-  initCommand(bottle)
-  initQuery(bottle)
+  initPersistanceService(container)
+  initQueueService(container)
+  initTemplateService(container)
+  initMessageService(container)
+  initTransmissionService(container)
+  initIntegrationService(container)
+  initRecipientService(container)
+  initCommand(container)
+  initQuery(container)
 
-  return bottle.container
+  return container
 }
