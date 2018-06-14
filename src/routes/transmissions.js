@@ -19,11 +19,17 @@ router.post('/:id', async (req, res) => {
 
     const transmissionId = parseInt(req.params.id)
 
-    result = {}
+    // Retrieve the transmission.
+    response = await container.get('transmissionQuery').getById(transmissionId)
 
-    /*
-    // Retrieve message.
-    response = await container.messageQuery.getById(messageId)
+    if (response.status !== Response.OK) {
+      throw new HttpError(response, HttpStatus.BAD_REQUEST)
+    }
+
+    const transmission = response.transmission    
+
+    // Retrieve the message of this transmission.
+    response = await container.get('messageQuery').getById(transmission.messageId)
 
     if (response.status !== Response.OK) {
       throw new HttpError(response, HttpStatus.BAD_REQUEST)
@@ -32,14 +38,13 @@ router.post('/:id', async (req, res) => {
     const message = response.message    
 
     // Process the message.
-    response = await container.messageProcessCommand.execute(message)
+    response = await container.get('transmissionProcessCommand').execute(message, transmission)
 
     if (response.status !== Response.OK) {
       throw new HttpError(response, HttpStatus.BAD_REQUEST)
     }
 
-    result = response.transmissions
-    */
+    result = {}
   }
   catch(e) {
     if (e instanceof HttpError) {

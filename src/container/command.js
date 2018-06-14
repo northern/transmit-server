@@ -2,6 +2,7 @@
 import TemplateCreateCommand from '../app/Command/TemplateCreateCommand'
 import MessageCreateCommand from '../app/Command/MessageCreateCommand'
 import MessageProcessCommand from '../app/Command/MessageProcessCommand'
+import TransmissionProcessCommand from '../app/Command/TransmissionProcessCommand'
 
 export default container => {
   const config = container.get('config')
@@ -35,6 +36,17 @@ export default container => {
     service.setTemplateService(container.get('templateService'))
     service.setIntegrationService(container.get('integrationService'))
     service.setRecipientService(container.get('recipientService'))
+
+    return service
+  }, true)
+
+  container.service('transmissionProcessCommand', container => {
+    const service = new TransmissionProcessCommand()
+    service.setLogger(logger)
+    service.setPersistenceService(container.get('persistenceService'))
+    service.setQueueService(container.get('queueService'))
+    service.setTransmissionService(container.get('transmissionService'))
+    service.setIntegrationService(container.get('integrationService'))
 
     return service
   }, true)

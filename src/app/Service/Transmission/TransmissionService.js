@@ -1,5 +1,6 @@
 
 import Transmission from '../../Entity/Transmission'
+import TransmissionValidationError from './Error/TransmissionValidationError'
 
 export default class TransmissionService {
   static get PROVIDER_MYSQL() {
@@ -24,6 +25,10 @@ export default class TransmissionService {
 
   addProvider(provider) {
     this.providers.push(provider)
+  }
+
+  async getById(id, connection) {
+    return this.repository.getById(id, connection)
   }
 
   create(message, templateRevision, integrations, recipients, connection) {
@@ -85,7 +90,23 @@ export default class TransmissionService {
     return transmissions
   }
 
-  send(transmission) {
+  async update(transmission, values, connection) {
+    const updatedTransmission = Object.assign(new Transmission(), transmission, values)
+
+    const result = this.validator.validate(transmission)
+
+    if (result.errors.length > 0) {
+      throw new TransmissionValidationError(result.errors)
+    }
+
+    await this.repository.persist(updatedTransmission, connection)
+
+    return updatedTransmission
+  }
+
+  send(message, transmission, integrations) {
+    console.log("%o", message)
+    console.log("%o", integrations)
     
   }
 }
