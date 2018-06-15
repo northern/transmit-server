@@ -18,7 +18,7 @@ export default class TransmissionValidator {
     const schema = {
       title: "Postways Transmission Schema",
       type: 'object',
-      required: ['messageId', 'status', 'type', 'target', 'vars', 'error', 'timeCreated', 'timeUpdated'],
+      required: ['messageId', 'token', 'status', 'channel', 'target', 'vars', 'error', 'timeCreated', 'timeUpdated'],
       properties: {
         id: {
           type: ['number', 'string', 'null'],
@@ -26,14 +26,17 @@ export default class TransmissionValidator {
         messageId: {
           type: ['number', 'string'],
         },
+        token: {
+          type: ['string'],
+        },
         status: {
           type: ['string'],
         },
-        type: {
+        channel: {
           type: ['string'],
         },
         target: {
-          type: ['object'],
+          type: ['object', 'string'],
         },
         vars: {
           type: ['object', 'null'],

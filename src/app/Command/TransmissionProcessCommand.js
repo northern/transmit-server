@@ -4,6 +4,7 @@ import AppError from '../Error/AppError'
 import AbstractCommand from './AbstractCommand'
 import Transmission from '../Entity/Transmission'
 import TransmissionValidationError from '../Service/Transmission/Error/TransmissionValidationError'
+import DuplicateTransmissionProcessRequest from './Error/DuplicateTransmissionProcessRequest'
 
 export default class TransmissionProcessCommand extends AbstractCommand {
   setQueueService(queueService) {
@@ -18,12 +19,20 @@ export default class TransmissionProcessCommand extends AbstractCommand {
     this.integrationService = integrationService
   }
 
+  setTemplateService(templateService) {
+    this.templateService = templateService
+  }
+
   async execute(message, transmission) {
     const response = new Response()
 
     let connection
 
     try {
+      if (transmission.status !== Transmission.STATUS_PENDING) {
+        throw new DuplicateTransmissionProcessRequest(transmission)
+      }
+
       connection = await this.persistenceService.beginTransaction()
 
       // Update the transmission status to 'processing'.
@@ -33,11 +42,14 @@ export default class TransmissionProcessCommand extends AbstractCommand {
 
       transmission = await this.transmissionService.update(transmission, values, connection)
 
-      // Get the available integrations.
-      const integrations = this.integrationService.getIntegrations()
+      // Create the template revision from the message.
+      const templateRevision = this.templateService.createRevisionInline(message.template.revision)
+
+      // Get the integration for this transmission.
+      const integration = this.integrationService.getIntegration(transmission.channel)
 
       // Send the message..
-      this.transmissionService.send(message, transmission, integrations)
+      this.transmissionService.send(transmission, templateRevision, integration)
 
 
       await this.persistenceService.commit(connection)

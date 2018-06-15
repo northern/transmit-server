@@ -31,7 +31,7 @@ export default class TransmissionService {
     return this.repository.getById(id, connection)
   }
 
-  create(message, templateRevision, integrations, recipients, connection) {
+  async create(message, templateRevision, integrations, recipients, connection) {
     const transmissions = []
 
     // Providers is an array containing a list of channels for which providers
@@ -49,43 +49,60 @@ export default class TransmissionService {
     // that type of target (i.e. an email provider) and the channel ("email") is
     // specified on the template.
     recipients.map(recipient => {
-      const transmission = new Transmission()
-      transmission.messageId = message.id
-      transmission.vars = recipient.vars
-      
       if (recipient.email && providers.includes('email') && channels.includes('email')) {
-        transmission.type = Transmission.TYPE_EMAIL
+        const transmission = new Transmission()
+        transmission.messageId = message.id
+        transmission.vars = recipient.vars
+        transmission.channel = Transmission.CHANNEL_EMAIL
         transmission.target = recipient.email
+
+        transmissions.push(transmission)
       }
 
       if (recipient.phone && providers.includes('sms') && channels.includes('sms')) {
-        transmission.type = Transmission.TYPE_SMS
+        const transmission = new Transmission()
+        transmission.messageId = message.id
+        transmission.vars = recipient.vars
+        transmission.channel = Transmission.CHANNEL_SMS
         transmission.target = recipient.phone
+
+        transmissions.push(transmission)
       }
 
       if (recipient.push && providers.includes('push') && channels.includes('push')) {
-        transmission.type = Transmission.TYPE_PUSH
+        const transmission = new Transmission()
+        transmission.messageId = message.id
+        transmission.vars = recipient.vars
+        transmission.channel = Transmission.CHANNEL_PUSH
         transmission.target = recipient.push
+
+        transmissions.push(transmission)
       }
 
       if (recipient.callback && providers.includes('callback') && channels.includes('callback')) {
-        transmission.type = Transmission.TYPE_CALLBACK
+        const transmission = new Transmission()
+        transmission.messageId = message.id
+        transmission.vars = recipient.vars
+        transmission.channel = Transmission.CHANNEL_CALLBACK
         transmission.target = recipient.callback
+
+        transmissions.push(transmission)
       }
 
       if (recipient.chat && providers.includes('chat') && channels.includes('chat')) {
-        transmission.type = Transmission.TYPE_CHAT
+        const transmission = new Transmission()
+        transmission.messageId = message.id
+        transmission.vars = recipient.vars
+        transmission.channel = Transmission.CHANNEL_CHAT
         transmission.target = recipient.chat
-      }
 
-      // If a transmission type and target where set then we can add this one
-      // to the list and persist it.
-      if (transmission.type && transmission.target) {
         transmissions.push(transmission)
-
-        this.repository.persist(transmission, connection)
       }
     })
+
+    for (var i = 0; i < transmissions.length; i++) {
+      await this.repository.persist(transmissions[i], connection)
+    }
 
     return transmissions
   }
@@ -104,9 +121,10 @@ export default class TransmissionService {
     return updatedTransmission
   }
 
-  send(message, transmission, integrations) {
-    console.log("%o", message)
-    console.log("%o", integrations)
+  send(transmission, templateRevision, integration) {
+    //console.log("%o", templateRevision)
+    //console.log("%o", transmission)
+    //console.log("%o", integrations)
     
   }
 }

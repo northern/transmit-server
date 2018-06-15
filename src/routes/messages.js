@@ -26,7 +26,7 @@ router.post('/:id', async (req, res) => {
       throw new HttpError(response, HttpStatus.BAD_REQUEST)
     }
 
-    const message = response.message    
+    const message = response.message
 
     // Process the message.
     response = await container.get('messageProcessCommand').execute(message)
@@ -35,7 +35,9 @@ router.post('/:id', async (req, res) => {
       throw new HttpError(response, HttpStatus.BAD_REQUEST)
     }
 
-    result = response.transmissions
+    result = {
+      transmissions: response.transmissions
+    }
   }
   catch(e) {
     if (e instanceof HttpError) {

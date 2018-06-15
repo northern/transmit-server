@@ -47,6 +47,7 @@ export default container => {
     service.setQueueService(container.get('queueService'))
     service.setTransmissionService(container.get('transmissionService'))
     service.setIntegrationService(container.get('integrationService'))
+    service.setTemplateService(container.get('templateService'))
 
     return service
   }, true)

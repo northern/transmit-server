@@ -1,4 +1,6 @@
 
+import uuid from 'uuid'
+
 import Template from './Template'
 
 export default class Transmission {
@@ -37,31 +39,32 @@ export default class Transmission {
     return 'ok'
   }
 
-  static get TYPE_EMAIL() {
+  static get CHANNEL_EMAIL() {
     return Template.CHANNEL_TYPE_EMAIL
   }
 
-  static get TYPE_SMS() {
+  static get CHANNEL_SMS() {
     return Template.CHANNEL_TYPE_SMS
   }
 
-  static get TYPE_PUSH() {
+  static get CHANNEL_PUSH() {
     return Template.CHANNEL_TYPE_PUSH
   }
 
-  static get TYPE_CALLBACK() {
+  static get CHANNEL_CALLBACK() {
     return Template.CHANNEL_TYPE_CALLBACK
   }
 
-  static get TYPE_CHAT() {
+  static get CHANNEL_CHAT() {
     return Template.CHANNEL_TYPE_CHAT
   }
 
   constructor() {
     this.id = null
     this.messageId = null
+    this.token = uuid.v4()
     this.status = Transmission.STATUS_PENDING
-    this.type = null
+    this.channel = null
     this.target = null
     this.vars = null
     this.error = null

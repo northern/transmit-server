@@ -41,8 +41,9 @@ DROP TABLE IF EXISTS `transmissions`;
 CREATE TABLE `transmissions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `message_id` int(11) NOT NULL,
+  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `channel` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
   `target` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `vars` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `error` longtext COLLATE utf8mb4_unicode_ci,

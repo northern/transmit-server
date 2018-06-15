@@ -50,4 +50,19 @@ export default class IntegrationService {
   getIntegrations() {
     return this.integrations
   }
+
+  getIntegration(channel) {
+    const integrations = this.integrations.filter(integration => {
+      if (integration.channel === channel) {
+        return integration
+      }
+    })
+
+    if (integrations.length !== 1) {
+      // TODO: Needs proper exception
+      throw new Error("Missing integration")
+    }
+
+    return integrations[0]
+  }
 }

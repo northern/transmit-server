@@ -5,6 +5,8 @@ import Response from '../Response'
 import AppError from '../Error/AppError'
 import AbstractCommand from './AbstractCommand'
 import Message from '../Entity/Message'
+import MessageValidationError from '../Service/Message/Error/MessageValidationError'
+import DuplicateMessageProcessRequest from './Error/DuplicateMessageProcessRequest'
 
 export default class MessageProcessCommand extends AbstractCommand {
   setQueueService(queueService) {
@@ -37,6 +39,10 @@ export default class MessageProcessCommand extends AbstractCommand {
     let connection
 
     try {
+      if (message.status !== Message.STATUS_PENDING) {
+        throw new DuplicateMessageProcessRequest(message)
+      }
+
       connection = await this.persistenceService.beginTransaction()
 
       // Either load the template or create an inline template and obtain the active revision.
@@ -71,7 +77,7 @@ export default class MessageProcessCommand extends AbstractCommand {
       const recipients = this.recipientService.create(message)
 
       // Create the individual transmissions.
-      const transmissions = this.transmissionService.create(message, templateRevision, integrations, recipients, connection)
+      const transmissions = await this.transmissionService.create(message, templateRevision, integrations, recipients, connection)
 
       await this.persistenceService.commit(connection)
       await this.persistenceService.releaseConnection(connection)
@@ -93,6 +99,12 @@ export default class MessageProcessCommand extends AbstractCommand {
     catch(e) {
       await this.persistenceService.rollback(connection)
 
+      if (e instanceof MessageValidationError) {
+        response.status  = Response.INVALID
+        response.message = e.message
+        response.errors  = e.errors
+      }
+      else
       if (e instanceof AppError) {
         response.status  = Response.ERROR
         response.message = e.message

@@ -1,5 +1,6 @@
 
 import Template from '../../Entity/Template'
+import Revision from '../../Entity/Template/Revision'
 import TemplateNotFoundByIdError from './Error/TemplateNotFoundByIdError'
 
 export default class TemplateService {
@@ -37,5 +38,12 @@ export default class TemplateService {
     const template = new Template(data)
 
     return template
+  }
+
+  createRevisionInline(data) {
+    const revision = new Revision()
+    revision.unserialize(data)
+
+    return revision
   }
 }
