@@ -49,6 +49,13 @@ export default () => {
         port: process.env.SERVER_PORT || 3000,
       },
 
+      defaults: {
+        sender: {
+          from: process.env.DEFAULT_SENDER_FROM,
+          email: process.env.DEFAULT_SENDER_EMAIL,
+        }
+      },
+
       database: ((provider) => {
         if (!provider) {
           throw new Error("Missing database provider in config.")

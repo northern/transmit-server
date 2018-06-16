@@ -4,7 +4,9 @@ export default class SmtpProvider {
 
   }
 
-  send(message, transmission) {
-
+  async send(title, body, extra = {}) {
+    console.log("title", title)
+    console.log("body", body)
+    console.log("%o", extra)
   }
 }

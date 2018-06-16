@@ -151,7 +151,6 @@ export default class MessageValidator {
                       additionalProperties: true,
                     },
                 },
-                additionalProperties: false,
               },
               minItems: 1,
             },
@@ -161,7 +160,8 @@ export default class MessageValidator {
                 type: ['string'],
                 enum: Template.getChannelTypes(),
               }
-            }
+            },
+            additionalProperties: false,
           },
           additionalProperties: false
         },

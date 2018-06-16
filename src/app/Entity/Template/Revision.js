@@ -20,6 +20,75 @@ export default class Revision {
     this.test = new Test()
   }
 
+  getTitle(channel) {
+    let title;
+
+    switch (channel) {
+      case Channels.TYPE_EMAIL:
+        title = this.email.title
+        break
+
+      case Channels.TYPE_SMS:
+        // SMS has no title.
+        break
+
+      case Channels.TYPE_PUSH:
+        title = this.push.title
+        break
+
+      case Channels.TYPE_CALLBACK:
+        title = this.callback.title
+        break
+
+      case Channels.TYPE_CHAT:
+        title = this.chat.title
+        break
+    }
+
+    if (!title) {
+      title = this.default.title
+    }
+
+    return title
+  }
+
+  getBody(channel) {
+    let body;
+
+    switch (channel) {
+      case Channels.TYPE_EMAIL:
+        if (this.email.isHtml) {
+          body = this.email.body.html
+        }
+        else {
+          body = this.email.body.text
+        }
+        break
+
+      case Channels.TYPE_SMS:
+        body = this.sms.body
+        break
+
+      case Channels.TYPE_PUSH:
+        body = this.push.body
+        break
+
+      case Channels.TYPE_CALLBACK:
+        body = this.callback.body
+        break
+
+      case Channels.TYPE_CHAT:
+        body = this.chat.body
+        break
+    }
+
+    if (!body) {
+      body = this.default.body
+    }
+
+    return body
+  }
+
   unserialize(data) {
     if (!data) {
       data = {}

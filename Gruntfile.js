@@ -45,16 +45,19 @@ module.exports = function(grunt) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        'template': {
-          'channels': {
-            'required': ['email'/*, 'chat'*/],
+        template: {
+          channels: {
+            required: ['email'/*, 'chat'*/],
           },
-          'default': {
-            'title': "Hello from Postways",
-            'body': "This is a message send through the Postways API.",
+          default: {
+            title: "Hello from Postways",
+            body: "This is a {{ baz }} message {{ foo }} send {{ bar }} through the Postways API.",
+          },
+          vars: {
+            baz: "Baz",
           }
         },
-        'recipients': [{
+        recipients: [{
           email: "john.doe@postways.com",
           chat: {
             username: 'username',

@@ -23,7 +23,7 @@ router.post('/:id', async (req, res) => {
     response = await container.get('transmissionQuery').getById(transmissionId)
 
     if (response.status !== Response.OK) {
-      throw new HttpError(response, HttpStatus.BAD_REQUEST)
+      throw new HttpError(response, HttpStatus.NOT_FOUND)
     }
 
     const transmission = response.transmission    

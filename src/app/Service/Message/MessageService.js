@@ -50,4 +50,14 @@ export default class MessageService {
 
     return updatedMessage
   }
+
+  getTemplateVars(message) {
+    let vars = null
+
+    if (message.template.vars instanceof Object) {
+      vars = message.template.vars
+    }
+
+    return vars
+  }
 }

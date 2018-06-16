@@ -11,6 +11,10 @@ export default class TransmissionProcessCommand extends AbstractCommand {
     this.queueService = queueService
   }
 
+  setMessageService(messageService) {
+    this.messageService = messageService
+  }
+
   setTransmissionService(transmissionService) {
     this.transmissionService = transmissionService
   }
@@ -21,6 +25,10 @@ export default class TransmissionProcessCommand extends AbstractCommand {
 
   setTemplateService(templateService) {
     this.templateService = templateService
+  }
+
+  setDefaults(defaults) {
+    this.defaults = defaults
   }
 
   async execute(message, transmission) {
@@ -42,14 +50,14 @@ export default class TransmissionProcessCommand extends AbstractCommand {
 
       transmission = await this.transmissionService.update(transmission, values, connection)
 
-      // Create the template revision from the message.
-      const templateRevision = this.templateService.createRevisionInline(message.template.revision)
+      // Create the template revision from the message and the rendered title & body.
+      const revision = this.templateService.createRevisionInline(message.template.revision)
 
       // Get the integration for this transmission.
       const integration = this.integrationService.getIntegration(transmission.channel)
 
       // Send the message..
-      this.transmissionService.send(transmission, templateRevision, integration)
+      await this.transmissionService.send(transmission, revision, integration, message.template.vars, this.defaults)
 
 
       await this.persistenceService.commit(connection)

@@ -4,7 +4,7 @@ export default class StsProvider {
 
   }
 
-  send(message, transmission) {
+  send(title, body, extra = {}) {
 
   }
 }

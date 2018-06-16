@@ -4,7 +4,7 @@ export default class AwsProvider {
 
   }
 
-  send(message, transmission) {
+  send(title, body, extra = {}) {
 
   }
 }

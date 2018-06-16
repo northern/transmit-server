@@ -4,7 +4,7 @@ export default class SlackProvider {
 
   }
 
-  send(message, transmission) {
+  send(title, body, extra = {}) {
 
   }
 }

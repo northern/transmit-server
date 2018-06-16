@@ -1,5 +1,5 @@
 
-export default class Recipient {
+export default class TransmissionTarget {
   constructor() {
     this.email = null
     this.phone = null

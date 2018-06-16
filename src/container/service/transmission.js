@@ -2,6 +2,7 @@
 import TransmissionService from '../../app/Service/Transmission/TransmissionService'
 import TransmissionValidator from '../../app/Service/Transmission/TransmissionValidator'
 import TransmissionRepository from '../../app/Service/Transmission/TransmissionRepository'
+import TransmissionHelper from '../../app/Service/Transmission/TransmissionHelper'
 import MySqlStorage from '../../app/Service/Transmission/Storage/MySqlStorage'
 
 export default (container) => {
@@ -32,11 +33,18 @@ export default (container) => {
     return service
   })
 
+  container.service('transmissionHelper', container => {
+    const service = new TransmissionHelper()
+
+    return service
+  })
+
   container.service('transmissionService', container => {
     const service = new TransmissionService()
     service.setLogger(logger)
     service.setRepository(container.get('transmissionRepository'))
     service.setValidator(container.get('transmissionValidator'))
+    service.setHelper(container.get('transmissionHelper'))
 
     return service
   })

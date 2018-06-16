@@ -4,7 +4,7 @@ export default class HttpProvider {
 
   }
 
-  send(message, transmission) {
-
+  send(title, body, extra = {}) {
+    
   }
 }

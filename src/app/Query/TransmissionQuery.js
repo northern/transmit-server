@@ -21,7 +21,7 @@ export default class TransmissionQuery extends AbstractQuery {
     catch(e) {
       if (e instanceof AppError) {
         response.status = Response.ERROR
-        response.transmission = e.transmission
+        response.message = e.message
       }
       else {
         throw e

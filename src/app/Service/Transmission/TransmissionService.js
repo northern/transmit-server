@@ -1,5 +1,7 @@
 
 import Transmission from '../../Entity/Transmission'
+import TransmissionTarget from '../../Entity/TransmissionTarget'
+import TransmissionNotFoundError from './Error/TransmissionNotFoundError'
 import TransmissionValidationError from './Error/TransmissionValidationError'
 
 export default class TransmissionService {
@@ -23,16 +25,40 @@ export default class TransmissionService {
     this.validator = validator
   }
 
+  setHelper(helper) {
+    this.helper = helper
+  }
+
   addProvider(provider) {
     this.providers.push(provider)
   }
 
   async getById(id, connection) {
-    return this.repository.getById(id, connection)
+    const transmission = await this.repository.getById(id, connection)
+
+    if (!transmission) {
+      throw new TransmissionNotFoundError(id)
+    }
+
+    return transmission
   }
 
-  async create(message, templateRevision, integrations, recipients, connection) {
+  async create(message, revision, integrations, connection) {
     const transmissions = []
+
+    const targets = []
+
+    message.data.recipients.map(recipient => {
+      const target = new TransmissionTarget()
+      target.email = recipient.email || null
+      target.phone = recipient.phone || null
+      target.push = recipient.push || null
+      target.callback = recipient.callback || null
+      target.chat = recipient.chat || null
+      target.vars = recipient.vars || null
+      
+      targets.push(target)
+    })
 
     // Providers is an array containing a list of channels for which providers
     // are configured (e.g. "email", "sms", etc.)
@@ -42,59 +68,59 @@ export default class TransmissionService {
 
     // Channels is an array containing a list of the channels set on a template
     // (e.g. "email", "sms", etc.)
-    const channels = templateRevision.channels.getCombined()
+    const channels = revision.channels.getCombined()
 
-    // Loop through all the recipients and create Transmissions where a recipient
+    // Loop through all the targets and create Transmissions where a recipient
     // has a target specified (e.g. "email") and there is a provider to send to
     // that type of target (i.e. an email provider) and the channel ("email") is
     // specified on the template.
-    recipients.map(recipient => {
-      if (recipient.email && providers.includes('email') && channels.includes('email')) {
+    targets.map(target => {
+      if (target.email && providers.includes('email') && channels.includes('email')) {
         const transmission = new Transmission()
         transmission.messageId = message.id
-        transmission.vars = recipient.vars
+        transmission.vars = target.vars
         transmission.channel = Transmission.CHANNEL_EMAIL
-        transmission.target = recipient.email
+        transmission.target = target.email
 
         transmissions.push(transmission)
       }
 
-      if (recipient.phone && providers.includes('sms') && channels.includes('sms')) {
+      if (target.phone && providers.includes('sms') && channels.includes('sms')) {
         const transmission = new Transmission()
         transmission.messageId = message.id
-        transmission.vars = recipient.vars
+        transmission.vars = target.vars
         transmission.channel = Transmission.CHANNEL_SMS
-        transmission.target = recipient.phone
+        transmission.target = target.phone
 
         transmissions.push(transmission)
       }
 
-      if (recipient.push && providers.includes('push') && channels.includes('push')) {
+      if (target.push && providers.includes('push') && channels.includes('push')) {
         const transmission = new Transmission()
         transmission.messageId = message.id
-        transmission.vars = recipient.vars
+        transmission.vars = target.vars
         transmission.channel = Transmission.CHANNEL_PUSH
-        transmission.target = recipient.push
+        transmission.target = target.push
 
         transmissions.push(transmission)
       }
 
-      if (recipient.callback && providers.includes('callback') && channels.includes('callback')) {
+      if (target.callback && providers.includes('callback') && channels.includes('callback')) {
         const transmission = new Transmission()
         transmission.messageId = message.id
-        transmission.vars = recipient.vars
+        transmission.vars = target.vars
         transmission.channel = Transmission.CHANNEL_CALLBACK
-        transmission.target = recipient.callback
+        transmission.target = target.callback
 
         transmissions.push(transmission)
       }
 
-      if (recipient.chat && providers.includes('chat') && channels.includes('chat')) {
+      if (target.chat && providers.includes('chat') && channels.includes('chat')) {
         const transmission = new Transmission()
         transmission.messageId = message.id
-        transmission.vars = recipient.vars
+        transmission.vars = target.vars
         transmission.channel = Transmission.CHANNEL_CHAT
-        transmission.target = recipient.chat
+        transmission.target = target.chat
 
         transmissions.push(transmission)
       }
@@ -121,10 +147,38 @@ export default class TransmissionService {
     return updatedTransmission
   }
 
-  send(transmission, templateRevision, integration) {
-    //console.log("%o", templateRevision)
-    //console.log("%o", transmission)
-    //console.log("%o", integrations)
-    
+  async send(transmission, revision, integration, vars, defaults) {
+    const combinedVars = this.helper.getCombinedVars(vars, transmission.vars)
+
+    const title = this.helper.render(revision.getTitle(transmission.channel), combinedVars)
+    const body = this.helper.render(revision.getBody(transmission.channel), combinedVars)
+
+    let extra
+
+    switch (transmission.channel) {
+      case Transmission.CHANNEL_EMAIL: {
+        const email = revision.email
+
+        let alternateBody
+
+        if (email.isHtml) {
+          alternateBody = email.body.text
+        }
+        else {
+          alternateBody = email.body.html
+        }
+
+        extra = {
+          senderName: email.getSenderName(defaults.sender.from),
+          senderEmail: email.getSenderEmail(defaults.sender.email),
+          isHtml: email.isHtml,
+          alternateBody: alternateBody ? this.helper.render(alternateBody, combinedVars) : null
+        }
+      }
+      break
+    }
+
+    await integration.provider.send(title, body, extra)
   }
+
 }

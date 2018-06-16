@@ -35,7 +35,6 @@ export default container => {
     service.setTransmissionService(container.get('transmissionService'))
     service.setTemplateService(container.get('templateService'))
     service.setIntegrationService(container.get('integrationService'))
-    service.setRecipientService(container.get('recipientService'))
 
     return service
   }, true)
@@ -45,9 +44,11 @@ export default container => {
     service.setLogger(logger)
     service.setPersistenceService(container.get('persistenceService'))
     service.setQueueService(container.get('queueService'))
+    service.setMessageService(container.get('messageService'))
     service.setTransmissionService(container.get('transmissionService'))
     service.setIntegrationService(container.get('integrationService'))
     service.setTemplateService(container.get('templateService'))
+    service.setDefaults(config.defaults)
 
     return service
   }, true)

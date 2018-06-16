@@ -10,6 +10,14 @@ export default class Email {
     this.isHtml = false
   }
 
+  getSenderName(defaultName) {
+    return this.senderName || defaultName
+  }
+
+  getSenderEmail(defaultEmail) {
+    return this.senderEmail || defaultEmail
+  }
+
   serialize() {
     return Object.assign({}, this)
   }
@@ -22,7 +30,7 @@ export default class Email {
     this.title = data.title || null
     this.senderName = data.senderName || null
     this.senderEmail = data.senderEmail || null
-    this.body = data.body ? (new Body()).unserialize(data.body) : new Body()
+    this.body.unserialize(data.body)
     this.isHtml = data.isHtml || false
   }
 }
