@@ -43,7 +43,7 @@ export default class TransmissionService {
     return transmission
   }
 
-  async create(message, revision, integrations, connection) {
+  async create(message, revision, integrations, channels, connection) {
     const transmissions = []
 
     const targets = []
@@ -68,14 +68,14 @@ export default class TransmissionService {
 
     // Channels is an array containing a list of the channels set on a template
     // (e.g. "email", "sms", etc.)
-    const channels = revision.channels.getCombined()
+    const combinedChannels = revision.channels.getCombined(channels)
 
     // Loop through all the targets and create Transmissions where a recipient
     // has a target specified (e.g. "email") and there is a provider to send to
     // that type of target (i.e. an email provider) and the channel ("email") is
     // specified on the template.
     targets.map(target => {
-      if (target.email && providers.includes('email') && channels.includes('email')) {
+      if (target.email && providers.includes('email') && combinedChannels.includes('email')) {
         const transmission = new Transmission()
         transmission.messageId = message.id
         transmission.vars = target.vars
@@ -85,7 +85,7 @@ export default class TransmissionService {
         transmissions.push(transmission)
       }
 
-      if (target.phone && providers.includes('sms') && channels.includes('sms')) {
+      if (target.phone && providers.includes('sms') && combinedChannels.includes('sms')) {
         const transmission = new Transmission()
         transmission.messageId = message.id
         transmission.vars = target.vars
@@ -95,7 +95,7 @@ export default class TransmissionService {
         transmissions.push(transmission)
       }
 
-      if (target.push && providers.includes('push') && channels.includes('push')) {
+      if (target.push && providers.includes('push') && combinedChannels.includes('push')) {
         const transmission = new Transmission()
         transmission.messageId = message.id
         transmission.vars = target.vars
@@ -105,7 +105,7 @@ export default class TransmissionService {
         transmissions.push(transmission)
       }
 
-      if (target.callback && providers.includes('callback') && channels.includes('callback')) {
+      if (target.callback && providers.includes('callback') && combinedChannels.includes('callback')) {
         const transmission = new Transmission()
         transmission.messageId = message.id
         transmission.vars = target.vars
@@ -115,7 +115,7 @@ export default class TransmissionService {
         transmissions.push(transmission)
       }
 
-      if (target.chat && providers.includes('chat') && channels.includes('chat')) {
+      if (target.chat && providers.includes('chat') && combinedChannels.includes('chat')) {
         const transmission = new Transmission()
         transmission.messageId = message.id
         transmission.vars = target.vars

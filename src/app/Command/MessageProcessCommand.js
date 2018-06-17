@@ -83,7 +83,7 @@ export default class MessageProcessCommand extends AbstractCommand {
       const integrations = await this.integrationService.getIntegrations(connection)
 
       // Create the individual transmissions.
-      const transmissions = await this.transmissionService.create(message, revision, integrations, connection)
+      const transmissions = await this.transmissionService.create(message, revision, integrations, message.data.channels, connection)
 
       await this.persistenceService.commit(connection)
       await this.persistenceService.releaseConnection(connection)

@@ -25,8 +25,8 @@ export default class Channels {
     this.required = [Channels.TYPE_EMAIL]
   }
 
-  getCombined() {
-    return [...this.preferred, ...this.required]
+  getCombined(channels = []) {
+    return [...this.preferred, ...this.required, ...channels]
   }
 
   serialize() {
