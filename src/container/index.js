@@ -11,14 +11,14 @@ import initIntegrationService from './service/integration'
 import initCommand from './command'
 import initQuery from './query'
 
-export default (config) => {
+export default async (config) => {
   const container = new Container()
 
   container.service('logger', () => logger)
   container.service('config', () => config)
 
   initPersistanceService(container)
-  initQueueService(container)
+  await initQueueService(container)
   initTemplateService(container)
   initMessageService(container)
   initTransmissionService(container)

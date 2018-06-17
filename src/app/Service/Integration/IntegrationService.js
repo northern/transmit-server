@@ -47,11 +47,11 @@ export default class IntegrationService {
     this.integrations = integrations
   }
 
-  getIntegrations() {
+  async getIntegrations(connection) {
     return this.integrations
   }
 
-  getIntegration(channel) {
+  async getIntegration(channel, connection) {
     const integrations = this.integrations.filter(integration => {
       if (integration.channel === channel) {
         return integration

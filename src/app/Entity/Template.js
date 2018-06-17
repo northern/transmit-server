@@ -1,6 +1,4 @@
 
-import _ from 'lodash'
-
 import Category from './Template/Category'
 import Revision from './Template/Revision'
 import Channels from './Template/Revision/Channels'
@@ -64,10 +62,6 @@ export default class Template {
     this.revision = data.revision || this.revision
     this.category = new Category().unserialize(data.category || {})
 
-  }
-
-  getActiveRevision() {
-    return _.find(this.revisions, {number: this.revision})
   }
 
   static getChannelTypes() {

@@ -5,6 +5,8 @@ import HttpStatus from 'http-status-codes'
 import Response from '../app/Response'
 import HttpError from './error/HttpError'
 
+import messagePayloadValidation from './schema/message'
+
 const router = express.Router()
 
 router.post('/:id', async (req, res) => {
@@ -60,6 +62,12 @@ router.post('/', async (req, res) => {
   const logger = container.get('logger')
 
   try {
+    const validation = messagePayloadValidation(req.body)
+
+    if (validation.errors.length > 0) {
+      throw new HttpError({errors: validation.errors}, HttpStatus.BAD_REQUEST)
+    }    
+
     const response = await container.get('messageCreateCommand').execute(req.body)
 
     if (response.status !== Response.OK) {

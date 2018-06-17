@@ -37,7 +37,8 @@ export default class TransmissionProcessCommand extends AbstractCommand {
     let connection
 
     try {
-      if (transmission.status !== Transmission.STATUS_PENDING) {
+      // If a transmission is in a "processing" state then don't process again.
+      if (transmission.status === Transmission.STATUS_PROCESSING) {
         throw new DuplicateTransmissionProcessRequest(transmission)
       }
 
@@ -54,11 +55,10 @@ export default class TransmissionProcessCommand extends AbstractCommand {
       const revision = this.templateService.createRevisionInline(message.template.revision)
 
       // Get the integration for this transmission.
-      const integration = this.integrationService.getIntegration(transmission.channel)
+      const integration = await this.integrationService.getIntegration(transmission.channel, connection)
 
       // Send the message..
       await this.transmissionService.send(transmission, revision, integration, message.template.vars, this.defaults)
-
 
       await this.persistenceService.commit(connection)
       await this.persistenceService.releaseConnection(connection)

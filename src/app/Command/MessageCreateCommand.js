@@ -19,9 +19,9 @@ export default class MessageCreateCommand extends AbstractCommand {
     let connection
 
     try {
-      // Create and persist message.
       connection = await this.persistenceService.beginTransaction()
 
+      // Create and persist message.
       const message = await this.messageService.create(data, connection)
 
       await this.persistenceService.commit(connection)

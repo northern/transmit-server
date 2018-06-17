@@ -39,32 +39,40 @@ export default class MessageProcessCommand extends AbstractCommand {
     let connection
 
     try {
-      if (message.status !== Message.STATUS_PENDING) {
+      // If a message is in a "processing" state then don't process again.
+      if (message.status === Message.STATUS_PROCESSING) {
         throw new DuplicateMessageProcessRequest(message)
       }
 
       connection = await this.persistenceService.beginTransaction()
 
-      // Either load the template or create an inline template and obtain the active revision.
+      // Either load the template or create an inline template.
       let template = null
 
-      const templateId = _.get(message.data, 'template.id')
-
-      if (templateId) {
+      if (message.data.template.id) {
         // TODO: Load the template.
       }
       else {
         template = this.templateService.createInline(message.data.template)
       }
 
-      const revision = template.getActiveRevision()
+      // Get the specified or active revision from the template.
+      let revision
+
+      if (message.data.template.revision) {
+        revision = this.templateService.getRevision(template, message.data.template.revision)
+      }
+      else {
+        revision = this.templateService.getActiveRevision(template)
+      }      
+
+      // TODO: Check if revision is published.
 
       // Update the message status to 'processing'.
       const values = {
         status: Message.STATUS_PROCESSING,
         template: {
           revision: revision,
-          blocks: null,
           vars: message.data.template.vars,
         },
       }
@@ -72,7 +80,7 @@ export default class MessageProcessCommand extends AbstractCommand {
       message = await this.messageService.update(message, values, connection)
 
       // Get the available integrations.
-      const integrations = this.integrationService.getIntegrations()
+      const integrations = await this.integrationService.getIntegrations(connection)
 
       // Create the individual transmissions.
       const transmissions = await this.transmissionService.create(message, revision, integrations, connection)

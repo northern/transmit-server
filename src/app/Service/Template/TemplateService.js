@@ -1,4 +1,6 @@
 
+import _ from 'lodash'
+
 import Template from '../../Entity/Template'
 import Revision from '../../Entity/Template/Revision'
 import TemplateNotFoundByIdError from './Error/TemplateNotFoundByIdError'
@@ -24,6 +26,19 @@ export default class TemplateService {
     }
 
     return template
+  }
+
+
+  getRevision(template, number) {
+    const revision = _.find(template.revisions, {number: number})
+
+    // TODO: Error handling for not found.
+
+    return revision
+  }
+
+  getActiveRevision(template) {
+    return this.getRevision(template, template.revision)
   }
 
   create(name) {
