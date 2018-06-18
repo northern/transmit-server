@@ -4,7 +4,7 @@ import MessageCreateCommand from '../app/Command/MessageCreateCommand'
 import MessageProcessCommand from '../app/Command/MessageProcessCommand'
 import TransmissionProcessCommand from '../app/Command/TransmissionProcessCommand'
 
-export default container => {
+export default async (container) => {
   const config = container.get('config')
   const logger = container.get('logger')
 

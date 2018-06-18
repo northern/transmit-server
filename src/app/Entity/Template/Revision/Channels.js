@@ -25,8 +25,18 @@ export default class Channels {
     this.required = [Channels.TYPE_EMAIL]
   }
 
-  getCombined(channels = []) {
-    return [...this.preferred, ...this.required, ...channels]
+  getCombined(channels = [], providers = []) {
+    const preferred = []
+
+    // Find the first preferred channel for which there is a provider.
+    for (let i = 0; i < this.preferred.length; i++) {
+      if (providers.included(this.preferred[i])) {
+        preferred.push(this.preferred[i])
+        break
+      }
+    }
+
+    return [...preferred, ...this.required, ...channels]
   }
 
   serialize() {

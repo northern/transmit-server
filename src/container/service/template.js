@@ -3,7 +3,7 @@ import TemplateService from '../../app/Service/Template/TemplateService'
 import TemplateRepository from '../../app/Service/Template/TemplateRepository'
 import TemplateValidator from '../../app/Service/Template/TemplateValidator'
 
-export default (container) => {
+export default async (container) => {
   const logger = container.get('logger')
 
   container.service('templateServiceRepository', container => {

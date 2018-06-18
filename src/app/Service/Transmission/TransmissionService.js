@@ -68,7 +68,7 @@ export default class TransmissionService {
 
     // Channels is an array containing a list of the channels set on a template
     // (e.g. "email", "sms", etc.)
-    const combinedChannels = revision.channels.getCombined(channels)
+    const combinedChannels = revision.channels.getCombined(channels, providers)
 
     // Loop through all the targets and create Transmissions where a recipient
     // has a target specified (e.g. "email") and there is a provider to send to

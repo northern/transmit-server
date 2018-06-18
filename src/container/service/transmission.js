@@ -5,7 +5,7 @@ import TransmissionRepository from '../../app/Service/Transmission/TransmissionR
 import TransmissionHelper from '../../app/Service/Transmission/TransmissionHelper'
 import MySqlStorage from '../../app/Service/Transmission/Storage/MySqlStorage'
 
-export default (container) => {
+export default async (container) => {
   const config = container.get('config')
   const logger = container.get('logger')
 

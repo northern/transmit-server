@@ -2,7 +2,7 @@
 import PersistenceService from '../../app/Service/Persistence/PersistenceService'
 import MySqlProvider from '../../app/Service/Persistence/Provider/MySqlProvider'
 
-export default (container) => {
+export default async (container) => {
   container.service('persistenceService', container => {
     const config = container.get('config')
     const logger = container.get('logger')
@@ -23,5 +23,4 @@ export default (container) => {
 
     return service
   })
-
 }

@@ -4,7 +4,7 @@ import MessageValidator from '../../app/Service/Message/MessageValidator'
 import MessageRepository from '../../app/Service/Message/MessageRepository'
 import MySqlStorage from '../../app/Service/Message/Storage/MySqlStorage'
 
-export default (container) => {
+export default async (container) => {
   const config = container.get('config')
   const logger = container.get('logger')
 

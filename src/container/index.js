@@ -17,14 +17,14 @@ export default async (config) => {
   container.service('logger', () => logger)
   container.service('config', () => config)
 
-  initPersistanceService(container)
+  await initPersistanceService(container)
   await initQueueService(container)
-  initTemplateService(container)
-  initMessageService(container)
-  initTransmissionService(container)
-  initIntegrationService(container)
-  initCommand(container)
-  initQuery(container)
+  await initTemplateService(container)
+  await initMessageService(container)
+  await initTransmissionService(container)
+  await initIntegrationService(container)
+  await initCommand(container)
+  await initQuery(container)
 
   return container
 }

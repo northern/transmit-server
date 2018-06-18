@@ -1,7 +1,7 @@
 
 import IntegrationService from '../../app/Service/Integration/IntegrationService'
 
-export default (container) => {
+export default async (container) => {
   const config = container.get('config')
   const logger = container.get('logger')
 

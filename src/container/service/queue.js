@@ -14,9 +14,9 @@ const initSqsProvider = async (container, sqs) => {
       }
     }
 
-    sqs.createQueue(params, (err, result) => {
-      if (err) {
-        reject(err)
+    sqs.createQueue(params, (error, result) => {
+      if (error) {
+        reject(error)
       }
       else {
         resolve(result)

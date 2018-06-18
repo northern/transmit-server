@@ -3,7 +3,7 @@ import TemplateQuery from '../app/Query/TemplateQuery'
 import MessageQuery from '../app/Query/MessageQuery'
 import TransmissionQuery from '../app/Query/TransmissionQuery'
 
-export default (container) => {
+export default async (container) => {
   const config = container.get('config')
   const logger = container.get('logger')
 
