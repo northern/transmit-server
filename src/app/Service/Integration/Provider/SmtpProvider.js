@@ -1,12 +1,42 @@
 
+import nodemailer from 'nodemailer'
+
 export default class SmtpProvider {
   constructor(config) {
+    this.transporter = nodemailer.createTransport({
+      host: config.endpoint,
+      port: config.port,
+      secure: config.isSecure,
+      auth: {
+        user: config.username,
+        pass: config.password,
+      }
+    })
 
+    this.config = config
   }
 
   async send(title, body, extra = {}) {
-    console.log("title", title)
-    console.log("body", body)
-    console.log("%o", extra)
+    const options = {
+      from: extra.from,
+      to: extra.to,
+      subject: title,
+      text: extra.isHtml ? extra.alternateBody : body,
+    };
+
+    if (extra.isHtml) {
+      options.html = body
+    }
+
+    return new Promise((resolve, reject) => {
+      this.transporter.sendMail(options, (error, info) => {
+        if (error) {
+          reject(error)
+        }
+        else {
+          resolve(info)
+        }
+      });
+    })
   }
 }

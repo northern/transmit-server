@@ -42,6 +42,7 @@ services:
       SMTP_USERNAME: ${SMTP_USERNAME}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
       SMTP_ENDPOINT: ${SMTP_ENDPOINT}
+      SMTP_PORT: ${SMTP_PORT}
       SMTP_SECURE: ${SMTP_SECURE}
 
       # Integration 'aws'

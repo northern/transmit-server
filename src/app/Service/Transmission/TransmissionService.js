@@ -162,15 +162,15 @@ export default class TransmissionService {
         let alternateBody
 
         if (email.isHtml) {
-          alternateBody = email.body.text
+          alternateBody = email.body.text || revision.default.body
         }
         else {
           alternateBody = email.body.html
         }
 
         extra = {
-          senderName: email.getSenderName(defaults.sender.from),
-          senderEmail: email.getSenderEmail(defaults.sender.email),
+          to: transmission.target,
+          from: `${email.getSenderName(defaults.sender.from)} <${email.getSenderEmail(defaults.sender.email)}>`,
           isHtml: email.isHtml,
           alternateBody: alternateBody ? this.helper.render(alternateBody, combinedVars) : null
         }
@@ -178,7 +178,12 @@ export default class TransmissionService {
       break
     }
 
-    await integration.provider.send(title, body, extra)
+    try {
+      await integration.provider.send(title, body, extra)
+    }
+    catch(err) {
+      console.error(err)
+    }
   }
 
 }

@@ -53,12 +53,18 @@ module.exports = function(grunt) {
             title: "Hello from Postways",
             body: "This is a {{ baz }} message {{ foo }} send {{ bar }} through the Postways API.",
           },
+          email: {
+            body: {
+              html: "This is a <b>{{ baz }}</b> message <b>{{ foo }}</b> send <b>{{ bar }}</b> through the Postways API.",
+            },
+            isHtml: true,
+          },
           vars: {
             baz: "Baz",
           }
         },
         recipients: [{
-          email: "john.doe@postways.com",
+          email: "info@postways.com",
           chat: {
             username: 'username',
             channel: 'channel',
