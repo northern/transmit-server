@@ -11,36 +11,47 @@ export default class IntegrationService {
     this.logger = logger
   }
 
-  init(channels, providers) {
+  init(channels, settings) {
     const integrations = []
+    const providers = {}
 
     Object.keys(channels).map(channel => {
-      let provider
+      const type = channels[channel]
 
-      switch (channels[channel]) {
+      switch (type) {
         case 'aws':
-          provider = new AwsProvider(providers.aws)
+          if (!providers[type]) {
+            providers[type] = new AwsProvider(settings.aws)
+          }
           break
 
         case 'sts':
-          provider = new StsProvider(providers.sts)
+          if (!providers[type]) {
+            providers[type] = new StsProvider(settings.sts)
+          }
           break
 
         case 'smtp':
-          provider = new SmtpProvider(providers.smtp)
+          if (!providers[type]) {
+            providers[type] = new SmtpProvider(settings.smtp)
+          }
           break
 
         case 'http':
-          provider = new HttpProvider(providers.http)
+          if (!providers[type]) {
+            providers[type] = new HttpProvider(settings.http)
+          }
           break
 
         case 'slack':
-          provider = new SlackProvider(providers.slack)
+          if (!providers[type]) {
+            providers[type] = new SlackProvider(settings.slack)
+          }
           break
       }
 
       integrations.push(
-        new Integration(channel, provider)
+        new Integration(channel, providers[type])
       )
     })
 

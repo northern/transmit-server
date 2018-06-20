@@ -4,6 +4,10 @@ export default class HttpProvider {
 
   }
 
+  getCapabilities() {
+    return ['callback']
+  }
+
   send(title, body, extra = {}) {
     
   }

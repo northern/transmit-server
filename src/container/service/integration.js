@@ -8,7 +8,7 @@ export default async (container) => {
   container.service('integrationService', container => {
     const service = new IntegrationService()
     service.setLogger(logger)
-    service.init(config.integrations.channels, config.integrations.providers)
+    service.init(config.integrations.channels, config.integrations.settings)
 
     return service
   })

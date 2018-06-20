@@ -25,7 +25,7 @@ export default class Channels {
     this.required = [Channels.TYPE_EMAIL]
   }
 
-  getCombined(channels = [], providers = []) {
+  /*getCombined(channels = [], providers = []) {
     const preferred = []
 
     // Find the first preferred channel for which there is a provider.
@@ -37,7 +37,7 @@ export default class Channels {
     }
 
     return [...preferred, ...this.required, ...channels]
-  }
+  }*/
 
   serialize() {
     return Object.assign({}, this)

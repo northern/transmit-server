@@ -4,6 +4,10 @@ export default class StsProvider {
 
   }
 
+  getCapabilities() {
+    return ['email', 'sms', 'push']
+  }
+
   send(title, body, extra = {}) {
 
   }

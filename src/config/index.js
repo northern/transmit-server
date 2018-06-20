@@ -34,7 +34,7 @@ const getAwsExternal = () => ({
 })
 
 const getHttp = () => ({
-  httpUrl: process.env.HTTP_URL,
+  url: process.env.HTTP_URL,
 })
 
 const getSlack = () => ({
@@ -99,7 +99,7 @@ export default () => {
 
       integrations: ((email, sms, push, callback, chat) => {
         config = {
-          providers: {
+          settings: {
             smtp: getSmtp(),
             aws: getAwsInternal(),
             sts: getAwsExternal(),

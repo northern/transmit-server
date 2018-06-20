@@ -16,6 +16,10 @@ export default class SmtpProvider {
     this.config = config
   }
 
+  getCapabilities() {
+    return ['email']
+  }
+
   async send(title, body, extra = {}) {
     const options = {
       from: extra.from,

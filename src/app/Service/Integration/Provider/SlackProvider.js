@@ -4,6 +4,10 @@ export default class SlackProvider {
 
   }
 
+  getCapabilities() {
+    return ['chat']
+  }
+
   send(title, body, extra = {}) {
 
   }
