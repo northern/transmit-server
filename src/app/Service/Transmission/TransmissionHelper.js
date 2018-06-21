@@ -6,6 +6,22 @@ import Transmission from '../../Entity/Transmission'
 import TransmissionTarget from '../../Entity/TransmissionTarget'
 
 export default class TransmissionHelper {
+  static get CHANNEL_PREFERRED() {
+    return 'preferred'
+  }
+
+  static get CHANNEL_REQUIRED() {
+    return 'required'
+  }
+
+  /**
+   * Takes two Objects and combines them. If the resulting Object does not contain any keys
+   * then 'null' will be returned.
+   *
+   * @param Object templateVars
+   * @param Object transmissionVars
+   * @return Object | null
+   */
   getCombinedVars(templateVars, transmissionVars) {
     let combinedVars = Object.assign({}, templateVars || {}, transmissionVars || {})
 
@@ -16,14 +32,21 @@ export default class TransmissionHelper {
     return combinedVars    
   }
 
+  /**
+   * Convert a recipient data structure into a TransmissionTarget.
+   *
+   * @param Object recipient
+   * @return TransmissionTarget
+   */
   recipientToTransmissionTarget(recipient) {
     const target = new TransmissionTarget()
-    target.email = recipient.email || null
-    target.phone = recipient.phone || null
-    target.push = recipient.push || null
+
+    target.email    = recipient.email    || null
+    target.phone    = recipient.phone    || null
+    target.push     = recipient.push     || null
     target.callback = recipient.callback || null
-    target.chat = recipient.chat || null
-    target.vars = recipient.vars || null
+    target.chat     = recipient.chat     || null
+    target.vars     = recipient.vars     || null
 
     return target
   }
@@ -59,7 +82,20 @@ export default class TransmissionHelper {
     return channels;
   }
 
-  getTransmissions(message, target, channels, isPreferred = true) {
+  /**
+   * Returns a list of Transmissions based on a TransmissionTarget and a list of channels.
+   * When looping through the provided channels, when a "match" is found then a Transmission
+   * will be created. E.g. if the channel is "email" and the target has the "email" set then
+   * a new Transmission will be created.
+   *
+   * The isPreferred parameter refers to "preferred" channels and when set to "true" it means
+   * that after a first "match" is found, the loop will exist.
+   *
+   * @param TransmissionTarget target
+   * @param array channels
+   * @param boolean isPreferred
+   */
+  getTransmissions(target, channels, channelType) {
     const transmissions = []
 
     for (let i = 0; i < channels.length; i++) {
@@ -67,7 +103,6 @@ export default class TransmissionHelper {
         case Template.CHANNEL_TYPE_EMAIL:
           if (target.email) {
             const transmission = new Transmission()
-            transmission.messageId = message.id
             transmission.vars = target.vars
             transmission.channel = Transmission.CHANNEL_EMAIL
             transmission.target = target.email
@@ -79,7 +114,6 @@ export default class TransmissionHelper {
         case Template.CHANNEL_TYPE_SMS:
           if (target.phone) {
             const transmission = new Transmission()
-            transmission.messageId = message.id
             transmission.vars = target.vars
             transmission.channel = Transmission.CHANNEL_SMS
             transmission.target = target.phone
@@ -91,7 +125,6 @@ export default class TransmissionHelper {
         case Template.CHANNEL_TYPE_PUSH:
           if (target.push) {
             const transmission = new Transmission()
-            transmission.messageId = message.id
             transmission.vars = target.vars
             transmission.channel = Transmission.CHANNEL_PUSH
             transmission.target = target.push
@@ -103,7 +136,6 @@ export default class TransmissionHelper {
         case Template.CHANNEL_TYPE_CALLBACK:
           if (target.callback) {
             const transmission = new Transmission()
-            transmission.messageId = message.id
             transmission.vars = target.vars
             transmission.channel = Transmission.CHANNEL_CALLBACK
             transmission.target = target.callback
@@ -115,7 +147,6 @@ export default class TransmissionHelper {
         case Template.CHANNEL_TYPE_CHAT:
           if (target.chat) {
             const transmission = new Transmission()
-            transmission.messageId = message.id
             transmission.vars = target.vars
             transmission.channel = Transmission.CHANNEL_CHAT
             transmission.target = target.chat
@@ -125,7 +156,7 @@ export default class TransmissionHelper {
           break
       }
 
-      if (transmissions.length > 0 && isPreferred) {
+      if (transmissions.length > 0 && channelType === TransmissionHelper.CHANNEL_PREFERRED) {
         break
       }
     }

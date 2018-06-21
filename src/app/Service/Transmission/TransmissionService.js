@@ -1,5 +1,6 @@
 
 import Transmission from '../../Entity/Transmission'
+import TransmissionHelper from './TransmissionHelper'
 import TransmissionNotFoundError from './Error/TransmissionNotFoundError'
 import TransmissionValidationError from './Error/TransmissionValidationError'
 
@@ -59,18 +60,20 @@ export default class TransmissionService {
     const channelsPreferred = this.helper.getPrioritizedChannels(revision.channels.preferred, prioritizedChannels);
 
     targets.map(target => {
-      transmissions = transmissions.concat(this.helper.getTransmissions(message, target, channelsPreferred, true))
+      transmissions = transmissions.concat(this.helper.getTransmissions(target, channelsPreferred, TransmissionHelper.CHANNEL_PREFERRED))
     })
 
     // Create the transmissions for the "required" channels.
     const channelsRequired  = this.helper.getPrioritizedChannels(revision.channels.required, prioritizedChannels);
 
     targets.map(target => {
-      transmissions = transmissions.concat(this.helper.getTransmissions(message, target, channelsRequired, false))
+      transmissions = transmissions.concat(this.helper.getTransmissions(target, channelsRequired, TransmissionHelper.CHANNEL_REQUIRED))
     })
 
     // Persist the newly created transmissions.
     for (var i = 0; i < transmissions.length; i++) {
+      transmission.messageId = message.id
+
       await this.repository.persist(transmissions[i], connection)
     }
 
