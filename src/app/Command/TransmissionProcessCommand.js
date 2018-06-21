@@ -6,6 +6,9 @@ import Transmission from '../Entity/Transmission'
 import TransmissionValidationError from '../Service/Transmission/Error/TransmissionValidationError'
 import DuplicateTransmissionProcessRequest from './Error/DuplicateTransmissionProcessRequest'
 
+/**
+ * This command will process and individual Transmission and send it over its designated integration.
+ */
 export default class TransmissionProcessCommand extends AbstractCommand {
   setQueueService(queueService) {
     this.queueService = queueService

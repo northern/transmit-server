@@ -4,6 +4,11 @@ import AppError from '../Error/AppError'
 import AbstractCommand from './AbstractCommand'
 import MessageValidationError from '../Service/Message/Error/MessageValidationError'
 
+/**
+ * This command accepts and validates raw message payload data and when valid it
+ * will create and persist Message object in the database to then add a message to
+ * the queue for the message to be processed.
+ */
 export default class MessageCreateCommand extends AbstractCommand {
   setQueueService(queueService) {
     this.queueService = queueService

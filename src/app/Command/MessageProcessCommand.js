@@ -8,6 +8,10 @@ import Message from '../Entity/Message'
 import MessageValidationError from '../Service/Message/Error/MessageValidationError'
 import DuplicateMessageProcessRequest from './Error/DuplicateMessageProcessRequest'
 
+/**
+ * This command will process a message by breaking it into individual Transmissions. Each
+ * Transmission is then placed on the queue for processing.
+ */
 export default class MessageProcessCommand extends AbstractCommand {
   setQueueService(queueService) {
     this.queueService = queueService

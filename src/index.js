@@ -22,7 +22,9 @@ const init = async () => {
     res.sendStatus(500)
   })
 
-  server.listen(config().server.port, () => console.info(`Transmit Server running on port ${config().server.port}`))
+  server.listen(config().server.port, () => {
+    console.info(`Transmit Server running on port ${config().server.port}`)
+  })
 }
 
 init()

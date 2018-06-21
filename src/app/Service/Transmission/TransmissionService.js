@@ -8,10 +8,6 @@ export default class TransmissionService {
     return 'mysql'
   }
  
-  constructor() {
-    this.providers = []
-  }
-
   setLogger(logger) {
     this.logger = logger
   }
@@ -28,10 +24,6 @@ export default class TransmissionService {
     this.helper = helper
   }
 
-  addProvider(provider) {
-    this.providers.push(provider)
-  }
-
   async getById(id, connection) {
     const transmission = await this.repository.getById(id, connection)
 
@@ -42,6 +34,18 @@ export default class TransmissionService {
     return transmission
   }
 
+  /**
+   * Returns a list of Transmissions based on the Message and the provided Revision (Template). The
+   * Message will contain a list of recipients, these will be transformed into TransmissionTargets.
+   * Based on the TransmissionTargets the Transmissions will be created.
+   * The Revision will normally define the channels over which the transmission will be send (preferred
+   * and required channels). However, the prioritizedChannels can override these defaults.
+   *
+   * @param Message message
+   * @param Revision revision
+   * @param array prioritizedChannels
+   * @param Object connection
+   */
   async create(message, revision, prioritizedChannels, connection) {
     let transmissions = []
 
@@ -108,9 +112,12 @@ export default class TransmissionService {
           alternateBody = email.body.html
         }
 
+        const fromEmail = email.getSenderEmail(defaults.sender.email)
+        const fromName = email.getSenderName(defaults.sender.from)
+
         extra = {
           to: transmission.target,
-          from: `${email.getSenderName(defaults.sender.from)} <${email.getSenderEmail(defaults.sender.email)}>`,
+          from: fromName ? `${fromName} <${fromEmail}>` : fromEmail,
           isHtml: email.isHtml,
           alternateBody: alternateBody ? this.helper.render(alternateBody, combinedVars) : null
         }
