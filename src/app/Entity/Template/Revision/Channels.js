@@ -22,7 +22,7 @@ export default class Channels {
 
   constructor() {
     this.preferred = []
-    this.required = [Channels.TYPE_EMAIL]
+    this.required = []
   }
 
   serialize() {
@@ -35,6 +35,6 @@ export default class Channels {
     }
 
     this.preferred = data.preferred || []
-    this.required = data.required || [Channels.TYPE_EMAIL]
+    this.required = data.required || []
   }
 }

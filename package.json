@@ -22,13 +22,17 @@
   "scripts": {
     "dev": "nodemon src/index.js --exec babel-node",
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --watch --no-coverage",
     "start": "node src/index.js --exec babel-node"
   },
   "jest": {
     "modulePathIgnorePatterns": [
       "node_mdules",
       "dist"
+    ],
+    "collectCoverage": true,
+    "coverageReporters": [
+      "html"
     ]
   },
   "devDependencies": {

@@ -72,7 +72,7 @@ export default class TransmissionService {
 
     // Persist the newly created transmissions.
     for (var i = 0; i < transmissions.length; i++) {
-      transmission.messageId = message.id
+      transmissions[i].messageId = message.id
 
       await this.repository.persist(transmissions[i], connection)
     }
