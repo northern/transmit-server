@@ -12,6 +12,10 @@ export default class TransmissionRepository {
     return this.storage.getById(id, connection)
   }
 
+  async getByMessageId(id, connection) {
+    return this.storage.getByMessageId(id, connection)
+  }
+
   async persist(transmission, connection) {
     return await this.storage.persist(transmission, connection)
   }

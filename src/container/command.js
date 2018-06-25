@@ -2,6 +2,7 @@
 import TemplateCreateCommand from '../app/Command/TemplateCreateCommand'
 import MessageCreateCommand from '../app/Command/MessageCreateCommand'
 import MessageProcessCommand from '../app/Command/MessageProcessCommand'
+import MessageFinalizeCommand from '../app/Command/MessageFinalizeCommand'
 import TransmissionProcessCommand from '../app/Command/TransmissionProcessCommand'
 
 export default async (container) => {
@@ -52,4 +53,14 @@ export default async (container) => {
 
     return service
   }, true)
+
+  container.service('messageFinalizeCommand', container => {
+    const service = new MessageFinalizeCommand()
+    service.setLogger(logger)
+    service.setPersistenceService(container.get('persistenceService'))
+    service.setMessageService(container.get('messageService'))
+    service.setTransmissionService(container.get('transmissionService'))
+
+    return service
+  })
 }

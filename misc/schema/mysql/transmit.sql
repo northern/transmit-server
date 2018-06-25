@@ -47,6 +47,7 @@ CREATE TABLE `transmissions` (
   `target` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `vars` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `error` longtext COLLATE utf8mb4_unicode_ci,
+  `tries` int(11) NOT NULL DEFAULT 0,
   `time_created` int(11) NOT NULL,
   `time_updated` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),

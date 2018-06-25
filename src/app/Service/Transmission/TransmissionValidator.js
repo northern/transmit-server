@@ -44,6 +44,9 @@ export default class TransmissionValidator {
         error: {
           type: ['string', 'null'],
         },
+        tries: {
+          type: 'number'
+        },
         timeCreated: {
           type: ['number', 'null'],
         },

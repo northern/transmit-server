@@ -48,11 +48,9 @@ export default class TransmissionProcessCommand extends AbstractCommand {
       connection = await this.persistenceService.beginTransaction()
 
       // Update the transmission status to 'processing'.
-      const values = {
+      transmission = await this.transmissionService.update(transmission, {
         status: Transmission.STATUS_PROCESSING,
-      }
-
-      transmission = await this.transmissionService.update(transmission, values, connection)
+      }, connection)
 
       // Create the template revision from the message and the rendered title & body.
       const revision = this.templateService.createRevisionInline(message.template.revision)
@@ -60,8 +58,33 @@ export default class TransmissionProcessCommand extends AbstractCommand {
       // Get the integration for this transmission.
       const integration = await this.integrationService.getIntegration(transmission.channel, connection)
 
-      // Send the message..
-      await this.transmissionService.send(transmission, revision, integration, message.template.vars, this.defaults)
+      // Send the message and update the status.
+      let values
+
+      try {
+        await this.transmissionService.send(transmission, revision, integration, message.template.vars, this.defaults)
+
+        values = {
+          status: Transmission.STATUS_OK,
+        }
+      }
+      catch (error) {
+        if (transmission.tries < Transmission.MAX_TRIES) {
+          values = {
+            status: Transmission.STATUS_RETRY,
+            error: error.message,
+            tries: transmission.tries + 1,
+          }
+        }
+        else {
+          values = {
+            status: Transmission.STATUS_FAILED,
+            error: error.message,
+          }
+        }
+      }
+
+      transmission = await this.transmissionService.update(transmission, values, connection)
 
       await this.persistenceService.commit(connection)
       await this.persistenceService.releaseConnection(connection)

@@ -59,6 +59,10 @@ export default class Transmission {
     return Template.CHANNEL_TYPE_CHAT
   }
 
+  static get MAX_TRIES() {
+    return 3
+  }
+
   constructor() {
     this.id = null
     this.messageId = null
@@ -68,6 +72,7 @@ export default class Transmission {
     this.target = null
     this.vars = null
     this.error = null
+    this.tries = 1
     this.timeCreated = null
     this.timeUpdated = null
   }

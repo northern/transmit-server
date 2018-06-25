@@ -37,11 +37,18 @@ router.post('/:id', async (req, res) => {
 
     const message = response.message    
 
-    // Process the message.
+    // Process the transmission.
     response = await container.get('transmissionProcessCommand').execute(message, transmission)
 
     if (response.status !== Response.OK) {
       throw new HttpError(response, HttpStatus.BAD_REQUEST)
+    }
+
+    // Finalize the message (i.e. check if all transmissions for message have been processed).
+    response = await container.get('messageFinalizeCommand').execute(message)
+
+    if (response.status !== Response.OK) {
+      throw new HttpError(response, HttpError.BAD_REQUEST)
     }
 
     result = {}

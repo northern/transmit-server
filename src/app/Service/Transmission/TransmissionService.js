@@ -35,6 +35,10 @@ export default class TransmissionService {
     return transmission
   }
 
+  async getByMessageId(id, connection) {
+    return await this.repository.getByMessageId(id, connection)
+  }
+
   /**
    * Returns a list of Transmissions based on the Message and the provided Revision (Template). The
    * Message will contain a list of recipients, these will be transformed into TransmissionTargets.
@@ -60,14 +64,18 @@ export default class TransmissionService {
     const channelsPreferred = this.helper.getPrioritizedChannels(revision.channels.preferred, prioritizedChannels);
 
     targets.map(target => {
-      transmissions = transmissions.concat(this.helper.getTransmissions(target, channelsPreferred, TransmissionHelper.CHANNEL_PREFERRED))
+      transmissions = transmissions.concat(
+        this.helper.getTransmissions(target, channelsPreferred, TransmissionHelper.CHANNEL_PREFERRED)
+      )
     })
 
     // Create the transmissions for the "required" channels.
     const channelsRequired  = this.helper.getPrioritizedChannels(revision.channels.required, prioritizedChannels);
 
     targets.map(target => {
-      transmissions = transmissions.concat(this.helper.getTransmissions(target, channelsRequired, TransmissionHelper.CHANNEL_REQUIRED))
+      transmissions = transmissions.concat(
+        this.helper.getTransmissions(target, channelsRequired, TransmissionHelper.CHANNEL_REQUIRED)
+      )
     })
 
     // Persist the newly created transmissions.
@@ -131,9 +139,9 @@ export default class TransmissionService {
     try {
       await integration.provider.send(title, body, extra)
     }
-    catch(err) {
-      console.error(err)
+    catch (err) {
+      // TODO: Normalize error
+      throw new Error(err)
     }
   }
-
 }
