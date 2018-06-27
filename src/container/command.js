@@ -23,6 +23,7 @@ export default async (container) => {
     service.setPersistenceService(container.get('persistenceService'))
     service.setQueueService(container.get('queueService'))
     service.setMessageService(container.get('messageService'))
+    service.setEnvironment(config.environment)
 
     return service
   }, true)

@@ -1,4 +1,6 @@
 
+import _ from 'lodash'
+
 import Response from '../Response'
 import AppError from '../Error/AppError'
 import AbstractCommand from './AbstractCommand'
@@ -18,6 +20,10 @@ export default class MessageCreateCommand extends AbstractCommand {
     this.messageService = messageService
   }
 
+  setEnvironment(environment) {
+    this.environment = environment
+  }
+
   async execute(data) {
     const response = new Response()
 
@@ -26,8 +32,17 @@ export default class MessageCreateCommand extends AbstractCommand {
     try {
       connection = await this.persistenceService.beginTransaction()
 
+      // Establish environment.
+      let environment = this.environment.default
+
+      if (data.environment) {
+        environment = data.environment
+
+        delete data.environment
+      }
+
       // Create and persist message.
-      const message = await this.messageService.create(data, connection)
+      const message = await this.messageService.create(data, environment, connection)
 
       await this.persistenceService.commit(connection)
       await this.persistenceService.releaseConnection(connection)

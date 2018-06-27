@@ -45,6 +45,7 @@ module.exports = function(grunt) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        environment: 'dev',
         template: {
           channels: {
             required: ['email'/*, 'chat'*/],

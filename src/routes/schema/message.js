@@ -13,6 +13,10 @@ const schema = {
   type: 'object',
   required: ['template', 'recipients'],
   properties: {
+    environment: {
+      type: ['string', 'null'],
+      maxLength: 64,
+    },
     template: {
       type: 'object',
       oneOf: [{

@@ -48,6 +48,7 @@ export default class Template {
     this.revision = 1
     this.category = new Category()
     this.revisions = [revision]
+    this.enviromnent = null
     this.timeCreated = null
     this.timeUpdated = null    
   }
@@ -60,6 +61,7 @@ export default class Template {
     this.enabled = data.enabled || this.enabled
     this.status = data.status || this.status
     this.revision = data.revision || this.revision
+    this.enviromnent = data.enviromnent || this.enviromnent
     this.category = new Category().unserialize(data.category || {})
 
   }

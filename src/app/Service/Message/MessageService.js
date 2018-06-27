@@ -24,8 +24,9 @@ export default class MessageService {
     return this.repository.getById(id, connection)
   }
 
-  async create(data, connection) {
+  async create(data, environment, connection) {
     const message = new Message(data)
+    message.environment = environment
 
     const result = this.validator.validate(message)
 

@@ -49,6 +49,11 @@ export default () => {
         port: process.env.SERVER_PORT || 3000,
       },
 
+      environment: {
+        default: process.env.DEFAULT_ENV || 'prod',
+        delimiter: process.env.ENV_DELIMIT || "_",
+      },
+
       defaults: {
         sender: {
           from: process.env.DEFAULT_SENDER_FROM,

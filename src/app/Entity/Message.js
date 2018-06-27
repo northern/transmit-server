@@ -49,6 +49,7 @@ export default class Message {
     this.token = uuid.v4()
     this.status = Message.STATUS_PENDING
     this.error = null
+    this.environment = null
     this.data = data
     this.template = null
     this.timeCreated = null

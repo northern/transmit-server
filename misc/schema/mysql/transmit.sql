@@ -20,6 +20,7 @@ CREATE TABLE `messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `environment` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `error` longtext COLLATE utf8mb4_unicode_ci,
   `data` longtext COLLATE utf8mb4_unicode_ci,
   `template` longtext COLLATE utf8mb4_unicode_ci,
@@ -27,6 +28,7 @@ CREATE TABLE `messages` (
   `time_updated` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `token_idx` (`token`),
+  KEY `environment_idx` (`environment`),
   KEY `time_created_idx` (`time_created`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -74,10 +76,12 @@ CREATE TABLE `templates` (
   `category_name` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `category_title` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `revisions` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `environment` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `time_created` int(11) NOT NULL,
   `time_updated` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `name_idx` (`name`),
+  KEY `environment_idx` (`environment`),
   KEY `time_created_idx` (`time_created`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

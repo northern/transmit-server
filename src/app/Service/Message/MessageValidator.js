@@ -37,6 +37,10 @@ export default class MessageValidator {
           type: ['string'],
           enum: Message.getStatuses(),
         },
+        environment: {
+          type: ['string', 'null'],
+          maxLength: 64,
+        },
         error: {
           type: ['string', 'null'],
         },
