@@ -1,4 +1,5 @@
 
+import _ from 'lodash'
 import Twig from 'twig'
 
 import Template from '../../Entity/Template'
@@ -95,11 +96,19 @@ export default class TransmissionHelper {
    * @param array channels
    * @param boolean isPreferred
    */
-  getTransmissions(target, channels, channelType) {
+  getTransmissions(target, channels, channelType, capabilities) {
     const transmissions = []
 
     for (let i = 0; i < channels.length; i++) {
-      switch (channels[i]) {
+      const channel = channels[i]
+
+      // If the channel is not included in the capabilities then we skip..
+      if (!capabilities.includes(channel)) {
+        continue
+      }
+
+      // Create a Transmission for the specified channel.
+      switch (channel) {
         case Template.CHANNEL_TYPE_EMAIL:
           if (target.email) {
             const transmission = new Transmission()
@@ -162,6 +171,24 @@ export default class TransmissionHelper {
     }
 
     return transmissions
+  }
+
+  /**
+   * Get the capabilities, i.e. the channels for which we can actually send
+   * something out. Imagine we want to send an SMS but none of the integration
+   * providers supports sending SMS messages, in that scenario we do not want
+   * to create a transmission.
+   */
+  getUniqueCapabilities(integrations) {
+    let capabilities = []
+
+    integrations.map(integration => {
+      capabilities = capabilities.concat(integration.provider.getCapabilities())
+    })
+
+    capabilities = _.uniq(capabilities)
+
+    return capabilities    
   }
 
   render(source, vars) {

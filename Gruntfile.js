@@ -48,7 +48,7 @@ module.exports = function(grunt) {
         environment: 'dev',
         template: {
           channels: {
-            required: ['email'/*, 'chat'*/],
+            required: ['email', 'sms'],
           },
           default: {
             title: "Hello from Postways",
@@ -59,6 +59,9 @@ module.exports = function(grunt) {
               html: "This is a <b>{{ baz }}</b> message <b>{{ foo }}</b> send <b>{{ bar }}</b> through the Postways API.",
             },
             isHtml: true,
+          },
+          sms: {
+            body: "This is a {{ foo }} test {{ bar }} 123."
           },
           vars: {
             baz: "Baz",

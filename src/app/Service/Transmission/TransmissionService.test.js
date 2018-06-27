@@ -12,6 +12,12 @@ class MockTransmissionRepository {
   }
 }
 
+const mockIntegrations = [{
+  provider: {
+    getCapabilities: () => ['email', 'sms', 'push', 'chat', 'callback']
+  }
+}]
+
 describe('create (required channels)', () => {
   const mockRepository = new MockTransmissionRepository()
 
@@ -35,7 +41,7 @@ describe('create (required channels)', () => {
     const revision = new Revision()
     revision.unserialize(message.data.template)
 
-    const transmissions = await transmissionService.create(message, revision, [])
+    const transmissions = await transmissionService.create(message, revision, [], mockIntegrations)
 
     expect(transmissions.length).toBe(1)
     expect(transmissions[0].channel).toEqual('email')
@@ -59,7 +65,7 @@ describe('create (required channels)', () => {
     const revision = new Revision()
     revision.unserialize(message.data.template)
 
-    const transmissions = await transmissionService.create(message, revision, [])
+    const transmissions = await transmissionService.create(message, revision, [], mockIntegrations)
 
     expect(transmissions.length).toBe(2)
 
@@ -94,7 +100,7 @@ describe('create (required channels)', () => {
     const revision = new Revision()
     revision.unserialize(message.data.template)
 
-    const transmissions = await transmissionService.create(message, revision, [])
+    const transmissions = await transmissionService.create(message, revision, [], mockIntegrations)
 
     expect(transmissions.length).toBe(3)
 
@@ -134,7 +140,7 @@ describe('create (required channels)', () => {
     const revision = new Revision()
     revision.unserialize(message.data.template)
 
-    const transmissions = await transmissionService.create(message, revision, [])
+    const transmissions = await transmissionService.create(message, revision, [], mockIntegrations)
 
     expect(transmissions.length).toBe(4)
 
@@ -182,7 +188,7 @@ describe('create (required channels)', () => {
     const revision = new Revision()
     revision.unserialize(message.data.template)
 
-    const transmissions = await transmissionService.create(message, revision, [])
+    const transmissions = await transmissionService.create(message, revision, [], mockIntegrations)
 
     expect(transmissions.length).toBe(5)
 
@@ -234,7 +240,7 @@ describe('create (preferred channels)', () => {
     const revision = new Revision()
     revision.unserialize(message.data.template)
 
-    const transmissions = await transmissionService.create(message, revision, [])
+    const transmissions = await transmissionService.create(message, revision, [], mockIntegrations)
 
     expect(transmissions.length).toBe(1)
     expect(transmissions[0].channel).toEqual('email')
@@ -257,7 +263,7 @@ describe('create (preferred channels)', () => {
     const revision = new Revision()
     revision.unserialize(message.data.template)
 
-    const transmissions = await transmissionService.create(message, revision, [])
+    const transmissions = await transmissionService.create(message, revision, [], mockIntegrations)
 
     expect(transmissions.length).toBe(1)
     expect(transmissions[0].channel).toEqual('sms')
@@ -282,7 +288,7 @@ describe('create (preferred channels)', () => {
     const revision = new Revision()
     revision.unserialize(message.data.template)
 
-    const transmissions = await transmissionService.create(message, revision, [])
+    const transmissions = await transmissionService.create(message, revision, [], mockIntegrations)
 
     expect(transmissions.length).toBe(1)
     expect(transmissions[0].channel).toEqual('push')
@@ -305,7 +311,7 @@ describe('create (preferred channels)', () => {
     const revision = new Revision()
     revision.unserialize(message.data.template)
 
-    const transmissions = await transmissionService.create(message, revision, [])
+    const transmissions = await transmissionService.create(message, revision, [], mockIntegrations)
 
     expect(transmissions.length).toBe(1)
     expect(transmissions[0].channel).toEqual('callback')
@@ -331,7 +337,7 @@ describe('create (preferred channels)', () => {
     const revision = new Revision()
     revision.unserialize(message.data.template)
 
-    const transmissions = await transmissionService.create(message, revision, [])
+    const transmissions = await transmissionService.create(message, revision, [], mockIntegrations)
 
     expect(transmissions.length).toBe(1)
     expect(transmissions[0].channel).toEqual('chat')

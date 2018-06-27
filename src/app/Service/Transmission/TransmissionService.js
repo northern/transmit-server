@@ -1,4 +1,6 @@
 
+import _ from 'lodash'
+
 import Transmission from '../../Entity/Transmission'
 import TransmissionHelper from './TransmissionHelper'
 import TransmissionNotFoundError from './Error/TransmissionNotFoundError'
@@ -51,30 +53,39 @@ export default class TransmissionService {
    * @param array prioritizedChannels
    * @param Object connection
    */
-  async create(message, revision, prioritizedChannels, connection) {
+  async create(message, revision, prioritizedChannels, integrations, connection) {
     let transmissions = []
 
+    // Get the capabilities, i.e. the channels for which we can actually send
+    // something out. Imagine we want to send an SMS but none of the integration
+    // providers supports sending SMS messages, in that scenario we do not want
+    // to create a transmission.
+    const capabilities = this.helper.getUniqueCapabilities(integrations)
+
+    // Turn the recipients into TransmissionTarget's.
     const targets = []
 
     message.data.recipients.map(recipient => {
       targets.push(this.helper.recipientToTransmissionTarget(recipient))
     })
 
+    let channels
+
     // Create the transmission for the "preferred" channels (should never be more than one).
-    const channelsPreferred = this.helper.getPrioritizedChannels(revision.channels.preferred, prioritizedChannels);
+    channels = this.helper.getPrioritizedChannels(revision.channels.preferred, prioritizedChannels);
 
     targets.map(target => {
       transmissions = transmissions.concat(
-        this.helper.getTransmissions(target, channelsPreferred, TransmissionHelper.CHANNEL_PREFERRED)
+        this.helper.getTransmissions(target, channels, TransmissionHelper.CHANNEL_PREFERRED, capabilities)
       )
     })
 
     // Create the transmissions for the "required" channels.
-    const channelsRequired  = this.helper.getPrioritizedChannels(revision.channels.required, prioritizedChannels);
+    channels  = this.helper.getPrioritizedChannels(revision.channels.required, prioritizedChannels);
 
     targets.map(target => {
       transmissions = transmissions.concat(
-        this.helper.getTransmissions(target, channelsRequired, TransmissionHelper.CHANNEL_REQUIRED)
+        this.helper.getTransmissions(target, channels, TransmissionHelper.CHANNEL_REQUIRED, capabilities)
       )
     })
 
