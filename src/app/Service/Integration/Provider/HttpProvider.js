@@ -1,14 +1,19 @@
 
-export default class HttpProvider {
-  constructor(config) {
+import AbstractProvider from './AbstractProvider'
+import Transmission from  '../../../Entity/Transmission'
 
+export default class HttpProvider extends AbstractProvider {
+  constructor(config) {
+    super()
   }
 
   getCapabilities() {
-    return ['callback']
+    return [
+      Transmission.CHANNEL_CALLBACK,
+    ]
   }
 
-  send(title, body, extra = {}) {
+  send(channel, title, body, extra = {}) {
     
   }
 }

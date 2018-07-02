@@ -36,7 +36,7 @@ export default class TransmissionValidator {
           type: ['string'],
         },
         target: {
-          type: ['object', 'string'],
+          type: ['object', 'string', 'integer'],
         },
         vars: {
           type: ['object', 'null'],

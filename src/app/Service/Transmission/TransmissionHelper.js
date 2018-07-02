@@ -125,7 +125,7 @@ export default class TransmissionHelper {
             const transmission = new Transmission()
             transmission.vars = target.vars
             transmission.channel = Transmission.CHANNEL_SMS
-            transmission.target = target.phone
+            transmission.target = String(target.phone)
 
             transmissions.push(transmission)
           }

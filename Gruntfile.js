@@ -1,7 +1,8 @@
 
+require('dotenv').config()
+
 var request = require('request');
 var assert = require('chai').assert;
-
 var baseUrl = "http://localhost:3000";
 
 function dumpReq(req) {
@@ -48,7 +49,7 @@ module.exports = function(grunt) {
         environment: 'dev',
         template: {
           channels: {
-            required: ['email', 'sms'],
+            required: ['email'/*, 'sms'*/],
           },
           default: {
             title: "Hello from Postways",
@@ -73,6 +74,7 @@ module.exports = function(grunt) {
             username: 'username',
             channel: 'channel',
           },
+          phone: process.env.PHONE ? `${process.env.PHONE}` : undefined,
           vars: {
             foo: "Foo",
             bar: "Bar",

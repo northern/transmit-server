@@ -17,20 +17,10 @@ const getSmtp = () => ({
 })
 
 const getAwsInternal = () => ({
-  awsClientVerion: process.env.AWS_CLIENT_VERSION || 'latest',
+  awsClientVersion: process.env.AWS_CLIENT_VERSION || 'latest',
   awsClientRegion: process.env.AWS_CLIENT_REGION,
   awsClientKey: process.env.AWS_CLIENT_KEY,
   awsClientSecret: process.env.AWS_CLIENT_SECRET,
-})
-
-const getAwsExternal = () => ({
-  stsClientVersion: process.env.STS_CLIENT_VERSION || 'latest',
-  stsClientRegion: process.env.STS_CLIENT_REGION,
-  stsClientKey: process.env.STS_CLIENT_KEY,
-  stsClientSecret: process.env.STS_CLIENT_SECRET,
-  stsClientExternalId: process.env.STS_CLIENT_EXTERNAL_ID,
-  stsClientArn: process.env.STS_CLIENT_ARN,
-  stsClientCacheTimeout: process.env.STS_CLIENT_CACHE_TIMEOUT,
 })
 
 const getHttp = () => ({
@@ -56,6 +46,7 @@ export default () => {
 
       defaults: {
         sender: {
+          id: process.env.DEFAULT_SENDER_ID ? process.env.DEFAULT_SENDER_ID.replace(/ /g,'') : '',
           from: process.env.DEFAULT_SENDER_FROM,
           email: process.env.DEFAULT_SENDER_EMAIL,
         }
@@ -107,7 +98,6 @@ export default () => {
           settings: {
             smtp: getSmtp(),
             aws: getAwsInternal(),
-            sts: getAwsExternal(),
             http: getHttp(),
             slack: getSlack(),
           },

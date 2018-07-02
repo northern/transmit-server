@@ -1,8 +1,13 @@
 
 import nodemailer from 'nodemailer'
 
-export default class SmtpProvider {
+import AbstractProvider from './AbstractProvider'
+import Transmission from  '../../../Entity/Transmission'
+
+export default class SmtpProvider extends AbstractProvider {
   constructor(config) {
+    super()
+    
     this.transporter = nodemailer.createTransport({
       host: config.endpoint,
       port: config.port,
@@ -17,10 +22,12 @@ export default class SmtpProvider {
   }
 
   getCapabilities() {
-    return ['email']
+    return [
+      Transmission.CHANNEL_EMAIL,
+    ]
   }
 
-  async send(title, body, extra = {}) {
+  async send(channel, title, body, extra = {}) {
     const options = {
       from: extra.from,
       to: extra.to,
@@ -33,14 +40,14 @@ export default class SmtpProvider {
     }
 
     return new Promise((resolve, reject) => {
-      this.transporter.sendMail(options, (error, info) => {
+      this.transporter.sendMail(options, (error, data) => {
         if (error) {
           reject(error)
         }
         else {
-          resolve(info)
+          resolve(data)
         }
-      });
+      })
     })
   }
 }

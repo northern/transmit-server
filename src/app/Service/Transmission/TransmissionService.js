@@ -81,7 +81,7 @@ export default class TransmissionService {
     })
 
     // Create the transmissions for the "required" channels.
-    channels  = this.helper.getPrioritizedChannels(revision.channels.required, prioritizedChannels);
+    channels = this.helper.getPrioritizedChannels(revision.channels.required, prioritizedChannels);
 
     targets.map(target => {
       transmissions = transmissions.concat(
@@ -145,10 +145,18 @@ export default class TransmissionService {
         }
       }
       break
+
+      case Transmission.CHANNEL_SMS: {
+        extra = {
+          phone: transmission.target,
+          senderId: defaults.sender.id,
+        }
+      }
+      break
     }
 
     try {
-      await integration.provider.send(title, body, extra)
+      await integration.provider.send(transmission.channel, title, body, extra)
     }
     catch (err) {
       // TODO: Normalize error

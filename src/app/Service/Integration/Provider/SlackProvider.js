@@ -1,14 +1,19 @@
 
-export default class SlackProvider {
-  constructor(config) {
+import AbstractProvider from './AbstractProvider'
+import Transmission from  '../../../Entity/Transmission'
 
+export default class SlackProvider extends AbstractProvider {
+  constructor(config) {
+    super()
   }
 
   getCapabilities() {
-    return ['chat']
+    return [
+      Transmission.CHANNEL_CHAT,
+    ]
   }
 
-  send(title, body, extra = {}) {
+  send(channel, title, body, extra = {}) {
 
   }
 }

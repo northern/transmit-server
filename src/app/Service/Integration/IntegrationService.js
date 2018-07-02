@@ -1,7 +1,6 @@
 
 import Integration from '../../Entity/Integration'
 import AwsProvider from './Provider/AwsProvider'
-import StsProvider from './Provider/StsProvider'
 import SmtpProvider from './Provider/SmtpProvider'
 import HttpProvider from './Provider/HttpProvider'
 import SlackProvider from './Provider/SlackProvider'
@@ -22,12 +21,6 @@ export default class IntegrationService {
         case 'aws':
           if (!providers[type]) {
             providers[type] = new AwsProvider(settings.aws)
-          }
-          break
-
-        case 'sts':
-          if (!providers[type]) {
-            providers[type] = new StsProvider(settings.sts)
           }
           break
 
