@@ -1,3 +1,5 @@
+# After changing node modules, run:
+# $ docker-compose down && docker-compose up --remove-orphans --build --force-recreate server
 version: '3'
 services:
   server:

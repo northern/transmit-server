@@ -1,10 +1,25 @@
-
-export default class Response {
-  static get OK() { return 'ok'}
-  static get ERROR() { return 'error'}
-  static get INVALID() { return 'invalid' }
-
-  constructor() {
-    this.status = Response.OK
-  }
-}
+"use strict";
+exports.__esModule = true;
+var Response = /** @class */ (function () {
+    function Response(status) {
+        if (status === void 0) { status = Response.OK; }
+        this.status = status;
+    }
+    Object.defineProperty(Response, "OK", {
+        get: function () { return 'ok'; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Response, "ERROR", {
+        get: function () { return 'error'; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Response, "INVALID", {
+        get: function () { return 'invalid'; },
+        enumerable: true,
+        configurable: true
+    });
+    return Response;
+}());
+exports["default"] = Response;

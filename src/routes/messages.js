@@ -47,7 +47,10 @@ router.post('/:id', async (req, res) => {
       result = e.response
     }
     else {
-      throw e
+      logger.error(e.message);
+
+      status = HttpStatus.INTERNAL_SERVER_ERROR
+      result = "Oops, we seem to experience some technical diffeculties."
     }
   }
  
@@ -82,11 +85,14 @@ router.post('/', async (req, res) => {
       result = e.response
     }
     else {
-      throw e
+      logger.error(e.message);
+
+      status = HttpStatus.INTERNAL_SERVER_ERROR
+      result = "Oops, we seem to experience some technical diffeculties."
     }
   }
  
-  res.status(status).json(result) 
+  res.status(status).json(result)
 })
 
 export default router

@@ -34,6 +34,33 @@ function dumpRes(res) {
   return output;
 }
 
+/*
+timeCreated=>=0+<1000|-1
+
+{
+  timeCreated: [
+
+  {
+    op: 'AND'
+    x: {
+      op: '>=',
+      value: 0,
+    }, {
+      op: '<',
+      value: 1000
+    }
+  }, {
+    op: 'OR',
+    x: {
+      op: '=',
+      value: -1
+    }
+  }
+
+  ]
+}
+*/
+
 module.exports = function(grunt) {
   grunt.registerTask('messages:post', "Creates a new message.", function() {
     var done = this.async();
