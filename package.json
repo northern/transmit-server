@@ -19,6 +19,7 @@
   "dependencies": {
     "@northern/di": "^1.0.3",
     "@types/jest": "^24.0.5",
+    "@types/lodash": "^4.14.121",
     "aws-sdk": "^2.252.1",
     "chalk": "^2.4.1",
     "concurrently": "^4.1.0",

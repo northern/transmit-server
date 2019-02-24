@@ -1,19 +1,14 @@
 
 import _ from 'lodash'
-import Twig from 'twig'
+// import Twig from 'twig'
 
 import Template from '../../Entity/Template'
 import Transmission from '../../Entity/Transmission'
 import TransmissionTarget from '../../Entity/TransmissionTarget'
 
 export default class TransmissionHelper {
-  static get CHANNEL_PREFERRED() {
-    return 'preferred'
-  }
-
-  static get CHANNEL_REQUIRED() {
-    return 'required'
-  }
+  static readonly CHANNEL_PREFERRED: string = 'preferred'
+  static readonly CHANNEL_REQUIRED: string = 'required'
 
   /**
    * Takes two Objects and combines them. If the resulting Object does not contain any keys
@@ -21,16 +16,16 @@ export default class TransmissionHelper {
    *
    * @param Object templateVars
    * @param Object transmissionVars
-   * @return Object | null
+   * @return Object
    */
-  getCombinedVars(templateVars, transmissionVars) {
-    let combinedVars = Object.assign({}, templateVars || {}, transmissionVars || {})
+  getCombinedVars(templateVars: object, transmissionVars: object): object {
+    let combinedVars: object = Object.assign({}, templateVars || {}, transmissionVars || {})
 
     if (Object.keys(combinedVars).length === 0) {
-      combinedVars = null
+      combinedVars = {}
     }
 
-    return combinedVars    
+    return combinedVars
   }
 
   /**
@@ -39,15 +34,17 @@ export default class TransmissionHelper {
    * @param Object recipient
    * @return TransmissionTarget
    */
-  recipientToTransmissionTarget(recipient) {
-    const target = new TransmissionTarget()
+  recipientToTransmissionTarget(recipient: object): TransmissionTarget {
+    const target: TransmissionTarget = new TransmissionTarget()
 
-    target.email    = recipient.email    || null
-    target.phone    = recipient.phone    || null
-    target.push     = recipient.push     || null
-    target.callback = recipient.callback || null
-    target.chat     = recipient.chat     || null
-    target.vars     = recipient.vars     || null
+    const map: Map<string, any> = new Map(Object.entries(recipient))
+
+    target.email    = map.get('email')    || null
+    target.phone    = map.get('phone')    || null
+    target.push     = map.get('push')     || null
+    target.callback = map.get('callback') || null
+    target.chat     = map.get('chat')     || null
+    target.vars     = map.get('vars')     || null
 
     return target
   }
@@ -64,9 +61,9 @@ export default class TransmissionHelper {
    * @param array prioritizedChannels An array of prioritized channels (or NULL).
    * @return array
    */
-  getPrioritizedChannels(templateChannels, prioritizedChannels = null) {
+  getPrioritizedChannels(templateChannels: Array<string>, prioritizedChannels: Array<string> | null = null): Array<string> {
     // By default we simply return the templateChannels.
-    let channels = templateChannels;
+    let channels: Array<string> = templateChannels;
 
     if (prioritizedChannels !== null && prioritizedChannels.length > 0) {
         // If prioritizedChannels was defined then we clear the channel to refill it.
@@ -96,11 +93,11 @@ export default class TransmissionHelper {
    * @param array channels
    * @param boolean isPreferred
    */
-  getTransmissions(target, channels, channelType, capabilities) {
-    const transmissions = []
+  getTransmissions(target: TransmissionTarget, channels: Array<string>, channelType: string, capabilities: Array<string>) {
+    const transmissions: Array<Transmission> = []
 
     for (let i = 0; i < channels.length; i++) {
-      const channel = channels[i]
+      const channel: string = channels[i]
 
       // If the channel is not included in the capabilities then we skip..
       if (!capabilities.includes(channel)) {
@@ -165,6 +162,7 @@ export default class TransmissionHelper {
           break
       }
 
+      // When channelType is CHANNEL_PREFERRED we exit after we found one channel.
       if (transmissions.length > 0 && channelType === TransmissionHelper.CHANNEL_PREFERRED) {
         break
       }
@@ -179,23 +177,23 @@ export default class TransmissionHelper {
    * providers supports sending SMS messages, in that scenario we do not want
    * to create a transmission.
    */
-  getUniqueCapabilities(integrations) {
-    let capabilities = []
+  // getUniqueCapabilities(integrations: Array<Integration>) {
+  //   let capabilities: Array<string> = []
 
-    integrations.map(integration => {
-      capabilities = capabilities.concat(integration.provider.getCapabilities())
-    })
+  //   integrations.map(integration => {
+  //     capabilities = capabilities.concat(integration.provider.getCapabilities())
+  //   })
 
-    capabilities = _.uniq(capabilities)
+  //   capabilities = _.uniq(capabilities)
 
-    return capabilities    
-  }
+  //   return capabilities    
+  // }
 
-  render(source, vars) {
-    const template = Twig.twig({
-      data: source
-    })
+  // render(source, vars) {
+  //   const template = Twig.twig({
+  //     data: source
+  //   })
 
-    return template.render(vars)
-  }
+  //   return template.render(vars)
+  // }
 }

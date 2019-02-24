@@ -2,10 +2,10 @@
 export default class TransmissionTarget {
   public email: string | null
   public phone: string | null
-  public push: string | null
+  public push: object | null
   public callback: string | null
-  public chat: string | null
-  public vars: string | null
+  public chat: object | null
+  public vars: object | null
 
   constructor() {
     this.email = null

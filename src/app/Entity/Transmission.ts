@@ -1,7 +1,7 @@
 
 import uuid from 'uuid'
 
-import TransmissionTarget from  './TransmissionTarget'
+import Channels from './Template/Revision/Channels'
 
 export default class Transmission {
   /** 
@@ -29,6 +29,12 @@ export default class Transmission {
    */
   static readonly STATUS_OK = 'ok'
 
+  static readonly CHANNEL_EMAIL    = Channels.TYPE_EMAIL
+  static readonly CHANNEL_SMS      = Channels.TYPE_SMS
+  static readonly CHANNEL_PUSH     = Channels.TYPE_PUSH
+  static readonly CHANNEL_CALLBACK = Channels.TYPE_CALLBACK
+  static readonly CHANNEL_CHAT     = Channels.TYPE_CHAT
+
   static readonly MAX_TRIES = 3
 
   public id: number | null
@@ -36,7 +42,7 @@ export default class Transmission {
   public token: string
   public status: string
   public channel: string | null
-  public target: TransmissionTarget | null
+  public target: string | object | null
   public vars: object | null
   public error: string | null
   public tries: number

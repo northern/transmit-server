@@ -1,10 +1,17 @@
 
 import Category from './Template/Category'
 import Revision from './Template/Revision'
+import Channels from './Template/Revision/Channels'
 
 export default class Template {
   static readonly STATUS_ACTIVE: string = 'active'
   static readonly STATUS_DELETED: string = 'deleted'
+
+  static readonly CHANNEL_TYPE_EMAIL    = Channels.TYPE_EMAIL
+  static readonly CHANNEL_TYPE_SMS      = Channels.TYPE_SMS
+  static readonly CHANNEL_TYPE_PUSH     = Channels.TYPE_PUSH
+  static readonly CHANNEL_TYPE_CALLBACK = Channels.TYPE_CALLBACK
+  static readonly CHANNEL_TYPE_CHAT     = Channels.TYPE_CHAT
 
   static readonly ENGINE_TWIG: string = 'twig'
 
