@@ -2,7 +2,7 @@
 import Serializable from '../../Serializable'
 
 export default class Test implements Serializable {
-  vars: object | null
+  public vars: object | null
 
   constructor(vars: object | null = null) {
     this.vars = vars

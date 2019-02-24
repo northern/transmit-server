@@ -1,15 +1,20 @@
 
-export default class Category {
-  name: string | null
-  title: string | null
+import Serializable from '../Serializable'
+
+export default class Category implements Serializable {
+  public name: string | null
+  public title: string | null
 
   constructor(name: string | null = null, title: string | null = null) {
     this.name = name
     this.title = title
   }
 
-  serialize() {
-    return Object.assign({}, this)
+  serialize(): object {
+    return {
+      name: this.name,
+      title: this.title,
+    }
   }
 
   unserialize(data: object | null): void {

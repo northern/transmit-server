@@ -27,13 +27,18 @@ describe("Entity/Template/Revision/Test", () => {
   })
 
   it("should unserialize", () => {
+    const test: Test = new Test()
+
+    test.unserialize(null)
+
+    expect(test.vars).toBeNull()
+
     const data: object = {
       vars: {
         foo: 'bar'
       }
     }
 
-    const test: Test = new Test()
     test.unserialize(data)
 
     expect(test.vars).toEqual({foo: 'bar'})

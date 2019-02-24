@@ -16,7 +16,7 @@ describe('Entity/Template/Revision/Emaill/Body', () => {
     expect(body.html).toEqual('<html></html>')
   })
 
-  /*it("should serialize", () => {
+  it("should serialize", () => {
     const body: Body = new Body('default text', '<html></html>')
 
     const data: object = body.serialize()
@@ -25,19 +25,24 @@ describe('Entity/Template/Revision/Emaill/Body', () => {
 
     const map: Map<string, string> = new Map(Object.entries(data))
 
-    // expect(map.get('text')).toEqual('default text')
-    // expect(map.get('html')).toEqual('<html></html>')
-  })*/
+    expect(map.get('text')).toEqual('default text')
+    expect(map.get('html')).toEqual('<html></html>')
+  })
 
   it("should unserialize", () => {
+    const body: Body = new Body()
+
+    body.unserialize(null)
+
     const data: object = {
       text: 'default text',
       html: '<html></html>',
     }
 
-    const body: Body = new Body()
-    body.unserialize(data)
+    expect(body.text).toBeNull()
+    expect(body.html).toBeNull()
 
+    body.unserialize(data)
 
     expect(body.text).toEqual('default text')
     expect(body.html).toEqual('<html></html>')

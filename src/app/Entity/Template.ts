@@ -1,52 +1,29 @@
 
 import Category from './Template/Category'
 import Revision from './Template/Revision'
-import Channels from './Template/Revision/Channels'
 
 export default class Template {
-  static get CHANNEL_TYPE_EMAIL() {
-    return Channels.TYPE_EMAIL
-  }
+  static readonly STATUS_ACTIVE: string = 'active'
+  static readonly STATUS_DELETED: string = 'deleted'
 
-  static get CHANNEL_TYPE_SMS() {
-    return Channels.TYPE_SMS
-  }
+  static readonly ENGINE_TWIG: string = 'twig'
 
-  static get CHANNEL_TYPE_PUSH() {
-    return Channels.TYPE_PUSH
-  }
+  public id: number | null
+  public name: string | null
+  public title: string | null
+  public description: string | null
+  public enabled: boolean
+  public status: string
+  public revision: number
+  public category: Category
+  public revisions: Revision[]
+  public enviromnent: string | null
+  public engine: string
+  public timeCreated: number | null
+  public timeUpdated: number | null
 
-  static get CHANNEL_TYPE_CALLBACK() {
-    return Channels.TYPE_CALLBACK
-  }
-
-  static get CHANNEL_TYPE_CHAT() {
-    return Channels.TYPE_CHAT
-  }
-
-  static get STATUS_ACTIVE() {
-    return 'active'
-  }
-
-  static get STATUS_DELETED() {
-    return 'deleted'
-  }
-
-  id: number | null
-  name: string | null
-  title: string | null
-  description: string | null
-  enabled: boolean
-  status: string
-  revision: number
-  category: Category
-  revisions: Revision[]
-  enviromnent: string | null
-  timeCreated: number | null
-  timeUpdated: number | null
-
-  constructor(data: object) {
-    const revision = new Revision()
+  constructor(data: object | null = null) {
+    const revision = new Revision(1)
 
     if (data) {
       revision.unserialize(data)
@@ -62,39 +39,21 @@ export default class Template {
     this.category = new Category()
     this.revisions = [revision]
     this.enviromnent = null
+    this.engine = Template.ENGINE_TWIG
     this.timeCreated = null
     this.timeUpdated = null    
-  }
-
-  unserialize(data: object) {
-    const map = new Map(Object.entries(data))
-
-    this.id = map.get('id') || this.id
-    this.name = map.get('name') || this.name
-    this.title = map.get('title') || this.title
-    this.description = map.get('description') || this.description
-    this.enabled = map.get('enabled') || this.enabled
-    this.status = map.get('status') || this.status
-    this.revision = map.get('revision') || this.revision
-    this.enviromnent = map.get('enviromnent') || this.enviromnent
-    this.category = new Category()
-    this.category.unserialize(map.get('category') || {})
-  }
-
-  static getChannelTypes() {
-    return [
-      Template.CHANNEL_TYPE_EMAIL,
-      Template.CHANNEL_TYPE_SMS,
-      Template.CHANNEL_TYPE_PUSH,
-      Template.CHANNEL_TYPE_CALLBACK,
-      Template.CHANNEL_TYPE_CHAT,
-    ]
   }
 
   static getStatuses() {
     return [
       Template.STATUS_ACTIVE,
       Template.STATUS_DELETED,
+    ]
+  }
+
+  static getEngines() {
+    return [
+      Template.ENGINE_TWIG,
     ]
   }
 }

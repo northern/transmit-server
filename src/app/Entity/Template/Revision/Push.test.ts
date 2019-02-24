@@ -41,13 +41,20 @@ describe("Entity/Template/Revision/Push", () => {
   })
 
   it("should unserialize", () => {
+    const push: Push = new Push()
+
+    push.unserialize(null)
+
+    expect(push.title).toBeNull()
+    expect(push.from).toBeNull()
+    expect(push.body).toBeNull()
+
     const data: object = {
       title: 'default title',
       from: 'default from',
       body: 'default body',
     }
 
-    const push: Push = new Push()
     push.unserialize(data)
 
     expect(push.title).toEqual('default title')

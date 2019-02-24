@@ -33,13 +33,20 @@ describe('Entity/Template/Revision/Callback', () => {
   })
 
   it("should unserialize", () => {
+    const callback: Callback = new Callback()
+
+    callback.unserialize(null)
+
+    expect(callback.title).toBeNull()
+    expect(callback.from).toBeNull()
+    expect(callback.body).toBeNull()
+
     const data: object = {
       title: 'callback title',
       from: 'callback from',
       body: 'callback body',
     }
 
-    const callback: Callback = new Callback()
     callback.unserialize(data)
 
     expect(callback.title).toEqual('callback title')

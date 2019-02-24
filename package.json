@@ -11,9 +11,10 @@
     "watch:node": "nodemon dist/index.js",
     "watch:ts": "tsc -w *.ts",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "test:watch": "jest --watch --no-coverage",
     "start": "node src/index.js",
-    "build": "tsc"
+    "dist": "tsc"
   },
   "dependencies": {
     "@northern/di": "^1.0.3",

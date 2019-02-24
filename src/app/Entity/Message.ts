@@ -6,54 +6,42 @@ export default class Message {
   /** 
    * While a message is pending, waiting to be processed (default).
    */
-  static get STATUS_PENDING() {
-    return 'pending'
-  }
+  static readonly STATUS_PENDING: string = 'pending'
 
   /** 
    * While a message is processing its transmissions.
    */
-  static get STATUS_PROCESSING() {
-    return 'processing'
-  }
+  static readonly STATUS_PROCESSING: string = 'processing'
 
   /**
    * When a message failed, the 'error' has details.
    */
-  static get STATUS_FAILED() {
-    return 'failed'
-  }
+  static readonly STATUS_FAILED: string = 'failed'
 
   /**
    * When a message has failed but a retry has been scheduled.
    */
-  static get STATUS_RETRY() {
-    return 'retry'
-  }
+  static readonly STATUS_RETRY: string = 'retry'
 
   /**
    * When a message and "all" it's transmissions have been successully processed.
    */
-  static get STATUS_OK() {
-    return 'ok'
-  }
+  static readonly STATUS_OK: string = 'ok'
 
   /**
    * When a message was partially processed, i.e. not all transmissions could be processed successfully.
    */
-  static get STATUS_WARNING() {
-    return 'warning'
-  }
+  static get STATUS_WARNING: string = 'warning'
 
-  id: number | null
-  token: string
-  status: string
-  error: string | null
-  environment: string | null
-  data: object | null
-  template: Template | null
-  timeCreated: number | null
-  timeUpdated: number | null
+  public id: number | null
+  public token: string
+  public status: string
+  public error: string | null
+  public environment: string | null
+  public data: object | null
+  public template: Template | null
+  public timeCreated: number | null
+  public timeUpdated: number | null
 
   constructor(data: object | null = null) {
     this.id = null

@@ -36,12 +36,18 @@ describe("Entity/Template/Revision/Sms", () => {
   })
 
   it("should unserialize", () => {
+    const sms: Sms = new Sms()
+
+    expect(sms.from).toBeNull()
+    expect(sms.body).toBeNull()
+
+    sms.unserialize(null)
+
     const data: object = {
       from: 'default from',
       body: 'default body',
     }
 
-    const sms: Sms = new Sms()
     sms.unserialize(data)
 
     expect(sms.from).toEqual('default from')

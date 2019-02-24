@@ -30,12 +30,18 @@ describe("Entity/Template/Revision/Defaults", () => {
   })
 
   it("should unserialize", () => {
+    const defaults: Defaults = new Defaults()
+
+    defaults.unserialize(null)
+
+    expect(defaults.title).toEqual('')
+    expect(defaults.body).toEqual('')
+
     const data: object = {
       title: 'default title',
       body: 'default body',
     }
 
-    const defaults: Defaults = new Defaults()
     defaults.unserialize(data)
 
     expect(defaults.title).toEqual('default title')

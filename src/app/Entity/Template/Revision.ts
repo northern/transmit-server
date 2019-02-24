@@ -1,4 +1,6 @@
 
+import Serializable from '../Serializable'
+
 import Channels from './Revision/Channels'
 import Defaults from './Revision/Defaults'
 import Email from './Revision/Email'
@@ -7,18 +9,18 @@ import Push from './Revision/Push'
 import Callback from './Revision/Callback'
 import Test from './Revision/Test'
 
-export default class Revision {
-  number: number
-  parent: number | null
-  channels: Channels
-  defaults: Defaults
-  email: Email
-  sms: Sms
-  push: Push
-  callback: Callback
-  test: Test
+export default class Revision implements Serializable {
+  public number: number
+  public parent: number | null
+  public channels: Channels
+  public defaults: Defaults
+  public email: Email
+  public sms: Sms
+  public push: Push
+  public callback: Callback
+  public test: Test
 
-  constructor(number: number = 1, parent: number | null = null) {
+  constructor(number: number, parent: number | null = null) {
     this.number = number
     this.parent = parent
     this.channels = new Channels()
@@ -31,11 +33,11 @@ export default class Revision {
   }
 
   getTitle(channel: string): string {
-    let title: string = '';
+    let title: string | null = null;
 
     switch (channel) {
       case Channels.TYPE_EMAIL:
-        title = this.email.title || ''
+        title = this.email.title
         break
 
       case Channels.TYPE_SMS:
@@ -43,11 +45,11 @@ export default class Revision {
         break
 
       case Channels.TYPE_PUSH:
-        title = this.push.title || ''
+        title = this.push.title
         break
 
       case Channels.TYPE_CALLBACK:
-        title = this.callback.title || ''
+        title = this.callback.title
         break
 
       // case Channels.TYPE_CHAT:
@@ -55,7 +57,7 @@ export default class Revision {
       //   break
     }
 
-    if (!title.length) {
+    if (!title) {
       title = this.defaults.title
     }
 
@@ -63,15 +65,15 @@ export default class Revision {
   }
 
   getBody(channel: string): string {
-    let body: string = '';
+    let body: string | null = null;
 
     switch (channel) {
       case Channels.TYPE_EMAIL:
-        body = (this.email.isHtml ? this.email.body.html : this.email.body.text) || ''
+        body = (this.email.isHtml ? this.email.body.html : this.email.body.text)
         break
 
       case Channels.TYPE_SMS:
-        body = this.sms.body || ''
+        body = this.sms.body
         break
 
       case Channels.TYPE_PUSH:
@@ -87,29 +89,59 @@ export default class Revision {
       //   break
     }
 
-    if (!body.length) {
+    if (!body) {
       body = this.defaults.body
     }
 
     return body
   }
 
+  serialize(): object {
+    return {
+      number: this.number,
+      parent: this.parent,
+      channels: this.channels.serialize(),
+      defaults: this.defaults.serialize(),
+      email: this.email.serialize(),
+      sms: this.sms.serialize(),
+      push: this.push.serialize(),
+      callback: this.callback.serialize(),
+      test: this.test.serialize(),
+    }
+  }
+
   unserialize(data: object | null) {
     if (!data) {
-      data = {}
+      data = {
+        number: 1,
+        parent: null,
+      }
     }
 
-    const map: Map<string, string> = new Map(Object.entries(data))
+    const map: Map<string, any> = new Map(Object.entries(data))
 
-    this.number = <number>(map.get('number') || 1)
-    this.parent = map.get('parent') || null
+    this.number = map.get('number');
+    this.parent = map.get('parent');
 
-    (this.channels = new Channels()).unserialize(map.get('channels'))
-    (this.defaults = new Defaults()).unserialize(map.get('defaults'))
-    (this.email = new Email()).unserialize(map.get('email'))
-    (this.sms = new Sms()).unserialize(map.get('sms'))
-    (this.push = new Push()).unserialize(map.get('push'))
-    (this.callback = new Callback()).unserialize(map.get('callback'))
-    (this.test = new Test()).unserialize(map.get('test'))
+    this.channels = new Channels()
+    this.channels.unserialize(map.get('channels'))
+
+    this.defaults = new Defaults()
+    this.defaults.unserialize(map.get('defaults'))
+
+    this.email = new Email()
+    this.email.unserialize(map.get('email'))
+
+    this.sms = new Sms()
+    this.sms.unserialize(map.get('sms'))
+
+    this.push = new Push()
+    this.push.unserialize(map.get('push'))
+
+    this.callback = new Callback()
+    this.callback.unserialize(map.get('callback'))
+
+    this.test = new Test()
+    this.test.unserialize(map.get('test'))
   }
 }

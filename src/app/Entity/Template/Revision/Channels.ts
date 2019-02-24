@@ -2,25 +2,11 @@
 import Serializable from '../../Serializable'
 
 export default class Channels implements Serializable {
-  static get TYPE_EMAIL() {
-    return 'email'
-  }
-
-  static get TYPE_SMS() {
-    return 'sms'
-  }
-
-  static get TYPE_PUSH() {
-    return 'push'
-  }
-
-  static get TYPE_CALLBACK() {
-    return 'callback'
-  }
-
-  static get TYPE_CHAT() {
-    return 'chat'
-  }
+  static readonly TYPE_EMAIL    = 'email'
+  static readonly TYPE_SMS      = 'sms'
+  static readonly TYPE_PUSH     = 'push'
+  static readonly TYPE_CALLBACK = 'callback'
+  static readonly TYPE_CHAT     = 'chat'
 
   public preferred: string[]
   public required: string[]

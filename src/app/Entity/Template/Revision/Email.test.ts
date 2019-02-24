@@ -57,6 +57,17 @@ describe("Entity/Template/Revision/Email", () => {
   })
 
   it("should unserialize", () => {
+    const email: Email = new Email()
+
+    email.unserialize(null)
+
+    expect(email.title).toBeNull()
+    expect(email.senderEmail).toBeNull()
+    expect(email.senderName).toBeNull()
+    expect(email.body.text).toBeNull()
+    expect(email.body.html).toBeNull()
+    expect(email.isHtml).toBeFalsy()
+
     const data: object = {
       title: 'default title',
       senderEmail: 'default sender email',
@@ -68,7 +79,6 @@ describe("Entity/Template/Revision/Email", () => {
       isHtml: false,
     }
 
-    const email: Email = new Email()
     email.unserialize(data)
 
     expect(email.title).toEqual('default title')
@@ -77,5 +87,53 @@ describe("Entity/Template/Revision/Email", () => {
     expect(email.body.text).toEqual('default text')
     expect(email.body.html).toEqual('<html></html>')
     expect(email.isHtml).toBeFalsy()
+  })
+
+  it("should get senderName when set", () => {
+    const email: Email = new Email(
+      'my title',
+      'my sender name',
+      'my sender email',
+      new Body('my text', '<html></html>'),
+      false
+    )
+
+    expect(email.getSenderName('default sender name')).toBe('my sender name')
+  })
+
+  it("should get default senderName when not set", () => {
+    const email: Email = new Email(
+      'my title',
+      null,
+      'my sender email',
+      new Body('my text', '<html></html>'),
+      false
+    )
+
+    expect(email.getSenderName('default sender name')).toBe('default sender name')
+  })
+
+  it("should get senderEmail when set", () => {
+    const email: Email = new Email(
+      'my title',
+      'my sender name',
+      'my sender email',
+      new Body('my text', '<html></html>'),
+      false
+    )
+
+    expect(email.getSenderEmail('default sender email')).toBe('my sender email')
+  })
+
+  it("should get default senderEmail when not set", () => {
+    const email: Email = new Email(
+      'my title',
+      'my sender name',
+      null,
+      new Body('my text', '<html></html>'),
+      false
+    )
+
+    expect(email.getSenderEmail('default sender email')).toBe('default sender email')
   })
 })
