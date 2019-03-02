@@ -1,20 +1,21 @@
 
 import {
-  Validator
+  Validator,
+  ValidatorResult
 } from 'jsonschema'
 
 export default class TransmissionValidator {
-  setLogger(logger) {
-    this.logger = logger
-  }
-
-  validate(data) {
+  validate(data: object): object {
     const validator = new Validator()
 
-    return validator.validate(data, this.getSchema())
+    const result = validator.validate(data, this.getSchema())
+
+    return {
+      errors: result.errors
+    }
   }
 
-  getSchema() {
+  getSchema(): object {
     const schema = {
       title: "Postways Transmission Schema",
       type: 'object',

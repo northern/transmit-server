@@ -4,6 +4,11 @@ import Template from './Template'
 
 export default class Message {
   /** 
+   * While a message is created but not yet processed.
+   */
+  static readonly STATUS_CREATED: string = 'created'
+
+  /** 
    * While a message is pending, waiting to be processed (default).
    */
   static readonly STATUS_PENDING: string = 'pending'
@@ -31,7 +36,7 @@ export default class Message {
   /**
    * When a message was partially processed, i.e. not all transmissions could be processed successfully.
    */
-  static get STATUS_WARNING: string = 'warning'
+  static readonly STATUS_WARNING: string = 'warning'
 
   public id: number | null
   public token: string
@@ -46,7 +51,7 @@ export default class Message {
   constructor(data: object | null = null) {
     this.id = null
     this.token = uuid.v4()
-    this.status = Message.STATUS_PENDING
+    this.status = Message.STATUS_CREATED
     this.error = null
     this.environment = null
     this.data = data
@@ -57,6 +62,7 @@ export default class Message {
 
   static getStatuses() {
     return [
+      Message.STATUS_CREATED,
       Message.STATUS_PENDING,
       Message.STATUS_PROCESSING,
       Message.STATUS_FAILED,

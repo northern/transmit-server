@@ -5,10 +5,11 @@ import _ from 'lodash'
 import Template from '../../Entity/Template'
 import Transmission from '../../Entity/Transmission'
 import TransmissionTarget from '../../Entity/TransmissionTarget'
+import Integration from '../../Entity/Integration'
 
-export default class TransmissionHelper {
+export default class TransmissionUtil {
   static readonly CHANNEL_PREFERRED: string = 'preferred'
-  static readonly CHANNEL_REQUIRED: string = 'required'
+  static readonly CHANNEL_REQUIRED: string  = 'required'
 
   /**
    * Takes two Objects and combines them. If the resulting Object does not contain any keys
@@ -163,7 +164,7 @@ export default class TransmissionHelper {
       }
 
       // When channelType is CHANNEL_PREFERRED we exit after we found one channel.
-      if (transmissions.length > 0 && channelType === TransmissionHelper.CHANNEL_PREFERRED) {
+      if (transmissions.length > 0 && channelType === TransmissionUtil.CHANNEL_PREFERRED) {
         break
       }
     }
@@ -173,21 +174,21 @@ export default class TransmissionHelper {
 
   /**
    * Get the capabilities, i.e. the channels for which we can actually send
-   * something out. Imagine we want to send an SMS but none of the integration
-   * providers supports sending SMS messages, in that scenario we do not want
-   * to create a transmission.
+   * something out. Imagine we want to send an SMS but the provided integration
+   * provider does not support sending SMS messages. In that scenario we do not 
+   * want to create a transmission for that channel.
    */
-  // getUniqueCapabilities(integrations: Array<Integration>) {
-  //   let capabilities: Array<string> = []
+  getUniqueCapabilities(integrations: Array<Integration>): Array<string> {
+    let capabilities: Array<string> = []
 
-  //   integrations.map(integration => {
-  //     capabilities = capabilities.concat(integration.provider.getCapabilities())
-  //   })
+    integrations.map((integration: Integration): void => {
+      capabilities = [...integration.provider.getCapabilities()] // capabilities.concat(integration.provider.getCapabilities())
+    })
 
-  //   capabilities = _.uniq(capabilities)
+    capabilities = _.uniq(capabilities)
 
-  //   return capabilities    
-  // }
+    return capabilities    
+  }
 
   // render(source, vars) {
   //   const template = Twig.twig({

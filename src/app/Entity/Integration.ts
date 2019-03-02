@@ -1,9 +1,11 @@
 
+import IProvider from './Integration/IProvider'
+
 export default class Integration {
   public channel: string
-  public provider: object
+  public provider: IProvider
   
-  constructor(channel: string, provider: object) {
+  constructor(channel: string, provider: IProvider) {
     this.channel = channel
     this.provider = provider
   }

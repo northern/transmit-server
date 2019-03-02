@@ -120,8 +120,8 @@ export default class Revision implements Serializable {
 
     const map: Map<string, any> = new Map(Object.entries(data))
 
-    this.number = map.get('number');
-    this.parent = map.get('parent');
+    this.number = map.get('number') || this.number;
+    this.parent = map.get('parent') || this.parent;
 
     this.channels = new Channels()
     this.channels.unserialize(map.get('channels'))

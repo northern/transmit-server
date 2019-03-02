@@ -1,6 +1,6 @@
 
-export default class JSONUtil {
-  static parseSafe(s) {
+export default class JsonUtil {
+  static parseSafe(s: string): any {
     try {
       return JSON.parse(s)
     }

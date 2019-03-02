@@ -17,12 +17,14 @@
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "sourceMap": true,
     "outDir": "dist",
     "noUnusedParameters": true,
+
+    "noUnusedLocals": false,
+    "strictPropertyInitialization": false,
 
     "baseUrl": ".",
     "paths": {

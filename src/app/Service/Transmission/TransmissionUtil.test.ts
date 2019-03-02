@@ -2,13 +2,13 @@
 import Template from '../../Entity/Template'
 import Transmission from '../../Entity/Transmission'
 import TransmissionTarget from '../../Entity/TransmissionTarget'
-import TransmissionHelper from './TransmissionHelper'
+import TransmissionUtil from './TransmissionUtil'
 
 describe('getCombinedVars', () => {
-  let transmissionHelper: TransmissionHelper
+  let transmissionUtil: TransmissionUtil
 
   beforeEach(() => {
-    transmissionHelper = new TransmissionHelper()
+    transmissionUtil = new TransmissionUtil()
   })
 
   it("should return the combination of two simple objects", () => {
@@ -23,7 +23,7 @@ describe('getCombinedVars', () => {
       bar: "abc"
     }
 
-    const combined = transmissionHelper.getCombinedVars(objectA, objectB)
+    const combined = transmissionUtil.getCombinedVars(objectA, objectB)
     expect(combined).toEqual(expectedResult)
   })
 
@@ -51,44 +51,44 @@ describe('getCombinedVars', () => {
       }
     }
 
-    const combined = transmissionHelper.getCombinedVars(objectA, objectB)
+    const combined = transmissionUtil.getCombinedVars(objectA, objectB)
     expect(combined).toEqual(expectedResult)
   })
 
   it("should return empty object when given objects are empty", () => {
-    const combined = transmissionHelper.getCombinedVars({}, {})
+    const combined = transmissionUtil.getCombinedVars({}, {})
     expect(combined).toEqual({})
   })
 })
 
 describe('recipientToTransmissionTarget', () => {
-  const transmissionHelper = new TransmissionHelper()
+  const transmissionUtil = new TransmissionUtil()
 
   it("should return the email when set", () => {
     const email = "info@postways.com"
 
-    const target = transmissionHelper.recipientToTransmissionTarget({email})
+    const target = transmissionUtil.recipientToTransmissionTarget({email})
     expect(target.email).toEqual(email)
   })
 
   it("should return the phone number when set", () => {
     const phone = "0123456789"
 
-    const target = transmissionHelper.recipientToTransmissionTarget({phone})
+    const target = transmissionUtil.recipientToTransmissionTarget({phone})
     expect(target.phone).toEqual(phone)
   })
 
   it("should return the push token when set", () => {
     const push = {token:"abc123"}
 
-    const target = transmissionHelper.recipientToTransmissionTarget({push})
+    const target = transmissionUtil.recipientToTransmissionTarget({push})
     expect(target.push).toEqual(push)
   })
 
   it("should return the callback when set", () => {
     const callback = "http://www.example.com"
 
-    const target = transmissionHelper.recipientToTransmissionTarget({callback})
+    const target = transmissionUtil.recipientToTransmissionTarget({callback})
     expect(target.callback).toEqual(callback)
   })
 
@@ -98,7 +98,7 @@ describe('recipientToTransmissionTarget', () => {
       password: "s3cr3t"
     }
 
-    const target = transmissionHelper.recipientToTransmissionTarget({chat})
+    const target = transmissionUtil.recipientToTransmissionTarget({chat})
     expect(target.chat).toEqual(chat)
   })
 
@@ -110,17 +110,17 @@ describe('recipientToTransmissionTarget', () => {
       }
     }
 
-    const target = transmissionHelper.recipientToTransmissionTarget({vars})
+    const target = transmissionUtil.recipientToTransmissionTarget({vars})
     expect(target.vars).toEqual(vars)
   })
 })
 
 describe('getPrioritizedChannels', () => {
-  let transmissionHelper: TransmissionHelper
+  let transmissionUtil: TransmissionUtil
   let templateChannels: Array<string>
 
   beforeEach(() => {
-    transmissionHelper = new TransmissionHelper()
+    transmissionUtil = new TransmissionUtil()
 
     templateChannels = [
       Template.CHANNEL_TYPE_EMAIL,
@@ -132,17 +132,17 @@ describe('getPrioritizedChannels', () => {
   it("should return the same channels when no priority channels are provided", () => {
     let channels: Array<string>
 
-    channels = transmissionHelper.getPrioritizedChannels(templateChannels)
+    channels = transmissionUtil.getPrioritizedChannels(templateChannels)
     expect(channels).toEqual(templateChannels)
 
-    channels = transmissionHelper.getPrioritizedChannels(templateChannels, [])
+    channels = transmissionUtil.getPrioritizedChannels(templateChannels, [])
     expect(channels).toEqual(templateChannels)
   })
 
   it("should return the 'email' priority channel when provided", () => {
     let channels: Array<string>
 
-    channels = transmissionHelper.getPrioritizedChannels(templateChannels, [
+    channels = transmissionUtil.getPrioritizedChannels(templateChannels, [
       Template.CHANNEL_TYPE_EMAIL
     ])
     expect(channels).toEqual([Template.CHANNEL_TYPE_EMAIL])
@@ -151,7 +151,7 @@ describe('getPrioritizedChannels', () => {
   it("should return both 'sms' and 'push' priority channels when provided", () => {
     let channels: Array<string>
 
-    channels = transmissionHelper.getPrioritizedChannels(templateChannels, [
+    channels = transmissionUtil.getPrioritizedChannels(templateChannels, [
       Template.CHANNEL_TYPE_SMS,
       Template.CHANNEL_TYPE_PUSH
     ])
@@ -161,7 +161,7 @@ describe('getPrioritizedChannels', () => {
   it("should return no channels if the priority channel does not exist on the template", () => {
     let channels: Array<string>
 
-    channels = transmissionHelper.getPrioritizedChannels([
+    channels = transmissionUtil.getPrioritizedChannels([
         Template.CHANNEL_TYPE_SMS,
         Template.CHANNEL_TYPE_PUSH
       ], [
@@ -173,11 +173,11 @@ describe('getPrioritizedChannels', () => {
 })
 
 describe('getTransmissions (preferred channels)', () => {
-  let transmissionHelper: TransmissionHelper
+  let transmissionUtil: TransmissionUtil
   let capabilities: Array<string>
 
   beforeEach(() => {
-    transmissionHelper = new TransmissionHelper()
+    transmissionUtil = new TransmissionUtil()
 
     capabilities = [
       Template.CHANNEL_TYPE_EMAIL,
@@ -196,7 +196,7 @@ describe('getTransmissions (preferred channels)', () => {
     target.callback = "http://www.example.com"
     target.chat = {username: "bob", password: "s3cr3t"}
 
-    const transmissions = transmissionHelper.getTransmissions(target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionHelper.CHANNEL_PREFERRED, capabilities)
+    const transmissions = transmissionUtil.getTransmissions(target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionUtil.CHANNEL_PREFERRED, capabilities)
     expect(transmissions.length).toBe(1)
     expect(transmissions[0].channel).toEqual('email')
     expect(transmissions[0].target).toEqual("info@postways.com")
@@ -209,7 +209,7 @@ describe('getTransmissions (preferred channels)', () => {
     target.callback = "http://www.example.com"
     target.chat = {username: "bob", password: "s3cr3t"}
 
-    const transmissions = transmissionHelper.getTransmissions(target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionHelper.CHANNEL_PREFERRED, capabilities)
+    const transmissions = transmissionUtil.getTransmissions(target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionUtil.CHANNEL_PREFERRED, capabilities)
     expect(transmissions.length).toBe(1)
     expect(transmissions[0].channel).toEqual('sms')
     expect(transmissions[0].target).toEqual("0123456789")
@@ -221,7 +221,7 @@ describe('getTransmissions (preferred channels)', () => {
     target.callback = "http://www.example.com"
     target.chat = {username: "bob", password: "s3cr3t"}
 
-    const transmissions = transmissionHelper.getTransmissions(target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionHelper.CHANNEL_PREFERRED, capabilities)
+    const transmissions = transmissionUtil.getTransmissions(target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionUtil.CHANNEL_PREFERRED, capabilities)
     expect(transmissions.length).toBe(1)
     expect(transmissions[0].channel).toEqual('push')
     expect(transmissions[0].target).toEqual({token: "abc123"})
@@ -232,7 +232,7 @@ describe('getTransmissions (preferred channels)', () => {
     target.callback = "http://www.example.com"
     target.chat = {username: "bob", password: "s3cr3t"}
 
-    const transmissions = transmissionHelper.getTransmissions(target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionHelper.CHANNEL_PREFERRED, capabilities)
+    const transmissions = transmissionUtil.getTransmissions(target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionUtil.CHANNEL_PREFERRED, capabilities)
     expect(transmissions.length).toBe(1)
     expect(transmissions[0].channel).toEqual('callback')
     expect(transmissions[0].target).toEqual("http://www.example.com")
@@ -242,7 +242,7 @@ describe('getTransmissions (preferred channels)', () => {
     const target = new TransmissionTarget()
     target.chat = {username: "bob", password: "s3cr3t"}
 
-    const transmissions = transmissionHelper.getTransmissions(target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionHelper.CHANNEL_PREFERRED, capabilities)
+    const transmissions = transmissionUtil.getTransmissions(target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionUtil.CHANNEL_PREFERRED, capabilities)
     expect(transmissions.length).toBe(1)
     expect(transmissions[0].channel).toEqual('chat')
     expect(transmissions[0].target).toEqual({username: "bob", password: "s3cr3t"})
@@ -251,17 +251,17 @@ describe('getTransmissions (preferred channels)', () => {
   it("should return no transmission", () => {
     const target = new TransmissionTarget()
 
-    const transmissions = transmissionHelper.getTransmissions(target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionHelper.CHANNEL_PREFERRED, capabilities)
+    const transmissions = transmissionUtil.getTransmissions(target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionUtil.CHANNEL_PREFERRED, capabilities)
     expect(transmissions.length).toBe(0)
   })
 })
 
 describe('getTransmissions (required channels)', () => {
-  let transmissionHelper: TransmissionHelper
+  let transmissionUtil: TransmissionUtil
   let capabilities: Array<string>
 
   beforeEach(() => {
-    transmissionHelper = new TransmissionHelper()
+    transmissionUtil = new TransmissionUtil()
 
     capabilities = [
       Template.CHANNEL_TYPE_EMAIL,
@@ -280,7 +280,7 @@ describe('getTransmissions (required channels)', () => {
     target.callback = "http://www.example.com"
     target.chat = {username: "bob", password: "s3cr3t"}
 
-    const transmissions: Array<Transmission> = transmissionHelper.getTransmissions(target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionHelper.CHANNEL_REQUIRED, capabilities)
+    const transmissions: Array<Transmission> = transmissionUtil.getTransmissions(target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionUtil.CHANNEL_REQUIRED, capabilities)
     expect(transmissions.length).toBe(5)
 
     let transmission: Transmission | undefined
@@ -329,7 +329,7 @@ describe('getTransmissions (required channels)', () => {
   it("should return no transmissions", () => {
     const target = new TransmissionTarget()
 
-    const transmissions = transmissionHelper.getTransmissions(target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionHelper.CHANNEL_REQUIRED, capabilities)
+    const transmissions = transmissionUtil.getTransmissions(target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionUtil.CHANNEL_REQUIRED, capabilities)
     expect(transmissions.length).toBe(0)
   })
 })

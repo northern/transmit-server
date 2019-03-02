@@ -1,37 +1,46 @@
 
+import ILogger from '../../ILogger'
 import Message from '../../Entity/Message'
 import Transmission from '../../Entity/Transmission'
+import MessageRepository from './MessageRepository'
+import MessageValidator from './MessageValidator'
 import MessageValidationError from './Error/MessageValidationError'
 
-export default class MessageService {
-  static get PROVIDER_MYSQL() {
-    return 'mysql'
-  }
+export default class MessageService implements IMessageService {
+  static readonly PROVIDER_MYSQL: string = 'mysql'
+
+  private logger: ILogger
+  private repository: MessageRepository
+  private validator: MessageValidator
   
-  setLogger(logger) {
+  setLogger(logger: ILogger): void {
     this.logger = logger
   }
 
-  setRepository(repository) {
+  setRepository(repository: MessageRepository): void {
     this.repository = repository
   }
 
-  setValidator(validator) {
+  setValidator(validator: MessageValidator): void {
     this.validator = validator
   }
 
-  async getById(id, connection) {
+  async getById(id: string, connection: any): Promise<Message> {
     return this.repository.getById(id, connection)
   }
 
-  async create(data, environment, connection) {
+  async create(data: object, environment: string, connection: any): Promise<Message> {
     const message = new Message(data)
     message.environment = environment
 
     const result = this.validator.validate(message)
 
-    if (result.errors.length > 0) {
-      throw new MessageValidationError(result.errors)
+    const map: Map<string, any> = new Map(Object.entries(result))
+
+    const errors = map.get('errors')
+
+    if (errors && errors.length > 0) {
+      throw new MessageValidationError(errors)
     }
 
     await this.repository.persist(message, connection)
@@ -39,13 +48,17 @@ export default class MessageService {
     return message
   }
 
-  async update(message, values, connection) {
+  async update(message: Message, values: object, connection: any) {
     const updatedMessage = Object.assign(new Message(), message, values)
 
-    const result = this.validator.validate(message)
+    const result = this.validator.validate(updatedMessage)
 
-    if (result.errors.length > 0) {
-      throw new MessageValidationError(result.errors)
+    const map: Map<string, any> = new Map(Object.entries(result))
+
+    const errors = map.get('errors')
+
+    if (errors && errors.length > 0) {
+      throw new MessageValidationError(errors)
     }
 
     await this.repository.persist(updatedMessage, connection)
@@ -53,12 +66,12 @@ export default class MessageService {
     return updatedMessage
   }
 
-  getTemplateVars(message) {
+  getTemplateVars(_message: Message): object | null {
     let vars = null
 
-    if (message.template.vars instanceof Object) {
-      vars = message.template.vars
-    }
+    // if (message.template.vars instanceof Object) {
+    //   vars = message.template.vars
+    // }
 
     return vars
   }
@@ -79,7 +92,7 @@ export default class MessageService {
    * If one or more transmissions have received the status FAILED then we should
    * set the status of the message to WARNING.
    */
-  getCombinedStatus(transmissions) {
+  getCombinedStatus(transmissions: Array<Transmission>): string {
     let failedCount = 0
 
     for (let i = 0; i < transmissions.length; i++) {

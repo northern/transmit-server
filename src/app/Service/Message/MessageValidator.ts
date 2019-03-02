@@ -1,27 +1,24 @@
 
 import {
-  Validator
+  Validator,
+  ValidatorResult
 } from 'jsonschema'
 
-import Template from '../../Entity/Template'
 import Message from '../../Entity/Message'
+import IMesssageValidator from './IMessageValidator'
 
-export default class MessageValidator {
-  setLogger(logger) {
-    this.logger = logger
-  }
-
-  setTemplateValidator(templateValidator) {
-    this.templateValidator = templateValidator
-  }
-
-  validate(message) {
+export default class MessageValidator implements IMesssageValidator {
+  validate(data: object): object {
     const validator = new Validator()
 
-    return validator.validate(message, this.getSchema())
+    const result = validator.validate(data, this.getSchema())
+
+    return {
+      errors: result.errors
+    }
   }
 
-  getSchema() {
+  getSchema(): object {
     const schema = {
       title: "Postways Message Schema",
       type: 'object',

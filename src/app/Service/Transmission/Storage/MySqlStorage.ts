@@ -1,18 +1,25 @@
 
-import AbstractStorage from './AbstractStorage'
+import ILogger from '../../../ILogger'
+import IStorage from './IStorage'
 import Transmission from '../../../Entity/Transmission'
-import JSONUtil from '../../../Util/JSONUtil'
+import JsonUtil from '../../../Util/JsonUtil'
 
-export default class MySqlStorage extends AbstractStorage {
-  async getById(id, connection) {
+export default class MySqlStorage implements IStorage {
+  private logger: ILogger
+
+  setLogger(logger: ILogger): void {
+    this.logger = logger
+  }
+
+  async getById(id: string, connection: any): Promise<Transmission | null> {
     let transmission = null
 
     try {
-      const [rows, fields] = await connection.query(
+      const [results] = await connection.query(
         'SELECT * FROM `transmissions` WHERE `id` = ?', [id]
       )
 
-      const result = rows[0]
+      const result = results[0]
 
       if (result) {
         transmission = new Transmission()
@@ -21,8 +28,8 @@ export default class MySqlStorage extends AbstractStorage {
         transmission.token = result.token
         transmission.status = result.status
         transmission.channel = result.channel
-        transmission.target = JSONUtil.parseSafe(result.target)
-        transmission.vars = JSONUtil.parseSafe(result.vars)
+        transmission.target = JsonUtil.parseSafe(result.target)
+        transmission.vars = JsonUtil.parseSafe(result.vars)
         transmission.error = result.error
         transmission.tries = result.tries
         transmission.timeCreated = result.time_created
@@ -36,27 +43,29 @@ export default class MySqlStorage extends AbstractStorage {
     return transmission
   }
 
-  async getByMessageId(id, connection) {
-    let transmissions = []
+  async getByMessageId(id: string, connection: any): Promise<Transmission[]> {
+    let transmissions: Transmission[] = []
 
     try {
-      const [results, fields] = await connection.query(
+      const [results] = await connection.query(
         'SELECT * from `transmissions` WHERE `message_id` = ?', [id]
       )
 
-      results.map(result => {
+      results.map((result: object): void => {
+        const map: Map<string, any> = new Map(Object.entries(result))
+
         const transmission = new Transmission()
-        transmission.id = result.id
-        transmission.messageId = result.message_id
-        transmission.token = result.token
-        transmission.status = result.status
-        transmission.channel = result.channel
-        transmission.target = JSONUtil.parseSafe(result.target)
-        transmission.vars = JSONUtil.parseSafe(result.vars)
-        transmission.error = result.error
-        transmission.tries = result.tries
-        transmission.timeCreated = result.time_created
-        transmission.timeUpdated = result.time_updated
+        transmission.id = map.get('id')
+        transmission.messageId = map.get('message_id')
+        transmission.token = map.get('token')
+        transmission.status = map.get('status')
+        transmission.channel = map.get('channel')
+        transmission.target = JsonUtil.parseSafe(map.get('target'))
+        transmission.vars = JsonUtil.parseSafe(map.get('vars'))
+        transmission.error = map.get('error')
+        transmission.tries = map.get('tries')
+        transmission.timeCreated = map.get('time_created')
+        transmission.timeUpdated = map.get('time_updated')
 
         transmissions.push(transmission)
       })
@@ -68,12 +77,12 @@ export default class MySqlStorage extends AbstractStorage {
     return transmissions
   }
 
-  async persist(transmission, connection) {
+  async persist(transmission: Transmission, connection: any): Promise<Transmission> {
     try {
       if (!transmission.id) {
         transmission.timeCreated = Math.floor(new Date().getTime() / 1000)
 
-        const result = await connection.query(
+        const results = await connection.query(
           'INSERT INTO transmissions SET ?', {
             message_id: transmission.messageId,
             token: transmission.token,
@@ -88,7 +97,7 @@ export default class MySqlStorage extends AbstractStorage {
           }
         )
 
-        transmission.id = result[0].insertId
+        transmission.id = results[0].insertId
       }
       else {
         transmission.timeUpdated = Math.floor(new Date().getTime() / 1000)
