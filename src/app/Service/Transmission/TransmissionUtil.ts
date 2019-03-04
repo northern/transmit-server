@@ -20,7 +20,7 @@ export default class TransmissionUtil {
    * @return Object
    */
   getCombinedVars(templateVars: object, transmissionVars: object): object {
-    let combinedVars: object = Object.assign({}, templateVars || {}, transmissionVars || {})
+    let combinedVars: object = Object.assign({}, templateVars, transmissionVars)
 
     if (Object.keys(combinedVars).length === 0) {
       combinedVars = {}

@@ -1,4 +1,6 @@
 
+import Transmission from '../../Entity/Transmission'
+
 import {
   Validator,
   ValidatorResult
@@ -32,9 +34,11 @@ export default class TransmissionValidator {
         },
         status: {
           type: ['string'],
+          enum: Transmission.getStatuses(),
         },
         channel: {
           type: ['string'],
+          enum: Transmission.getChannels(),
         },
         target: {
           type: ['object', 'string', 'integer'],

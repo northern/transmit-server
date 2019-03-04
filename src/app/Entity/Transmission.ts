@@ -62,4 +62,24 @@ export default class Transmission {
     this.timeCreated = null
     this.timeUpdated = null
   }
+
+  static getStatuses() {
+    return [
+      Transmission.STATUS_PENDING,
+      Transmission.STATUS_PROCESSING,
+      Transmission.STATUS_FAILED,
+      Transmission.STATUS_RETRY,
+      Transmission.STATUS_OK,
+    ]
+  }
+
+  static getChannels() {
+    return [
+      Transmission.CHANNEL_EMAIL,
+      Transmission.CHANNEL_SMS,
+      Transmission.CHANNEL_PUSH,
+      Transmission.CHANNEL_CALLBACK,
+      Transmission.CHANNEL_CHAT,
+    ]
+  }
 }

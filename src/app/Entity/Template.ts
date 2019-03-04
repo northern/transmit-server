@@ -58,6 +58,16 @@ export default class Template {
     ]
   }
 
+  static getChannels() {
+    return [
+      Template.CHANNEL_TYPE_EMAIL,
+      Template.CHANNEL_TYPE_SMS,
+      Template.CHANNEL_TYPE_PUSH,
+      Template.CHANNEL_TYPE_CALLBACK,
+      Template.CHANNEL_TYPE_CHAT,
+    ]
+  }
+
   static getEngines() {
     return [
       Template.ENGINE_TWIG,

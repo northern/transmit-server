@@ -113,27 +113,33 @@ export default class TransmissionService {
 
     // Persist the newly created transmissions.
     for (var i = 0; i < transmissions.length; i++) {
-      transmissions[i].messageId = message.id
+      const transmission: Transmission = transmissions[i]
 
-      await this.repository.persist(transmissions[i], connection)
+      transmission.messageId = message.id
+
+      await this.repository.persist(transmission, connection)
     }
 
     return transmissions
   }
 
-  /*async update(transmission: Transmission, values: object, connection: any) {
+  async update(transmission: Transmission, values: object, connection: any): Promise<Transmission> {
     const updatedTransmission: Transmission = Object.assign(new Transmission(), transmission, values)
 
-    const result = this.validator.validate(updatedTransmission)
+    const result: object = this.validator.validate(updatedTransmission)
 
-    if (result.errors.length > 0) {
-      throw new TransmissionValidationError(result.errors)
+    const map: Map<string, any> = new Map(Object.entries(result))
+
+    const errors: any[] = map.get('errors')
+
+    if (errors.length > 0) {
+      throw new TransmissionValidationError(errors)
     }
 
     await this.repository.persist(updatedTransmission, connection)
 
     return updatedTransmission
-  }*/
+  }
 
   /*async send(transmission, revision, integration, vars, defaults) {
     const combinedVars = this.util.getCombinedVars(vars, transmission.vars)
