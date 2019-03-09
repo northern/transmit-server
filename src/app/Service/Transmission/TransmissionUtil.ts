@@ -1,7 +1,8 @@
 
 import _ from 'lodash'
-// import Twig from 'twig'
+import Twig from 'twig'
 
+import Message from '../../Entity/Message'
 import Template from '../../Entity/Template'
 import Transmission from '../../Entity/Transmission'
 import TransmissionTarget from '../../Entity/TransmissionTarget'
@@ -71,7 +72,7 @@ export default class TransmissionUtil {
         channels = [];
 
         prioritizedChannels.map(prioritizedChannel => {
-            // If the prioritized channel is in the template channels we can use it.
+          // If the prioritized channel is in the template channels we can use it.
           if (templateChannels.includes(prioritizedChannel)) {
             channels.push(prioritizedChannel)
           }
@@ -94,7 +95,7 @@ export default class TransmissionUtil {
    * @param array channels
    * @param boolean isPreferred
    */
-  getTransmissions(target: TransmissionTarget, channels: Array<string>, channelType: string, capabilities: Array<string>) {
+  createTransmissions(message: Message, target: TransmissionTarget, channels: Array<string>, channelType: string, capabilities: Array<string>): Array<Transmission> {
     const transmissions: Array<Transmission> = []
 
     for (let i = 0; i < channels.length; i++) {
@@ -109,9 +110,8 @@ export default class TransmissionUtil {
       switch (channel) {
         case Template.CHANNEL_TYPE_EMAIL:
           if (target.email) {
-            const transmission = new Transmission()
+            const transmission = new Transmission(message.id, Transmission.CHANNEL_EMAIL)
             transmission.vars = target.vars
-            transmission.channel = Transmission.CHANNEL_EMAIL
             transmission.target = target.email
 
             transmissions.push(transmission)
@@ -120,9 +120,8 @@ export default class TransmissionUtil {
 
         case Template.CHANNEL_TYPE_SMS:
           if (target.phone) {
-            const transmission = new Transmission()
+            const transmission = new Transmission(message.id, Transmission.CHANNEL_SMS)
             transmission.vars = target.vars
-            transmission.channel = Transmission.CHANNEL_SMS
             transmission.target = String(target.phone)
 
             transmissions.push(transmission)
@@ -131,9 +130,8 @@ export default class TransmissionUtil {
 
         case Template.CHANNEL_TYPE_PUSH:
           if (target.push) {
-            const transmission = new Transmission()
+            const transmission = new Transmission(message.id, Transmission.CHANNEL_PUSH)
             transmission.vars = target.vars
-            transmission.channel = Transmission.CHANNEL_PUSH
             transmission.target = target.push
 
             transmissions.push(transmission)
@@ -142,9 +140,8 @@ export default class TransmissionUtil {
 
         case Template.CHANNEL_TYPE_CALLBACK:
           if (target.callback) {
-            const transmission = new Transmission()
+            const transmission = new Transmission(message.id, Transmission.CHANNEL_CALLBACK)
             transmission.vars = target.vars
-            transmission.channel = Transmission.CHANNEL_CALLBACK
             transmission.target = target.callback
 
             transmissions.push(transmission)
@@ -153,9 +150,8 @@ export default class TransmissionUtil {
 
         case Template.CHANNEL_TYPE_CHAT:
           if (target.chat) {
-            const transmission = new Transmission()
+            const transmission = new Transmission(message.id, Transmission.CHANNEL_CHAT)
             transmission.vars = target.vars
-            transmission.channel = Transmission.CHANNEL_CHAT
             transmission.target = target.chat
 
             transmissions.push(transmission)
@@ -178,23 +174,25 @@ export default class TransmissionUtil {
    * provider does not support sending SMS messages. In that scenario we do not 
    * want to create a transmission for that channel.
    */
-  getUniqueCapabilities(integrations: Array<Integration>): Array<string> {
+  getIntegrationCapabilities(integrations: Array<Integration>): Array<string> {
     let capabilities: Array<string> = []
 
+    // Concatenate all capabilities.
     integrations.map((integration: Integration): void => {
-      capabilities = [...integration.provider.getCapabilities()] // capabilities.concat(integration.provider.getCapabilities())
+      capabilities = [...integration.provider.getCapabilities()]
     })
 
+    // And get the unique ones.
     capabilities = _.uniq(capabilities)
 
     return capabilities    
   }
 
-  // render(source, vars) {
-  //   const template = Twig.twig({
-  //     data: source
-  //   })
+  async render(source: string, vars: object): Promise<string> {
+    const template = Twig.twig({
+      data: source
+    })
 
-  //   return template.render(vars)
-  // }
+    return template.render(vars)
+  }
 }

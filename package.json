@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@northern/di": "^1.0.3",
+    "@types/twig": "^1.12.2",
     "aws-sdk": "^2.252.1",
     "chalk": "^2.4.1",
     "concurrently": "^4.1.0",
@@ -33,11 +34,11 @@
     "uuid": "^3.2.1"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.9",
     "@types/koa": "^2.0.48",
+    "@types/lodash": "^4.14.121",
     "@types/mocha": "^5.2.6",
     "@types/uuid": "^3.4.4",
-    "@types/jest": "^24.0.9",
-    "@types/lodash": "^4.14.121",
     "chai": "^4.1.2",
     "db-migrate": "^0.11.5",
     "dotenv": "^6.0.0",

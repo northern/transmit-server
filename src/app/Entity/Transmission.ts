@@ -38,10 +38,10 @@ export default class Transmission {
   static readonly MAX_TRIES = 3
 
   public id: number | null
-  public messageId: number | null
+  public messageId: string
   public token: string
   public status: string
-  public channel: string | null
+  public channel: string
   public target: string | object | null
   public vars: object | null
   public error: string | null
@@ -49,12 +49,12 @@ export default class Transmission {
   public timeCreated: number | null
   public timeUpdated: number | null
 
-  constructor() {
+  constructor(messageId: string, channel: string) {
     this.id = null
-    this.messageId = null
+    this.messageId = messageId
     this.token = uuid.v4()
     this.status = Transmission.STATUS_PENDING
-    this.channel = null
+    this.channel = channel
     this.target = null
     this.vars = null
     this.error = null

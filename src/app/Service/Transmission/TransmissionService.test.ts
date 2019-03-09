@@ -4,13 +4,74 @@ import Template from '../../Entity/Template'
 import TemplateRevision from '../../Entity/Template/Revision'
 import Transmission from '../../Entity/Transmission'
 import TransmissionTarget from '../../Entity/TransmissionTarget'
-import Integration from '../../Entity/Integration'
+import Integration, {
+  CHANNEL_EMAIL
+} from '../../Entity/Integration'
 import IProvider from '../../Entity/Integration/IProvider'
 import TransmissionService from './TransmissionService'
 import TransmissionUtil from './TransmissionUtil'
 import TransmissionValidator from './TransmissionValidator'
 import TransmissionRepository from './TransmissionRepository'
 import IStorage from './Storage/IStorage'
+
+describe('getById', () => {
+  it('should return a transmission', async() => {
+    const MockRepository = jest.fn<TransmissionRepository>(() => ({
+      getById: jest.fn((id: string, _connection: any) => {
+        const transmission = new Transmission(1, Transmission.CHANNEL_EMAIL)
+        transmission.id = id
+
+        return transmission
+      }),
+    }))
+
+    const transmissionService: TransmissionService = new TransmissionService()
+    transmissionService.setRepository(new MockRepository())
+
+    const transmission = await transmissionService.getById(1, null)
+
+    expect(transmission).toBeInstanceOf(Transmission)
+    expect(transmission.id).toBe(1)
+    expect(transmission.status).toBe(Transmission.STATUS_PENDING)
+    expect(transmission.channel).toBe(Transmission.CHANNEL_EMAIL)
+  })
+
+  it('should throw an exception', async() => {
+    const MockRepository = jest.fn<TransmissionRepository>(() => ({
+      getById: jest.fn((_id: string, _connection: any) => {
+        return null
+      }),
+    }))
+
+    const transmissionService: TransmissionService = new TransmissionService()
+    transmissionService.setRepository(new MockRepository())
+
+    await expect(
+      transmissionService.getById(1, null)
+    ).rejects.toThrow();    
+  })
+})
+
+describe('getByMessageId', () => {
+  it('should return tranmissions', async() => {
+    const MockRepository = jest.fn<TransmissionRepository>(() => ({
+      getByMessageId: jest.fn((_id: string, _connection: any) => {
+        return [
+          new Transmission(1, Transmission.CHANNEL_EMAIL),
+          new Transmission(1, Transmission.CHANNEL_EMAIL),
+        ]
+      }),
+    }))
+
+    const transmissionService: TransmissionService = new TransmissionService()
+    transmissionService.setRepository(new MockRepository())
+
+    const transmissions = await transmissionService.getByMessageId(1, null)
+
+    expect(transmissions).toBeInstanceOf(Array)
+    expect(transmissions.length).toBe(2)
+  })
+})
 
 const getMockIntegrations = (): Array<Integration> => {
   const MockProvider = jest.fn<IProvider>(() => ({
@@ -54,7 +115,7 @@ describe('create (required channels)', () => {
     transmissionService.setValidator(new TransmissionValidator())
   })
 
-  it("should return one transmission", async () => {
+  it("should create one transmission", async () => {
     const message: Message = new Message()
     message.id = 1
     message.data = {
@@ -73,7 +134,7 @@ describe('create (required channels)', () => {
 
     const mockIntegrations: Integration[] = getMockIntegrations();
 
-    const transmissions = await transmissionService.create(message, revision, [], mockIntegrations, null)
+    const transmissions = await transmissionService.create(message, revision, mockIntegrations, [], null)
 
     expect(transmissions.length).toBe(1)
     expect(transmissions[0].id).toEqual(1)
@@ -81,7 +142,7 @@ describe('create (required channels)', () => {
     expect(transmissions[0].target).toEqual("info@postways.com")
   })
 
-  it("should return two transmissions", async () => {
+  it("should create two transmissions", async () => {
     const message = new Message()
     message.id = 1
     message.data = {
@@ -101,7 +162,7 @@ describe('create (required channels)', () => {
 
     const mockIntegrations: Integration[] = getMockIntegrations();
 
-    const transmissions: Transmission[] = await transmissionService.create(message, revision, [], mockIntegrations, null)
+    const transmissions: Transmission[] = await transmissionService.create(message, revision, mockIntegrations, [], null)
 
     let transmission: Transmission
 
@@ -116,7 +177,7 @@ describe('create (required channels)', () => {
     expect(transmission.target).toEqual("0123456789")
   })  
 
-  it("should return three transmissions", async () => {
+  it("should create three transmissions", async () => {
     const message: Message = new Message()
     message.id = 1
     message.data = {
@@ -139,7 +200,7 @@ describe('create (required channels)', () => {
 
     const mockIntegrations: Integration[] = getMockIntegrations();
 
-    const transmissions: Transmission[] = await transmissionService.create(message, revision, [], mockIntegrations, null)
+    const transmissions: Transmission[] = await transmissionService.create(message, revision, mockIntegrations, [], null)
 
     expect(transmissions.length).toBe(3)
 
@@ -161,7 +222,7 @@ describe('create (required channels)', () => {
     expect(transmission.target).toEqual({token: "abc123"})
   })  
 
-  it("should return four transmissions", async () => {
+  it("should create four transmissions", async () => {
     const message: Message = new Message()
     message.id = 1
     message.data = {
@@ -185,7 +246,7 @@ describe('create (required channels)', () => {
 
     const mockIntegrations: Integration[] = getMockIntegrations();
 
-    const transmissions: Transmission[] = await transmissionService.create(message, revision, [], mockIntegrations, null)
+    const transmissions: Transmission[] = await transmissionService.create(message, revision, mockIntegrations, [], null)
 
     expect(transmissions.length).toBe(4)
 
@@ -212,7 +273,7 @@ describe('create (required channels)', () => {
     expect(transmission.target).toEqual("http://www.example.com")
   })  
 
-  it("should return five transmissions", async () => {
+  it("should create five transmissions", async () => {
     const message: Message = new Message()
     message.id = 1
     message.data = {
@@ -240,7 +301,7 @@ describe('create (required channels)', () => {
 
     const mockIntegrations: Integration[] = getMockIntegrations();
 
-    const transmissions: Transmission[] = await transmissionService.create(message, revision, [], mockIntegrations, null)
+    const transmissions: Transmission[] = await transmissionService.create(message, revision, mockIntegrations, [], null)
 
     expect(transmissions.length).toBe(5)
 
@@ -296,7 +357,7 @@ describe('create (preferred channels)', () => {
     transmissionService.setValidator(new TransmissionValidator())
   })
 
-  it("should return an email transmission", async () => {
+  it("should create an email transmission", async () => {
     const message: Message = new Message()
     message.id = 1
     message.data = {
@@ -315,7 +376,7 @@ describe('create (preferred channels)', () => {
 
     const mockIntegrations: Integration[] = getMockIntegrations();
 
-    const transmissions: Transmission[] = await transmissionService.create(message, revision, [], mockIntegrations, null)
+    const transmissions: Transmission[] = await transmissionService.create(message, revision, mockIntegrations, [], null)
 
     expect(transmissions.length).toBe(1)
     expect(transmissions[0]).toBeInstanceOf(Transmission)
@@ -323,7 +384,7 @@ describe('create (preferred channels)', () => {
     expect(transmissions[0].target).toEqual("info@postways.com")
   })
 
-  it("should return an sms transmission", async () => {
+  it("should create an sms transmission", async () => {
     const message: Message = new Message()
     message.id = 1
     message.data = {
@@ -342,7 +403,7 @@ describe('create (preferred channels)', () => {
 
     const mockIntegrations: Integration[] = getMockIntegrations();
 
-    const transmissions: Transmission[] = await transmissionService.create(message, revision, [], mockIntegrations, null)
+    const transmissions: Transmission[] = await transmissionService.create(message, revision, mockIntegrations, [], null)
 
     expect(transmissions.length).toBe(1)
     expect(transmissions[0]).toBeInstanceOf(Transmission)
@@ -350,7 +411,7 @@ describe('create (preferred channels)', () => {
     expect(transmissions[0].target).toEqual("0123456789")
   })
 
-  it("should return a push transmission", async () => {
+  it("should create a push transmission", async () => {
     const message: Message = new Message()
     message.id = 1
     message.data = {
@@ -371,7 +432,7 @@ describe('create (preferred channels)', () => {
 
     const mockIntegrations: Integration[] = getMockIntegrations();
 
-    const transmissions: Transmission[] = await transmissionService.create(message, revision, [], mockIntegrations, null)
+    const transmissions: Transmission[] = await transmissionService.create(message, revision, mockIntegrations, [], null)
 
     expect(transmissions.length).toBe(1)
     expect(transmissions[0]).toBeInstanceOf(Transmission)
@@ -379,7 +440,7 @@ describe('create (preferred channels)', () => {
     expect(transmissions[0].target).toEqual({token: "abc123"})
   })
 
-  it("should return a callback transmission", async () => {
+  it("should create a callback transmission", async () => {
     const message = new Message()
     message.id = 1
     message.data = {
@@ -398,7 +459,7 @@ describe('create (preferred channels)', () => {
 
     const mockIntegrations: Integration[] = getMockIntegrations();
 
-    const transmissions: Transmission[] = await transmissionService.create(message, revision, [], mockIntegrations, null)
+    const transmissions: Transmission[] = await transmissionService.create(message, revision, mockIntegrations, [], null)
 
     expect(transmissions.length).toBe(1)
     expect(transmissions[0]).toBeInstanceOf(Transmission)
@@ -406,7 +467,7 @@ describe('create (preferred channels)', () => {
     expect(transmissions[0].target).toEqual("http://www.example.com")
   })
 
-  it("should return a chat transmission", async () => {
+  it("should create a chat transmission", async () => {
     const message: Message = new Message()
     message.id = 1
     message.data = {
@@ -428,7 +489,7 @@ describe('create (preferred channels)', () => {
 
     const mockIntegrations: Integration[] = getMockIntegrations();
 
-    const transmissions: Transmission[] = await transmissionService.create(message, revision, [], mockIntegrations)
+    const transmissions: Transmission[] = await transmissionService.create(message, revision, mockIntegrations, [], null)
 
     expect(transmissions.length).toBe(1)
     expect(transmissions[0]).toBeInstanceOf(Transmission)
@@ -456,10 +517,8 @@ describe('update', () => {
   })
 
   it('should update correctly', async() => {
-    const transmission: Transmission = new Transmission()
+    const transmission: Transmission = new Transmission(1, Transmission.CHANNEL_EMAIL)
     transmission.id = 1
-    transmission.messageId = 1
-    transmission.channel = Transmission.CHANNEL_EMAIL
     transmission.target = 'info@postways.com'
     transmission.timeCreated = Math.floor(new Date().getTime() / 1000)
 
@@ -476,11 +535,9 @@ describe('update', () => {
     expect(updatedTransmission.target).toBe('061412345678')
   })
 
-  it('should throw a validation execption', async () => {
-    const transmission: Transmission = new Transmission()
+  it('should throw a validation exeception', async () => {
+    const transmission: Transmission = new Transmission(1, Transmission.CHANNEL_SMS)
     transmission.id = 1
-    transmission.messageId = 1
-    transmission.channel = Transmission.CHANNEL_SMS
     transmission.target = '061412345678'
     transmission.timeCreated = Math.floor(new Date().getTime() / 1000)
 
@@ -491,6 +548,166 @@ describe('update', () => {
 
     await expect(
       transmissionService.update(transmission, values, null)
-     ).rejects.toThrow();
+    ).rejects.toThrow();
+  })
+})
+
+class MockProvider implements IProvider {
+  getCapabilities(): Array<string> {
+    return [Integration.CHANNEL_EMAIL, Integration.CHANNEL_SMS]
+  }
+
+  async send(_channel: string, _title: string, _body: string, _extra: object | null): Promise<void> {
+    // console.info("channel", _channel)
+    // console.info("title", _title)
+    // console.info("body", _body)
+    // console.info("extra", _extra)
+  }
+}
+
+class MockProviderWithError implements IProvider {
+  getCapabilities(): Array<string> {
+    return [Integration.CHANNEL_EMAIL, Integration.CHANNEL_SMS]
+  }
+
+  async send(_channel: string, _title: string, _body: string, _extra: object | null): Promise<void> {
+    throw new Error("Kapoot")
+  }
+}
+
+describe('send', () => {
+  let transmissionService: TransmissionService
+
+  beforeEach(() => {
+    transmissionService = new TransmissionService()
+    transmissionService.setUtil(new TransmissionUtil())
+  })
+
+  it('should send a plain text email transmission', async () => {
+    const transmission: Transmission = new Transmission(1, Transmission.CHANNEL_EMAIL)
+    transmission.target = 'test@example.com'
+
+    const message: Message = new Message()
+    message.data = {
+      template: {
+        channels: {
+          preferred: ['email']
+        },
+        defaults: {
+          title: 'Default title',
+          body: 'Default body'
+        }
+      }
+    }
+
+    const revision: TemplateRevision = new TemplateRevision(1)
+    revision.unserialize(message.data.template)
+
+    const integration: Integration = new Integration(Integration.CHANNEL_EMAIL, new MockProvider())
+
+    const senderDefaults = {
+      id: 'postways',
+      from: 'Postways',
+      email: 'info@postways.com',
+    };
+
+    await transmissionService.send(transmission, revision, integration, {}, new Map(Object.entries(senderDefaults)))
+  })
+
+  it('should send a html email transmission', async () => {
+    const transmission: Transmission = new Transmission(1, Transmission.CHANNEL_EMAIL)
+    transmission.target = 'test@example.com'
+
+    const message: Message = new Message()
+    message.data = {
+      template: {
+        channels: {
+          preferred: ['email']
+        },
+        defaults: {
+          title: 'Default title',
+          body: 'Default body'
+        },
+        email: {
+          body: '<html>HTML body</html>',
+          isHtml: true,
+        }
+      }
+    }
+
+    const revision: TemplateRevision = new TemplateRevision(1)
+    revision.unserialize(message.data.template)
+
+    const integration: Integration = new Integration(Integration.CHANNEL_EMAIL, new MockProvider())
+
+    const senderDefaults = {
+      id: 'postways',
+      from: 'Postways',
+      email: 'info@postways.com',
+    };
+
+    await transmissionService.send(transmission, revision, integration, {}, new Map(Object.entries(senderDefaults)))
+  })
+
+  it('should send sms transmission', async () => {
+    const transmission: Transmission = new Transmission(1, Transmission.CHANNEL_SMS)
+    transmission.target = '+610212345678'
+
+    const message: Message = new Message()
+    message.data = {
+      template: {
+        channels: {
+          preferred: ['sms']
+        },
+        defaults: {
+          title: 'Default title',
+          body: 'Default body'
+        }
+      }
+    }
+
+    const revision: TemplateRevision = new TemplateRevision(1)
+    revision.unserialize(message.data.template)
+
+    const integration: Integration = new Integration(Integration.CHANNEL_SMS, new MockProvider())
+
+    const senderDefaults = {
+      id: 'postways',
+    };
+
+    await transmissionService.send(transmission, revision, integration, {}, new Map(Object.entries(senderDefaults)))
+  })
+
+  it('should throw an error on send', async () => {
+    const transmission: Transmission = new Transmission(1, Transmission.CHANNEL_EMAIL)
+    transmission.target = 'test@example.com'
+
+    const message: Message = new Message()
+    message.data = {
+      template: {
+        channels: {
+          preferred: ['email']
+        },
+        defaults: {
+          title: 'Default title',
+          body: 'Default body'
+        }
+      }
+    }
+
+    const revision: TemplateRevision = new TemplateRevision(1)
+    revision.unserialize(message.data.template)
+
+    const integration: Integration = new Integration(Integration.CHANNEL_EMAIL, new MockProviderWithError())
+
+    const senderDefaults = {
+      id: 'postways',
+      from: 'Postways',
+      email: 'info@postways.com',
+    };
+
+    await expect(
+      transmissionService.send(transmission, revision, integration, {}, new Map(Object.entries(senderDefaults)))
+    ).rejects.toThrow();
   })
 })
