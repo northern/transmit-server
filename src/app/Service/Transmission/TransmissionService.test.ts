@@ -1,18 +1,33 @@
 
+import ILogger from '../../ILogger'
 import Message from '../../Entity/Message'
 import Template from '../../Entity/Template'
 import TemplateRevision from '../../Entity/Template/Revision'
 import Transmission from '../../Entity/Transmission'
 import TransmissionTarget from '../../Entity/TransmissionTarget'
-import Integration, {
-  CHANNEL_EMAIL
-} from '../../Entity/Integration'
+import Integration from '../../Entity/Integration'
 import IProvider from '../../Entity/Integration/IProvider'
 import TransmissionService from './TransmissionService'
 import TransmissionUtil from './TransmissionUtil'
 import TransmissionValidator from './TransmissionValidator'
 import TransmissionRepository from './TransmissionRepository'
 import IStorage from './Storage/IStorage'
+
+class MockLogger implements ILogger {
+  info(_message: string): void {}
+}
+
+describe('setters', () => {
+  let transmission: TransmissionService
+
+  beforeEach(() => {
+     transmission = new TransmissionService()
+  })
+
+  it('should the logger', () => {
+    transmission.setLogger(new MockLogger())
+  })
+})
 
 describe('getById', () => {
   it('should return a transmission', async() => {

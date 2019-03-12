@@ -1,9 +1,11 @@
 
 import ILogger from '../../ILogger'
+import ObjectUtil from '../../Util/ObjectUtil'
 import Message from '../../Entity/Message'
 import Transmission from '../../Entity/Transmission'
 import MessageRepository from './MessageRepository'
 import MessageValidator from './MessageValidator'
+import MessageNotFoundError from './Error/MessageNotFoundError'
 import MessageValidationError from './Error/MessageValidationError'
 
 export default class MessageService implements IMessageService {
@@ -26,30 +28,28 @@ export default class MessageService implements IMessageService {
   }
 
   async getById(id: string, connection: any): Promise<Message> {
-    return this.repository.getById(id, connection)
+    const message: Message = await this.repository.getById(id, connection)
+
+    if (message === null) {
+      throw new MessageNotFoundError(id)
+    }
+
+    return message
   }
 
   async create(data: object, environment: string, connection: any): Promise<Message> {
-    const message = new Message(data)
+    const message: Message = new Message(data)
     message.environment = environment
-
-    const result = this.validator.validate(message)
-
-    const map: Map<string, any> = new Map(Object.entries(result))
-
-    const errors = map.get('errors')
-
-    if (errors && errors.length > 0) {
-      throw new MessageValidationError(errors)
-    }
 
     await this.repository.persist(message, connection)
 
     return message
   }
 
-  async update(message: Message, values: object, connection: any) {
-    const updatedMessage = Object.assign(new Message(), message, values)
+  async update(message: Message, values: object, connection: any): Promise<Message> {
+    const filteredValues = ObjectUtil.filter(values, ['id', 'timeCreated', 'timeUpdated'])
+
+    const updatedMessage = Object.assign(new Message(), message, filteredValues)
 
     const result = this.validator.validate(updatedMessage)
 
@@ -93,33 +93,30 @@ export default class MessageService implements IMessageService {
    * set the status of the message to WARNING.
    */
   getCombinedStatus(transmissions: Array<Transmission>): string {
-    let failedCount = 0
+    let status: string = Message.STATUS_PROCESSING
 
-    for (let i = 0; i < transmissions.length; i++) {
-      const transmission = transmissions[i]
+    const stillProcessing: Transmission[] = transmissions.filter((t: Transmission) => 
+      t.status === Transmission.STATUS_RETRY ||
+      t.status === Transmission.STATUS_PENDING ||
+      t.status === Transmission.STATUS_PROCESSING
+    )
 
-      switch (transmission.status) {
-        case Transmission.STATUS_RETRY:
-        case Transmission.STATUS_PENDING:
-        case Transmission.STATUS_PROCESSING:
-          return Message.STATUS_PROCESSING
+    if (stillProcessing.length === 0) {
+      const failedCount: number = transmissions.filter((t: Transmission) => t.status === Transmission.STATUS_FAILED).length
 
-        case Transmission.STATUS_FAILED:
-          failedCount++
-          break
+      if (failedCount > 0) {
+        if (failedCount === transmissions.length) {
+          status = Message.STATUS_FAILED
+        }
+        else {
+          status = Message.STATUS_WARNING
+        }
+      }
+      else {
+        status = Message.STATUS_OK
       }
     }
 
-    let status = Message.STATUS_OK
-
-    if (failedCount > 0) {
-      status = Message.STATUS_WARNING
-
-      if (failedCount === transmissions.length) {
-        status = Message.STATUS_FAILED
-      }
-    }
-    
     return status
   }
 }

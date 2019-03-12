@@ -1,4 +1,4 @@
 
 export default interface ILogger {
-  info(message: string): void;
+  info(message: string): void
 }
