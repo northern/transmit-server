@@ -1,7 +1,7 @@
 
-import Serializable from '../../Serializable'
+import ISerializer from '../../ISerializer'
 
-export default class Push implements Serializable {
+export default class Push implements ISerializer {
   public title: string | null
   public from: string | null
   public body: string | null

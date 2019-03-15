@@ -1,7 +1,7 @@
 
-import Serializable from '../Serializable'
+import ISerializer from '../ISerializer'
 
-export default class Category implements Serializable {
+export default class Category implements ISerializer {
   public name: string | null
   public title: string | null
 

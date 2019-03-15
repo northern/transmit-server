@@ -1,7 +1,7 @@
 
-import Serializable from '../../Serializable'
+import ISerializer from '../../ISerializer'
 
-export default class Test implements Serializable {
+export default class Test implements ISerializer {
   public vars: object | null
 
   constructor(vars: object | null = null) {

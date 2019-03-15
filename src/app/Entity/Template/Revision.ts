@@ -1,5 +1,5 @@
 
-import Serializable from '../Serializable'
+import ISerializer from '../ISerializer'
 
 import Channels from './Revision/Channels'
 import Defaults from './Revision/Defaults'
@@ -9,7 +9,7 @@ import Push from './Revision/Push'
 import Callback from './Revision/Callback'
 import Test from './Revision/Test'
 
-export default class Revision implements Serializable {
+export default class Revision implements ISerializer {
   public number: number
   public parent: number | null
   public channels: Channels

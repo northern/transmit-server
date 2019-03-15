@@ -1,7 +1,7 @@
 
-import Serializable from '../../Serializable'
+import ISerializer from '../../ISerializer'
 
-export default class Channels implements Serializable {
+export default class Channels implements ISerializer {
   static readonly TYPE_EMAIL    = 'email'
   static readonly TYPE_SMS      = 'sms'
   static readonly TYPE_PUSH     = 'push'

@@ -3,9 +3,9 @@ import Message from './Message'
 
 describe("Entity/Message", () => {
   it("should instantiate without a constructor parameters", () => {
-    const template: Message = new Message()
+    const message: Message = new Message()
 
-    expect(template).toBeInstanceOf(Message)
+    expect(message).toBeInstanceOf(Message)
   })
 
   it('should get statuses', () => {

@@ -38,7 +38,7 @@ export default class Message {
    */
   static readonly STATUS_WARNING: string = 'warning'
 
-  public id: string | null
+  public id: number | string | null
   public token: string
   public status: string
   public error: string | null

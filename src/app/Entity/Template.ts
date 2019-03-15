@@ -15,7 +15,7 @@ export default class Template {
 
   static readonly ENGINE_TWIG: string = 'twig'
 
-  public id: number | null
+  public id: number | string | null
   public name: string | null
   public title: string | null
   public description: string | null

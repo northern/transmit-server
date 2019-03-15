@@ -1,7 +1,7 @@
 
-import Serializable from '../../Serializable'
+import ISerializer from '../../ISerializer'
 
-export default class Sms implements Serializable {
+export default class Sms implements ISerializer {
   public from: string | null
   public body: string | null
 

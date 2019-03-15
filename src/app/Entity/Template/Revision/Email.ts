@@ -1,8 +1,8 @@
 
-import Serializable from '../../Serializable'
+import ISerializer from '../../ISerializer'
 import Body from './Email/Body'
 
-export default class Email implements Serializable {
+export default class Email implements ISerializer {
   public title: string | null
   public senderName: string | null
   public senderEmail: string | null

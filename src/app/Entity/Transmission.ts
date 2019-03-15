@@ -37,7 +37,7 @@ export default class Transmission {
 
   static readonly MAX_TRIES = 3
 
-  public id: number | null
+  public id: number | string | null
   public messageId: string
   public token: string
   public status: string

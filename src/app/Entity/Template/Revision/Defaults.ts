@@ -1,7 +1,7 @@
 
-import Serializable from '../../Serializable'
+import ISerializer from '../../ISerializer'
 
-export default class Defaults implements Serializable {
+export default class Defaults implements ISerializer {
   public title: string
   public body: string
 

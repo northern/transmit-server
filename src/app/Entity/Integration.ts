@@ -10,6 +10,12 @@ export default class Integration {
   public provider: IProvider
   
   constructor(channel: string, provider: IProvider) {
+    const capabilities = provider.getCapabilities()
+
+    if (!capabilities.includes(channel)) {
+      throw new Error(`Channel (${channel}) does not match Provider capabilities ([${capabilities}]).`)
+    }
+
     this.channel = channel
     this.provider = provider
   }
