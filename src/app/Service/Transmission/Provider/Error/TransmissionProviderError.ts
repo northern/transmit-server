@@ -1,6 +1,6 @@
 
-import AbstractError from '../../../../Error/AbstractError'
+import TransmissionError from '../../Error/TransmissionError'
 
-export default class TransmissionProviderError extends AbstractError {
+export default class TransmissionProviderError extends TransmissionError {
   
 }

@@ -8,7 +8,7 @@ import MessageValidator from './MessageValidator'
 import MessageNotFoundError from './Error/MessageNotFoundError'
 import MessageValidationError from './Error/MessageValidationError'
 
-export default class MessageService implements IMessageService {
+export default class MessageService {
   static readonly PROVIDER_MYSQL: string = 'mysql'
 
   private logger: ILogger

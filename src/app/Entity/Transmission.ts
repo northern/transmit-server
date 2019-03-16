@@ -38,7 +38,7 @@ export default class Transmission {
   static readonly MAX_TRIES = 3
 
   public id: number | string | null
-  public messageId: string
+  public messageId: number | string
   public token: string
   public status: string
   public channel: string
@@ -49,7 +49,7 @@ export default class Transmission {
   public timeCreated: number | null
   public timeUpdated: number | null
 
-  constructor(messageId: string, channel: string) {
+  constructor(messageId: number | string, channel: string) {
     this.id = null
     this.messageId = messageId
     this.token = uuid.v4()

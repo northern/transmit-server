@@ -602,8 +602,7 @@ describe('send', () => {
     const transmission: Transmission = new Transmission(1, Transmission.CHANNEL_EMAIL)
     transmission.target = 'test@example.com'
 
-    const message: Message = new Message()
-    message.data = {
+    const data = {
       template: {
         channels: {
           preferred: ['email']
@@ -615,8 +614,11 @@ describe('send', () => {
       }
     }
 
+    const message: Message = new Message()
+    message.data = data
+
     const revision: TemplateRevision = new TemplateRevision(1)
-    revision.unserialize(message.data.template)
+    revision.unserialize(data.template)
 
     const integration: Integration = new Integration(Integration.CHANNEL_EMAIL, new MockProvider())
 
@@ -633,8 +635,7 @@ describe('send', () => {
     const transmission: Transmission = new Transmission(1, Transmission.CHANNEL_EMAIL)
     transmission.target = 'test@example.com'
 
-    const message: Message = new Message()
-    message.data = {
+    const data = {
       template: {
         channels: {
           preferred: ['email']
@@ -650,8 +651,11 @@ describe('send', () => {
       }
     }
 
+    const message: Message = new Message()
+    message.data = data
+
     const revision: TemplateRevision = new TemplateRevision(1)
-    revision.unserialize(message.data.template)
+    revision.unserialize(data.template)
 
     const integration: Integration = new Integration(Integration.CHANNEL_EMAIL, new MockProvider())
 
@@ -668,8 +672,7 @@ describe('send', () => {
     const transmission: Transmission = new Transmission(1, Transmission.CHANNEL_SMS)
     transmission.target = '+610212345678'
 
-    const message: Message = new Message()
-    message.data = {
+    const data = {
       template: {
         channels: {
           preferred: ['sms']
@@ -681,8 +684,11 @@ describe('send', () => {
       }
     }
 
+    const message: Message = new Message()
+    message.data = data
+
     const revision: TemplateRevision = new TemplateRevision(1)
-    revision.unserialize(message.data.template)
+    revision.unserialize(data.template)
 
     const integration: Integration = new Integration(Integration.CHANNEL_SMS, new MockProvider())
 
@@ -697,8 +703,7 @@ describe('send', () => {
     const transmission: Transmission = new Transmission(1, Transmission.CHANNEL_EMAIL)
     transmission.target = 'test@example.com'
 
-    const message: Message = new Message()
-    message.data = {
+    const data = {
       template: {
         channels: {
           preferred: ['email']
@@ -710,8 +715,11 @@ describe('send', () => {
       }
     }
 
+    const message: Message = new Message()
+    message.data = data
+
     const revision: TemplateRevision = new TemplateRevision(1)
-    revision.unserialize(message.data.template)
+    revision.unserialize(data.template)
 
     const integration: Integration = new Integration(Integration.CHANNEL_EMAIL, new MockProviderWithError())
 

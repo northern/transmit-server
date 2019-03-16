@@ -1,21 +1,17 @@
 
-import Message from '../../../Entity/Message'
-import IProvider, {
-  CAPABILITY_EMAIL,
-  CAPABILITY_SMS,
-  CAPABILITY_PUSH,
-} from '../../../Entity/Integration/IProvider'
+import IProvider from '../../../Entity/Integration/IProvider'
+import Integration from '../../../Entity/Integration'
 
 export default class AwsProvider implements IProvider {
   getCapabilities() {
     return [
-      CAPABILITY_EMAIL,
-      CAPABILITY_SMS,
-      CAPABILITY_PUSH,
+      Integration.CHANNEL_EMAIL,
+      Integration.CHANNEL_SMS,
+      Integration.CHANNEL_PUSH,
     ]
   }
 
-  send(_message: Message): void {
+  async send(_channel: string, _title: string, _body: string, _extra: object | null): Promise<void> {
 
   }
 }

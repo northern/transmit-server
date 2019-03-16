@@ -1,9 +1,8 @@
 
 import ILogger from '../../ILogger'
 import Message from '../../Entity/Message'
-import IMessageRespository from './IMessageRepository'
 
-export default class MessageRepository implements IMessageRespository {
+export default class MessageRepository {
   private logger: ILogger
   private storage: any
 

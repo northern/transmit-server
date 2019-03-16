@@ -7,6 +7,7 @@ import Template from '../../Entity/Template'
 import Transmission from '../../Entity/Transmission'
 import TransmissionTarget from '../../Entity/TransmissionTarget'
 import Integration from '../../Entity/Integration'
+import TransmissionMissingMessageidError from './Error/TransmissionMissingMessageIdError'
 
 export default class TransmissionUtil {
   static readonly CHANNEL_PREFERRED: string = 'preferred'
@@ -97,6 +98,10 @@ export default class TransmissionUtil {
    */
   createTransmissions(message: Message, target: TransmissionTarget, channels: Array<string>, channelType: string, capabilities: Array<string>): Array<Transmission> {
     const transmissions: Array<Transmission> = []
+
+    if (!message.id) {
+      throw new TransmissionMissingMessageidError()
+    }
 
     for (let i = 0; i < channels.length; i++) {
       const channel: string = channels[i]

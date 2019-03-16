@@ -201,7 +201,13 @@ describe('createTransmissions (preferred channels)', () => {
     target.callback = "http://www.example.com"
     target.chat = {username: "bob", password: "s3cr3t"}
 
-    const transmissions = transmissionUtil.createTransmissions(message, target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionUtil.CHANNEL_PREFERRED, capabilities)
+    const transmissions = transmissionUtil.createTransmissions(
+      message,
+      target,
+      ['email', 'sms', 'push', 'callback', 'chat'],
+      TransmissionUtil.CHANNEL_PREFERRED,
+      capabilities
+    )
     expect(transmissions.length).toBe(1)
     expect(transmissions[0].channel).toEqual('email')
     expect(transmissions[0].target).toEqual("info@postways.com")
@@ -214,7 +220,13 @@ describe('createTransmissions (preferred channels)', () => {
     target.callback = "http://www.example.com"
     target.chat = {username: "bob", password: "s3cr3t"}
 
-    const transmissions = transmissionUtil.createTransmissions(message, target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionUtil.CHANNEL_PREFERRED, capabilities)
+    const transmissions = transmissionUtil.createTransmissions(
+      message,
+      target,
+      ['email', 'sms', 'push', 'callback', 'chat'],
+      TransmissionUtil.CHANNEL_PREFERRED,
+      capabilities
+    )
     expect(transmissions.length).toBe(1)
     expect(transmissions[0].channel).toEqual('sms')
     expect(transmissions[0].target).toEqual("0123456789")
@@ -226,7 +238,13 @@ describe('createTransmissions (preferred channels)', () => {
     target.callback = "http://www.example.com"
     target.chat = {username: "bob", password: "s3cr3t"}
 
-    const transmissions = transmissionUtil.createTransmissions(message, target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionUtil.CHANNEL_PREFERRED, capabilities)
+    const transmissions = transmissionUtil.createTransmissions(
+      message,
+      target,
+      ['email', 'sms', 'push', 'callback', 'chat'],
+      TransmissionUtil.CHANNEL_PREFERRED,
+      capabilities
+    )
     expect(transmissions.length).toBe(1)
     expect(transmissions[0].channel).toEqual('push')
     expect(transmissions[0].target).toEqual({token: "abc123"})
@@ -237,7 +255,13 @@ describe('createTransmissions (preferred channels)', () => {
     target.callback = "http://www.example.com"
     target.chat = {username: "bob", password: "s3cr3t"}
 
-    const transmissions = transmissionUtil.createTransmissions(message, target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionUtil.CHANNEL_PREFERRED, capabilities)
+    const transmissions = transmissionUtil.createTransmissions(
+      message,
+      target,
+      ['email', 'sms', 'push', 'callback', 'chat'],
+      TransmissionUtil.CHANNEL_PREFERRED,
+      capabilities
+    )
     expect(transmissions.length).toBe(1)
     expect(transmissions[0].channel).toEqual('callback')
     expect(transmissions[0].target).toEqual("http://www.example.com")
@@ -247,7 +271,13 @@ describe('createTransmissions (preferred channels)', () => {
     const target = new TransmissionTarget()
     target.chat = {username: "bob", password: "s3cr3t"}
 
-    const transmissions = transmissionUtil.createTransmissions(message, target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionUtil.CHANNEL_PREFERRED, capabilities)
+    const transmissions = transmissionUtil.createTransmissions(
+      message,
+      target,
+      ['email', 'sms', 'push', 'callback', 'chat'],
+      TransmissionUtil.CHANNEL_PREFERRED,
+      capabilities
+    )
     expect(transmissions.length).toBe(1)
     expect(transmissions[0].channel).toEqual('chat')
     expect(transmissions[0].target).toEqual({username: "bob", password: "s3cr3t"})
@@ -256,7 +286,13 @@ describe('createTransmissions (preferred channels)', () => {
   it("should return no transmission", () => {
     const target = new TransmissionTarget()
 
-    const transmissions = transmissionUtil.createTransmissions(message, target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionUtil.CHANNEL_PREFERRED, capabilities)
+    const transmissions = transmissionUtil.createTransmissions(
+      message,
+      target,
+      ['email', 'sms', 'push', 'callback', 'chat'],
+      TransmissionUtil.CHANNEL_PREFERRED,
+      capabilities
+    )
     expect(transmissions.length).toBe(0)
   })
 })
@@ -289,7 +325,13 @@ describe('createTransmissions (required channels)', () => {
     target.callback = "http://www.example.com"
     target.chat = {username: "bob", password: "s3cr3t"}
 
-    const transmissions: Array<Transmission> = transmissionUtil.createTransmissions(message, target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionUtil.CHANNEL_REQUIRED, capabilities)
+    const transmissions: Array<Transmission> = transmissionUtil.createTransmissions(
+      message,
+      target,
+      ['email', 'sms', 'push', 'callback', 'chat'],
+      TransmissionUtil.CHANNEL_REQUIRED,
+      capabilities
+    )
     expect(transmissions.length).toBe(5)
 
     let transmission: Transmission | undefined
@@ -338,7 +380,47 @@ describe('createTransmissions (required channels)', () => {
   it("should return no transmissions", () => {
     const target = new TransmissionTarget()
 
-    const transmissions = transmissionUtil.createTransmissions(message, target, ['email', 'sms', 'push', 'callback', 'chat'], TransmissionUtil.CHANNEL_REQUIRED, capabilities)
+    const transmissions = transmissionUtil.createTransmissions(
+      message,
+      target,
+      ['email', 'sms', 'push', 'callback', 'chat'],
+      TransmissionUtil.CHANNEL_REQUIRED,
+      capabilities
+    )
     expect(transmissions.length).toBe(0)
+  })
+})
+
+describe('createTransmissions fails', () => {
+  let transmissionUtil: TransmissionUtil
+  let capabilities: Array<string>
+
+  beforeEach(() => {
+    transmissionUtil = new TransmissionUtil()
+
+    capabilities = [
+      Template.CHANNEL_TYPE_EMAIL,
+      Template.CHANNEL_TYPE_SMS,
+      Template.CHANNEL_TYPE_PUSH,
+      Template.CHANNEL_TYPE_CHAT,
+      Template.CHANNEL_TYPE_CALLBACK
+    ]
+  })
+
+  it('should throw an exception', () => {
+    const message = new Message()
+    // message.id = 1  <<-- Not set!
+
+    const target = new TransmissionTarget()
+
+    expect(() => {
+      transmissionUtil.createTransmissions(
+        message,
+        target,
+        ['email', 'sms', 'push', 'callback', 'chat'],
+        TransmissionUtil.CHANNEL_REQUIRED,
+        capabilities
+      )
+    }).toThrow();
   })
 })

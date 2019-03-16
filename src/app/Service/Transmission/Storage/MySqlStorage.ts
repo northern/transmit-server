@@ -22,12 +22,13 @@ export default class MySqlStorage implements IStorage {
       const result = results[0]
 
       if (result) {
-        transmission = new Transmission()
+        transmission = new Transmission(
+          result.message_id,
+          result.channel
+        )
         transmission.id = result.id
-        transmission.messageId = result.message_id
         transmission.token = result.token
         transmission.status = result.status
-        transmission.channel = result.channel
         transmission.target = JsonUtil.parseSafe(result.target)
         transmission.vars = JsonUtil.parseSafe(result.vars)
         transmission.error = result.error
@@ -54,12 +55,13 @@ export default class MySqlStorage implements IStorage {
       results.map((result: object): void => {
         const map: Map<string, any> = new Map(Object.entries(result))
 
-        const transmission = new Transmission()
+        const transmission = new Transmission(
+          map.get('message_id'),
+          map.get('channel')
+        )
         transmission.id = map.get('id')
-        transmission.messageId = map.get('message_id')
         transmission.token = map.get('token')
         transmission.status = map.get('status')
-        transmission.channel = map.get('channel')
         transmission.target = JsonUtil.parseSafe(map.get('target'))
         transmission.vars = JsonUtil.parseSafe(map.get('vars'))
         transmission.error = map.get('error')

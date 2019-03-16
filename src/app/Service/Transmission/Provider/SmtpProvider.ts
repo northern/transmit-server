@@ -1,17 +1,15 @@
 
-import Message from '../../../Entity/Message'
-import IProvider, {
-  CAPABILITY_EMAIL,
-} from '../../../Entity/Integration/IProvider'
+import IProvider from '../../../Entity/Integration/IProvider'
+import Integration from '../../../Entity/Integration'
 
 export default class SmtpProvider implements IProvider {
   getCapabilities(): Array<string> {
     return [
-      CAPABILITY_EMAIL,
+      Integration.CHANNEL_EMAIL,
     ]
   }
 
-  send(_message: Message): void {
+  async send(_channel: string, _title: string, _body: string, _extra: object | null): Promise<void> {
 
   }
 }

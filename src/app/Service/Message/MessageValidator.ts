@@ -5,9 +5,8 @@ import {
 } from 'jsonschema'
 
 import Message from '../../Entity/Message'
-import IMesssageValidator from './IMessageValidator'
 
-export default class MessageValidator implements IMesssageValidator {
+export default class MessageValidator {
   validate(data: object): object {
     const validator = new Validator()
 

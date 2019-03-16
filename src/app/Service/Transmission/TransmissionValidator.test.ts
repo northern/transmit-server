@@ -28,16 +28,17 @@ describe('validate', () => {
   })
 
   it('should validate', () => {
-    const transmission: Transmission = new Transmission()
-    transmission.messageId = 1
-    transmission.channel = Transmission.CHANNEL_EMAIL
+    const transmission: Transmission = new Transmission(1, Transmission.CHANNEL_EMAIL)
     transmission.target = 'info@postways.com'
 
     const result: object = transmissionValidator.validate(transmission)
 
     expect(result).toBeInstanceOf(Object)
     expect(result).toHaveProperty('errors')
-    expect(result.errors).toBeInstanceOf(Array)
-    expect(result.errors.length).toBe(0)
+
+    const map: Map<string, any> = new Map(Object.entries(result))
+
+    expect(map.get('errors')).toBeInstanceOf(Array)
+    expect(map.get('errors').length).toBe(0)
   })
 })
