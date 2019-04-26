@@ -1,5 +1,7 @@
 .env
-dist
+.cache
+bin
+build
 coverage
 node_modules
 yarn-error.log

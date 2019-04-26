@@ -14,7 +14,8 @@
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch --no-coverage",
     "start": "node dist/index.js",
-    "dist": "tsc"
+    "build": "tsc",
+    "dist": "yarn build && parcel build ./build/index.js -d ./bin --no-source-maps"
   },
   "dependencies": {
     "@northern/di": "^1.0.3",
@@ -37,6 +38,10 @@
     "@types/mocha": "^5.2.6",
     "@types/twig": "^1.12.2",
     "@types/uuid": "^3.4.4",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-builtin-extend": "^1.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "chai": "^4.1.2",
     "concurrently": "^4.1.0",
     "db-migrate": "^0.11.5",
@@ -45,6 +50,7 @@
     "grunt-cli": "^1.2.0",
     "jest": "^23.1.0",
     "nodemon": "^1.17.2",
+    "parcel-bundler": "^1.12.3",
     "ts-jest": "^23.10.5",
     "ts-node": "^8.0.2",
     "tslint": "^5.14.0",
