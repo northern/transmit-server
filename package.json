@@ -13,9 +13,9 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch --no-coverage",
-    "start": "node dist/index.js",
+    "start": "node bin/index.js",
     "build": "tsc",
-    "dist": "yarn build && parcel build ./build/index.js -d ./bin --no-source-maps"
+    "dist": "yarn build && parcel build ./build/index.js -d ./bin --target node --no-source-maps"
   },
   "dependencies": {
     "@northern/di": "^1.0.3",
