@@ -27,19 +27,27 @@ describe("Entity/Template", () => {
 
     expect(statuses).toBeInstanceOf(Array)
     expect(statuses.length).toBe(2)
+    expect(statuses).toContain(Template.STATUS_ACTIVE)
+    expect(statuses).toContain(Template.STATUS_DELETED)
   })
 
   it('should get channels', () => {
-    const statuses = Template.getChannels()
+    const channels = Template.getChannels()
 
-    expect(statuses).toBeInstanceOf(Array)
-    expect(statuses.length).toBe(5)
+    expect(channels).toBeInstanceOf(Array)
+    expect(channels.length).toBe(5)
+    expect(channels).toContain(Template.CHANNEL_TYPE_EMAIL)
+    expect(channels).toContain(Template.CHANNEL_TYPE_SMS)
+    expect(channels).toContain(Template.CHANNEL_TYPE_PUSH)
+    expect(channels).toContain(Template.CHANNEL_TYPE_CALLBACK)
+    expect(channels).toContain(Template.CHANNEL_TYPE_CHAT)
   })
 
   it('should get engines', () => {
-    const statuses = Template.getEngines()
+    const engines = Template.getEngines()
 
-    expect(statuses).toBeInstanceOf(Array)
-    expect(statuses.length).toBe(1)
+    expect(engines).toBeInstanceOf(Array)
+    expect(engines.length).toBe(1)
+    expect(engines).toContain(Template.ENGINE_TWIG)
   })
 })
