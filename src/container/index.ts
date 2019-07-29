@@ -1,5 +1,6 @@
 
 // import Container from '@northern/di'
+import Container from '../util/Container'
 
 // // import logger from '../app/Util/logger'
 // // import initPersistanceService from './service/persistance'
@@ -11,11 +12,11 @@
 // // import initCommand from './command'
 // // import initQuery from './query'
 
-// export default async (config: any) => {
-//   const container = new Container()
+export default async (config: any) => {
+   const container = new Container()
 
 //   // container.service('logger', () => logger)
-//   // container.service('config', () => config)
+  container.service('config', () => config)
 
 //   // await initPersistanceService(container)
 //   // await initQueueService(container)
@@ -26,5 +27,5 @@
 //   // await initCommand(container)
 //   // await initQuery(container)
 
-//   return container
-// }
+  return container
+}

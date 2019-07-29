@@ -2,14 +2,17 @@
 import Koa from 'koa'
 import morgan from 'morgan'
 
-// import container from './container'
+import container from './container'
 
 const init = async() => {
   const server = new Koa();
 
-  // server.context.container = await container({}/*config()*/)
+  server.context.container = await container({}/*config()*/)
 
   server.use(async (ctx: any) => {
+    const config = ctx.container.get('config')
+    console.log(config)
+
     ctx.body = 'Hello World';
   });
 
