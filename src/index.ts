@@ -18,8 +18,10 @@ const init = async() => {
   server.context.container = await container(config())
 
   server.use(async (ctx: any) => {
+    const logger = ctx.container.get('logger')
     const service = ctx.container.get('transmissionService')
-    console.log(service)
+    
+    logger.info(service)
 
     ctx.body = 'Hello World';
   });
