@@ -10,12 +10,12 @@ export default async (container: Container) => {
   const logger = container.get('logger')
 
   container.service('transmissionRepository', (container: Container) => {
-    const service = new TransmissionRepository()
+    const service: TransmissionRepository = new TransmissionRepository()
     service.setLogger(logger)
 
     switch (config.database.provider) {
       case TransmissionService.PROVIDER_MYSQL: {
-        const storage = new MySqlStorage()
+        const storage: MySqlStorage = new MySqlStorage()
         storage.setLogger(logger)
 
         service.setStorage(storage)
@@ -31,7 +31,7 @@ export default async (container: Container) => {
   })
 
   container.service('transmissionService', (container: Container) => {
-    const service = new TransmissionService()
+    const service: TransmissionService = new TransmissionService()
     service.setLogger(logger)
     service.setRepository(container.get('transmissionRepository'))
     service.setValidator(container.get('transmissionValidator'))

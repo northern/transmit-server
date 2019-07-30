@@ -43,7 +43,7 @@ export default class TransmissionService {
   }
 
   async getById(id: string, connection: any): Promise<Transmission> {
-    const transmission = await this.repository.getById(id, connection)
+    const transmission: Transmission | null = await this.repository.getById(id, connection)
 
     if (!transmission) {
       throw new TransmissionNotFoundError(id)

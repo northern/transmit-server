@@ -43,7 +43,7 @@ describe('getById', () => {
     const transmissionService: TransmissionService = new TransmissionService()
     transmissionService.setRepository(new MockRepository())
 
-    const transmission = await transmissionService.getById(1, null)
+    const transmission: Transmission = await transmissionService.getById(1, null)
 
     expect(transmission).toBeInstanceOf(Transmission)
     expect(transmission.id).toBe(1)
@@ -51,7 +51,7 @@ describe('getById', () => {
     expect(transmission.channel).toBe(Transmission.CHANNEL_EMAIL)
   })
 
-  it('should throw an exception', async() => {
+  it('should throw an exception when does not exist', async() => {
     const MockRepository = jest.fn<TransmissionRepository>(() => ({
       getById: jest.fn((_id: string, _connection: any) => {
         return null
@@ -81,7 +81,7 @@ describe('getByMessageId', () => {
     const transmissionService: TransmissionService = new TransmissionService()
     transmissionService.setRepository(new MockRepository())
 
-    const transmissions = await transmissionService.getByMessageId(1, null)
+    const transmissions: Transmission[] = await transmissionService.getByMessageId(1, null)
 
     expect(transmissions).toBeInstanceOf(Array)
     expect(transmissions.length).toBe(2)
@@ -179,18 +179,16 @@ describe('create (required channels)', () => {
 
     const transmissions: Transmission[] = await transmissionService.create(message, revision, mockIntegrations, [], null)
 
-    let transmission: Transmission
+    const emailTransmission: Transmission = transmissions.find((transmission: Transmission): boolean => transmission.channel === 'email')
+    expect(emailTransmission).toBeInstanceOf(Transmission)
+    expect(emailTransmission.channel).toEqual('email')
+    expect(emailTransmission.target).toEqual("info@postways.com")
 
-    transmission = transmissions.find((transmission: Transmission): boolean => transmission.channel === 'email')
-    expect(transmission).toBeInstanceOf(Transmission)
-    expect(transmission.channel).toEqual('email')
-    expect(transmission.target).toEqual("info@postways.com")
-
-    transmission = transmissions.find((transmission: Transmission): boolean => transmission.channel === 'sms')
-    expect(transmission).toBeInstanceOf(Transmission)
-    expect(transmission.channel).toEqual('sms')
-    expect(transmission.target).toEqual("0123456789")
-  })  
+    const smsTransmission: Transmission = transmissions.find((transmission: Transmission): boolean => transmission.channel === 'sms')
+    expect(smsTransmission).toBeInstanceOf(Transmission)
+    expect(smsTransmission.channel).toEqual('sms')
+    expect(smsTransmission.target).toEqual("0123456789")
+  })
 
   it("should create three transmissions", async () => {
     const message: Message = new Message()
@@ -219,23 +217,21 @@ describe('create (required channels)', () => {
 
     expect(transmissions.length).toBe(3)
 
-    let transmission: Transmission
+    const emailTransmission: Transmission = transmissions.find(transmission => transmission.channel === 'email')
+    expect(emailTransmission).toBeInstanceOf(Transmission)
+    expect(emailTransmission.channel).toEqual('email')
+    expect(emailTransmission.target).toEqual("info@postways.com")
 
-    transmission = transmissions.find(transmission => transmission.channel === 'email')
-    expect(transmission).toBeInstanceOf(Transmission)
-    expect(transmission.channel).toEqual('email')
-    expect(transmission.target).toEqual("info@postways.com")
+    const smsTransmission: Transmission = transmissions.find(transmission => transmission.channel === 'sms')
+    expect(smsTransmission).toBeInstanceOf(Transmission)
+    expect(smsTransmission.channel).toEqual('sms')
+    expect(smsTransmission.target).toEqual("0123456789")
 
-    transmission = transmissions.find(transmission => transmission.channel === 'sms')
-    expect(transmission).toBeInstanceOf(Transmission)
-    expect(transmission.channel).toEqual('sms')
-    expect(transmission.target).toEqual("0123456789")
-
-    transmission = transmissions.find(transmission => transmission.channel === 'push')
-    expect(transmission).toBeInstanceOf(Transmission)
-    expect(transmission.channel).toEqual('push')
-    expect(transmission.target).toEqual({token: "abc123"})
-  })  
+    const pushTransmission: Transmission = transmissions.find(transmission => transmission.channel === 'push')
+    expect(pushTransmission).toBeInstanceOf(Transmission)
+    expect(pushTransmission.channel).toEqual('push')
+    expect(pushTransmission.target).toEqual({token: "abc123"})
+  })
 
   it("should create four transmissions", async () => {
     const message: Message = new Message()
@@ -265,28 +261,26 @@ describe('create (required channels)', () => {
 
     expect(transmissions.length).toBe(4)
 
-    let transmission: Transmission
+    const emailTransmission: Transmission = transmissions.find(transmission => transmission.channel === 'email')
+    expect(emailTransmission).toBeInstanceOf(Transmission)
+    expect(emailTransmission.channel).toEqual('email')
+    expect(emailTransmission.target).toEqual("info@postways.com")
 
-    transmission = transmissions.find(transmission => transmission.channel === 'email')
-    expect(transmission).toBeInstanceOf(Transmission)
-    expect(transmission.channel).toEqual('email')
-    expect(transmission.target).toEqual("info@postways.com")
+    const smsTransmission: Transmission = transmissions.find(transmission => transmission.channel === 'sms')
+    expect(smsTransmission).toBeInstanceOf(Transmission)
+    expect(smsTransmission.channel).toEqual('sms')
+    expect(smsTransmission.target).toEqual("0123456789")
 
-    transmission = transmissions.find(transmission => transmission.channel === 'sms')
-    expect(transmission).toBeInstanceOf(Transmission)
-    expect(transmission.channel).toEqual('sms')
-    expect(transmission.target).toEqual("0123456789")
+    const pushTransmission: Transmission = transmissions.find(transmission => transmission.channel === 'push')
+    expect(pushTransmission).toBeInstanceOf(Transmission)
+    expect(pushTransmission.channel).toEqual('push')
+    expect(pushTransmission.target).toEqual({token: "abc123"})
 
-    transmission = transmissions.find(transmission => transmission.channel === 'push')
-    expect(transmission).toBeInstanceOf(Transmission)
-    expect(transmission.channel).toEqual('push')
-    expect(transmission.target).toEqual({token: "abc123"})
-
-    transmission = transmissions.find(transmission => transmission.channel === 'callback')
-    expect(transmission).toBeInstanceOf(Transmission)
-    expect(transmission.channel).toEqual('callback')
-    expect(transmission.target).toEqual("http://www.example.com")
-  })  
+    const callbackTransmission: Transmission = transmissions.find(transmission => transmission.channel === 'callback')
+    expect(callbackTransmission).toBeInstanceOf(Transmission)
+    expect(callbackTransmission.channel).toEqual('callback')
+    expect(callbackTransmission.target).toEqual("http://www.example.com")
+  })
 
   it("should create five transmissions", async () => {
     const message: Message = new Message()
@@ -320,32 +314,30 @@ describe('create (required channels)', () => {
 
     expect(transmissions.length).toBe(5)
 
-    let transmission: Transmission
+    const emailTransmission: Transmission = transmissions.find(transmission => transmission.channel === 'email')
+    expect(emailTransmission).toBeInstanceOf(Transmission)
+    expect(emailTransmission.channel).toEqual('email')
+    expect(emailTransmission.target).toEqual("info@postways.com")
 
-    transmission = transmissions.find(transmission => transmission.channel === 'email')
-    expect(transmission).toBeInstanceOf(Transmission)
-    expect(transmission.channel).toEqual('email')
-    expect(transmission.target).toEqual("info@postways.com")
+    const smsTransmission: Transmission = transmissions.find(transmission => transmission.channel === 'sms')
+    expect(smsTransmission).toBeInstanceOf(Transmission)
+    expect(smsTransmission.channel).toEqual('sms')
+    expect(smsTransmission.target).toEqual("0123456789")
 
-    transmission = transmissions.find(transmission => transmission.channel === 'sms')
-    expect(transmission).toBeInstanceOf(Transmission)
-    expect(transmission.channel).toEqual('sms')
-    expect(transmission.target).toEqual("0123456789")
+    const pushTransmission: Transmission = transmissions.find(transmission => transmission.channel === 'push')
+    expect(pushTransmission).toBeInstanceOf(Transmission)
+    expect(pushTransmission.channel).toEqual('push')
+    expect(pushTransmission.target).toEqual({token: "abc123"})
 
-    transmission = transmissions.find(transmission => transmission.channel === 'push')
-    expect(transmission).toBeInstanceOf(Transmission)
-    expect(transmission.channel).toEqual('push')
-    expect(transmission.target).toEqual({token: "abc123"})
+    const callbackTransmission: Transmission = transmissions.find(transmission => transmission.channel === 'callback')
+    expect(callbackTransmission).toBeInstanceOf(Transmission)
+    expect(callbackTransmission.channel).toEqual('callback')
+    expect(callbackTransmission.target).toEqual("http://www.example.com")
 
-    transmission = transmissions.find(transmission => transmission.channel === 'callback')
-    expect(transmission).toBeInstanceOf(Transmission)
-    expect(transmission.channel).toEqual('callback')
-    expect(transmission.target).toEqual("http://www.example.com")
-
-    transmission = transmissions.find(transmission => transmission.channel === 'chat')
-    expect(transmission).toBeInstanceOf(Transmission)
-    expect(transmission.channel).toEqual('chat')
-    expect(transmission.target).toEqual({username: "bob", password: "s3cr3t"})
+    const chatTransmission: Transmission = transmissions.find(transmission => transmission.channel === 'chat')
+    expect(chatTransmission).toBeInstanceOf(Transmission)
+    expect(chatTransmission.channel).toEqual('chat')
+    expect(chatTransmission.target).toEqual({username: "bob", password: "s3cr3t"})
   })
 })
 
