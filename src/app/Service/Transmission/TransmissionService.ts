@@ -14,6 +14,8 @@ import TransmissionValidator from './TransmissionValidator'
 import TransmissionNotFoundError from './Error/TransmissionNotFoundError'
 import TransmissionValidationError from './Error/TransmissionValidationError'
 
+import Email from '../../Entity/Template/Revision/Email'
+
 export default class TransmissionService {
   static readonly PROVIDER_MYSQL    = 'mysql'
   static readonly PROVIDER_POSTGRES = 'postgres'
@@ -87,7 +89,7 @@ export default class TransmissionService {
       const map: Map<string, any> = new Map(Object.entries(message.data))
 
       // Recipients are transient, in that they only exist in the message payload.
-      const recipients = map.get('recipients')
+      const recipients: object[] = map.get('recipients')
 
       if (recipients) {
         recipients.map((recipient: object) => {
@@ -96,12 +98,12 @@ export default class TransmissionService {
       }
     }
 
-    let channels: Array<string>
+    let channels: string[]
 
     // Create the transmission for the "preferred" channels (should never be more than one).
     channels = this.util.getPrioritizedChannels(templateRevision.channels.preferred, prioritizedChannels);
 
-    targets.map(target => {
+    targets.map((target: TransmissionTarget) => {
       transmissions = transmissions.concat(
         this.util.createTransmissions(message, target, channels, TransmissionUtil.CHANNEL_PREFERRED, capabilities)
       )
@@ -110,7 +112,7 @@ export default class TransmissionService {
     // Create the transmissions for the "required" channels.
     channels = this.util.getPrioritizedChannels(templateRevision.channels.required, prioritizedChannels);
 
-    targets.map(target => {
+    targets.map((target: TransmissionTarget) => {
       transmissions = transmissions.concat(
         this.util.createTransmissions(message, target, channels, TransmissionUtil.CHANNEL_REQUIRED, capabilities)
       )
@@ -145,25 +147,25 @@ export default class TransmissionService {
   }
 
   async send(transmission: Transmission, templateRevision: TemplateRevision, integration: Integration, vars: object, senderDefaults: Map<string, any>): Promise<void> {
-    const combinedVars = this.util.getCombinedVars(vars, transmission.vars || {})
+    const combinedVars: object = this.util.getCombinedVars(vars, transmission.vars || {})
 
-    const title = await this.util.render(templateRevision.getTitle(transmission.channel), combinedVars)
-    const body = await this.util.render(templateRevision.getBody(transmission.channel), combinedVars)
+    const title: string = await this.util.render(templateRevision.getTitle(transmission.channel), combinedVars)
+    const body: string = await this.util.render(templateRevision.getBody(transmission.channel), combinedVars)
 
-    let extra = null
+    let extra: object | null = null
 
     switch (transmission.channel) {
       case Transmission.CHANNEL_EMAIL: {
-        const email = templateRevision.email
+        const email: Email = templateRevision.email
 
-        let alternateBody = ''
+        let alternateBody: string = ''
 
         if (email.isHtml) {
           alternateBody = email.body.text || templateRevision.defaults.body
         }
 
-        const fromEmail = email.getSenderEmail(senderDefaults.get('email'))
-        const fromName = email.getSenderName(senderDefaults.get('from'))
+        const fromEmail: string = email.getSenderEmail(senderDefaults.get('email'))
+        const fromName: string = email.getSenderName(senderDefaults.get('from'))
 
         extra = {
           to: transmission.target,
