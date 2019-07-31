@@ -9,6 +9,7 @@ import TemplateRevision from '../../Entity/Template/Revision'
 import Email from '../../Entity/Template/Revision/Email'
 import TemplateDefaults from '../../Entity/Template/Revision/Defaults'
 import Integration from '../../Entity/Integration'
+
 import TransmissionUtil from './TransmissionUtil'
 import TransmissionRepository from './TransmissionRepository'
 import TransmissionValidator from './TransmissionValidator'
@@ -81,7 +82,7 @@ export default class TransmissionService {
     // we do not want to create a transmission for that channel.
     const capabilities: string[] = this.util.getIntegrationCapabilities(integrations)
 
-    // Turn the recipients into TransmissionTarget's.
+    // Turn the recipients into TransmissionTargets.
     const targets: TransmissionTarget[] = []
 
     if (message.data) {
@@ -108,9 +109,14 @@ export default class TransmissionService {
       )
     })
 
-    // Create the transmissions for the "required" channels.
+    if (transmissions.length > 1) {
+      // TODO: throw error. length cannot exceed 1.
+    }
+
+    // Get the final list of channels.
     channels = this.util.getPrioritizedChannels(templateRevision.channels.required, prioritizedChannels);
 
+    // Given the message and channels, for each target create the transmissions.
     targets.map((target: TransmissionTarget) => {
       transmissions = transmissions.concat(
         this.util.createTransmissions(message, target, channels, TransmissionUtil.CHANNEL_REQUIRED, capabilities)

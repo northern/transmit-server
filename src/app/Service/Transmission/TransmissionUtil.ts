@@ -165,7 +165,7 @@ export default class TransmissionUtil {
       }
 
       // When channelType is CHANNEL_PREFERRED we exit after we found one channel.
-      if (transmissions.length > 0 && channelType === TransmissionUtil.CHANNEL_PREFERRED) {
+      if (channelType === TransmissionUtil.CHANNEL_PREFERRED && transmissions.length > 0) {
         break
       }
     }
