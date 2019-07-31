@@ -6,6 +6,7 @@ import Message from '../../Entity/Message'
 import Transmission from '../../Entity/Transmission'
 import TransmissionTarget from '../../Entity/TransmissionTarget'
 import TemplateRevision from '../../Entity/Template/Revision'
+import Email from '../../Entity/Template/Revision/Email'
 import TemplateDefaults from '../../Entity/Template/Revision/Defaults'
 import Integration from '../../Entity/Integration'
 import TransmissionUtil from './TransmissionUtil'
@@ -13,8 +14,6 @@ import TransmissionRepository from './TransmissionRepository'
 import TransmissionValidator from './TransmissionValidator'
 import TransmissionNotFoundError from './Error/TransmissionNotFoundError'
 import TransmissionValidationError from './Error/TransmissionValidationError'
-
-import Email from '../../Entity/Template/Revision/Email'
 
 export default class TransmissionService {
   static readonly PROVIDER_MYSQL    = 'mysql'
